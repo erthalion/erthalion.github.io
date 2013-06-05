@@ -1,0 +1,73 @@
+---
+layout: post
+title:  "The Knife"
+date:   2015-12-29 1:14:21
+comments: true
+tags: [Pandoc]
+---
+
+I really don't know how I lived before without pandoc. It's an amazing tool, that saved me from a terrible pain of
+latex -> MS Word convertion. If you're writing many scientific documents in `latex` format, and faced with
+the demand to convert it into MS Word, you can understand me. It's like a tiresome point-and-click game, which can
+consume unbelievable amount of time.
+
+Pandoc can do it, and I'm not kidding. All you need is to create a source file in `markdown` format and
+copy all latex formulas. In this post you can find several details.
+
+<!--break-->
+
+What do we need to install pandoc? I'll advise [stack](https://github.com/commercialhaskell/stack):
+{% highlight bash %}
+$ stack install pandoc pandoc-citeproc pandoc-crossref
+{% endhighlight %}
+
+`pandoc-citeproc` and `pandoc-crossref` will be used to generate nice bibliography and references.
+
+Now we can do something like this:
+{% highlight latex %}
+$$\frac{\partial \vec{u}}{\partial t} + (\vec{u} \cdot \nabla) \vec{u} = - \frac{1}{\rho} \nabla p + \nabla \sigma + \vec{f}$$ {#eq:navier_stokes:motion}
+
+$$\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec{u}) = 0$$ {#eq:navier_stokes:continuity}
+{% endhighlight %}
+
+ang get a nice result (e.g. from Word Online):
+<img src="/public/img/navier.png" border="0" width="41%" style="margin: auto">
+
+Here you can see a label `eq:navier_stokes:motion` for corresponding equation. General template for references is:
+{% highlight latex %}
+some_content {#type:label}
+
+label will be used here [@type:label]
+{% endhighlight %}
+
+More documentation about types and usage is [here](https://github.com/lierdakil/pandoc-crossref).
+You can enable `pandoc-crossref` using command line argument `--filter`:
+{% highlight bash %}
+$ pandoc --filter pandoc-crossref -o result.docx source.md 
+{% endhighlight %}
+
+Note, that if we will use `begin/end` environment or "\\\\" for multiple equations, pandoc couldn't generate MS Word
+formula. Also, you shouldn't forget about empy line between equations.
+
+To use bibliography we can create a regular `bib` file and enable `pandoc-cireproc` like this:
+{% highlight bash %}
+$ pandoc --filter pandoc-crossref --bibliography report.bib -o result.docx source.md
+{% endhighlight %}
+
+The default citation style in Pandoc is Chicago author-date, but you can change
+it. E.g. if you're writing an academic paper in Russian, I bet you would like
+to use `GOST` standard. You can get a corresponding `csl` file 
+[here](http://editor.citationstyles.org/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fgost-r-7-0-5-2008-numeric-alphabetical),
+and use it like this:
+{% highlight bash %}
+$ pandoc --filter pandoc-crossref --bibliography report.bib --csl=gost.csl -o result.docx source.md
+{% endhighlight %}
+
+The last one thing is a language. If you're writing in Russian, you can suffer from encoding issues - to avoid
+this you need to specify language:
+
+{% highlight bash %}
+$ pandoc --filter pandoc-crossref --bibliography report.bib --csl=gost.csl -o result.docx source.md -V lang:russian
+{% endhighlight %}
+
+That's it, you will get a well-formed MS Word file with nice formulas.

@@ -1,0 +1,20 @@
+title:        Blog
+tagline:      "Erthalion's blog"
+description:  "My thoughts and experiments."
+url:          http://erthalion.info
+version:      1.0.0
+author:
+  name:       'Dmitry Dolgov'
+  email:      ''
+markdown:     kramdown
+permalink:    pretty
+paginate:     4
+paginate_path: "blog/page:num"
+future: true
+comments:
+    provider: disqus
+    disqus:
+        short_name: erthalion
+plugins: [
+    "jekyll-paginate"
+]

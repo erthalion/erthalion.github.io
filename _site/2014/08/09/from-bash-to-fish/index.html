@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+
+  <title>
+    From bash to fish &middot; 
+    Erthalion's blog
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/touch-icon-144-precomposed.png">
+  <link href='/img/favicon.ico' rel='shortcut icon' type='image/png'>
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-24190660-5', 'erthalion.info');
+      ga('send', 'pageview');
+
+    </script>
+</head>
+
+
+  <body>
+
+    <header class="masthead">
+      <div class="masthead-inner">
+        <a href="http://erthalion.info/blog"><h1>Blog</h1></a>
+        <p class="lead">My thoughts and experiments.</p>
+
+        <div class="colophon">
+          <ul class="colophon-links">
+            <li>
+              <a href="http://erthalion.info/">About me</a>
+            </li>
+            <li>
+              <a href="http://andhyde.com/">Hyde Jekyll theme</a>
+            </li>
+          </ul>
+
+          <p>&copy; 2020. Dmitry Dolgov All rights reserved.</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="content container">
+      <div class="post">
+  <h1>From bash to fish</h1>
+  <span class="post-date">09 Aug 2014</span>
+  <p>I’m doing a small revolution in my environment from time to time. I think “hey, a cool stuff”, take a deep breath and doing something new. And this is story about my migration from the bash to the fish shell.</p>
+
+<p>Let’s see, what says the official tutorial:</p>
+
+<blockquote>
+  <p>fish is a fully-equipped command line shell (like bash or zsh) that is smart and user-friendly. fish supports powerful features like syntax highlighting, autosuggestions, and tab completions that just work, with nothing to learn or configure.
+If you want to make your command line more productive, more useful, and more fun, without learning a bunch of arcane syntax and configuration options, then fish might be just what you’re looking for!</p>
+</blockquote>
+
+<p>And this is almost true =) But there is another concrete reason, why I like fish shell:</p>
+
+<ul>
+  <li>Search by history (as an autocomplete by tab)</li>
+  <li>More intuitive and clean configuration files</li>
+  <li>Vim mode <a href="https://github.com/fish-shell/fish-shell/issues/65">support</a></li>
+</ul>
+
+<!--break-->
+
+<p>I would to avoid unnecessary lyrics, and pay more attention to the configuration and gotchas (from the bash point of view).</p>
+
+<p>First of all - use <code class="language-plaintext highlighter-rouge">.</code> command instead <code class="language-plaintext highlighter-rouge">source</code> for the inclusion of the script.</p>
+
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">.</span> /some-install-path/fish-shell/share/fish/functions/fish_vi_mode.fish
+<span class="nb">.</span> /some-install-path/.config/fish/themes/fish_right_prompt.fish
+<span class="nb">.</span> /some-install-path/.config/fish/themes/fish_prompt.fish
+<span class="nb">.</span> /etc/profile.d/autojump.fish
+fish_vi_key_bindings</code></pre></figure>
+
+<p>I’ve used <code class="language-plaintext highlighter-rouge">some-install-path</code> because I’m a Vim hacker (<del>an extra pathos</del>), and I want a fresh version for the Vim support, so the manual compilation from github is my way. Then I’ve turned on Vim mode (<code class="language-plaintext highlighter-rouge">fish_vi_mode.fish</code> is necessary for this). <code class="language-plaintext highlighter-rouge">fish_prompt.fish</code> and <code class="language-plaintext highlighter-rouge">fish_right_prompt.fish</code> contain a description for the shell prompt and will be discussed later. If you use <code class="language-plaintext highlighter-rouge">autojump</code>, you should also include <code class="language-plaintext highlighter-rouge">autojump.fish</code> (if this file doesn’t exist, download it from repo).</p>
+
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">set </span>fish_greeting <span class="s2">""</span></code></pre></figure>
+
+<p>This greeting is very distracting, so disable it. No comments =)</p>
+
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">set</span> <span class="nt">-x</span> EDITOR vim
+<span class="nb">set </span>PATH /home/erthalion/.local/bin /usr/local/bin /opt/bin <span class="nv">$PATH</span></code></pre></figure>
+
+<p>We should set environment variables in this format. Pay attention to the <code class="language-plaintext highlighter-rouge">PATH</code> variable - don’t forget about <code class="language-plaintext highlighter-rouge">/usr/local/bin</code> and <code class="language-plaintext highlighter-rouge">/opt/bin</code> (looks like fish shell doesn’t include them by default).</p>
+
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">alias </span><span class="nv">goutshow</span><span class="o">=</span><span class="s1">'git fetch; git show origin/master..'</span></code></pre></figure>
+
+<p>One more observation - we should replace <code class="language-plaintext highlighter-rouge">&amp;&amp;</code> by the <code class="language-plaintext highlighter-rouge">;</code> or <code class="language-plaintext highlighter-rouge">and</code> commands.</p>
+
+<p>Now get closer to the prompt. It described by the two functions - <code class="language-plaintext highlighter-rouge">fish_prompt</code> and <code class="language-plaintext highlighter-rouge">fish_right_prompt</code> (your C.O.). I have no advices for this section. Really. You can use your imagination and do what you want =) There are my examples - <a href="https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_prompt.fish">left</a> and <a href="https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_right_prompt.fish">right</a>. Only one comment - you may want to show <code class="language-plaintext highlighter-rouge">virtualenv</code> name in the prompt. In that case you should disable original by the variable <code class="language-plaintext highlighter-rouge">set -x VIRTUAL_ENV_DISABLE_PROMPT 1</code>.</p>
+
+<p>But unfortunately, Vim support isn’t very well in the fish shell. For example, there is no <code class="language-plaintext highlighter-rouge">replace (r)</code> command, or <code class="language-plaintext highlighter-rouge">undo (u)</code>. Actually it’s a horrible problem for me, especially the first one =) And here is my <a href="https://github.com/fish-shell/fish-shell/pull/1595">solution</a> of this problem.</p>
+
+<p>I think, fish shell is available for a lot of improvements. All, that described above, is only a base for a convenient environment, and I hope, it will be useful.</p>
+
+
+</div>
+
+<div class="related">
+  <h2>Other Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2021/03/03/subscripting/">
+            How many engineers does it take to make subscripting work?
+            <small>03 Mar 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2020/11/28/evolution-of-btree-index-am/">
+            Evolution of tree data structures for indexing: more exciting than it sounds
+            <small>28 Nov 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2020/08/07/chess-and-optimizer/">
+            Query optimizer and chess?
+            <small>07 Aug 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'erthalion'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+ <title>Blog</title>
+ <link href="http://erthalion.info/blog/tags/PostgreSQL/atom.xml" rel="self"/>
+ <link href="http://erthalion.info/"/>
+ <updated>2021-03-03T10:36:39+01:00</updated>
+ <id>http://erthalion.info</id>
+ <author>
+   <name>Dmitry Dolgov</name>
+   <email></email>
+ </author>
+
+ 
+     
+     
+         <entry>
+           <title>How many engineers does it take to make subscripting work?</title>
+           <link href="http://erthalion.info/2021/03/03/subscripting/"/>
+           <updated>2021-03-03T10:12:45+01:00</updated>
+           <id>http://erthalion.info/2021/03/03/subscripting</id>
+           
+           <content type="html">Recently landed in PostgreSQL, jsonb subscripting support doesn't look as exciting as some other improvements around jsonb. But it's user visible changes are only tip of the iceberg. How many people were involved to make it, and what decisions choices were made? How long did it take, and what are the good/bad ideas to work on a patch?</content>
+           
+         </entry>
+     
+     
+     
+     
+ 
+     
+     
+     
+     
+     
+     
+         <entry>
+           <title>Evolution of tree data structures for indexing: more exciting than it sounds</title>
+           <link href="http://erthalion.info/2020/11/28/evolution-of-btree-index-am/"/>
+           <updated>2020-11-28T22:12:45+01:00</updated>
+           <id>http://erthalion.info/2020/11/28/evolution-of-btree-index-am</id>
+           
+           <content type="html">What is your first association with the concept of B-tree? Mine is 'old and well researched, or in other words boring'. And indeed apparently it was first introduced in 1970! Not only that, already in 1979 they were ubiquitous. Does it mean there is nothing exciting left any more?
+It turns out that there are multitude of interesting ideas and techniques around B-Trees. They're all coming from desire to cover different (often incompatible) needs, as well as adapt to emerging hardware. In this blog post I'll try to show this, and we will be concerned mostly with B-tree as a data structure.</content>
+           
+         </entry>
+     
+     
+ 
+     
+     
+     
+     
+     
+     
+     
+ 
+     
+     
+         <entry>
+           <title>PostgreSQL at low level: stay curious!</title>
+           <link href="http://erthalion.info/2019/12/06/postgresql-stay-curious/"/>
+           <updated>2019-12-06T14:21:54+01:00</updated>
+           <id>http://erthalion.info/2019/12/06/postgresql-stay-curious</id>
+           
+           <content type="html">It's not a secret that databases are damn complicated systems. And they tend to run on top of even more complicated stacks of software. Nowadays you will not surprise anyone (or at least not that much) by running your database on a Kubernetes cluster or inside a virtual machine. It's probably still questionable whether it's good and appropriate, but this approach is something we have to face — sometimes it's at least convenient, sometimes it allows to be more resource efficient and sometimes it's the only available infrastructure in a company. And one of the problems in this situation is that reasoning about the performance is not that easy any more. Well, it's not like it was much easier before, but still. Let's see what can we do about it and how strace, perf and BPF can change the game.</content>
+           
+         </entry>
+     
+     
+     
+     
+     
+     
+ 
+     
+     
+         <entry>
+           <title>Jsonb: few more stories about the performance</title>
+           <link href="http://erthalion.info/2017/12/21/advanced-json-benchmarks/"/>
+           <updated>2017-12-21T18:34:04+01:00</updated>
+           <id>http://erthalion.info/2017/12/21/advanced-json-benchmarks</id>
+           
+           <content type="html">&lt;blockquote&gt; &lt;p&gt;As such, there’s really no “standard” benchmark that will inform you about the best technology to use for your application. Only your requirements, your data, and your infrastructure can tell you what you need to know.&lt;/p&gt; &lt;/blockquote&gt; &lt;p&gt;For already some time I can’t stop doing interesting/useful/weird (one at the time) benchmarks to reveal some details on how to apply document-oriented approach in the world of relational databases. Finally, I decided that I have a critical mass of those details to share in the form of blog post. So welcome to The Benchmark Club, where we’re going to discuss what it takes to create a fair performance comparison of different databases. As you may guess, the first rule of The Benchmark Club is to never share a reproducible benchmarks. But we identify ourselves as a badass engineers, so we’re going to break this rule today.&lt;/p&gt; &lt;p&gt;&lt;img src=&quot;/public/img/fight_club.jpg&quot; border=&quot;0&quot; width=&quot;100%&quot; style=&quot;margin: auto&quot; /&gt;&lt;/p&gt; &lt;!--break--&gt; &lt;h2 id=&quot;targets&quot;&gt;Targets&lt;/h2&gt; &lt;p&gt;It’s not possible to compare all the existing solutions to store and process the data in form of documents (although looks like people usually expect exactly that), so I’ve limited my scope to PostgreSQL, MySQL and MongoDB:&lt;/p&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt;PostgreSQL - just because it’s an...</content>
+           
+         </entry>
+     
+     
+ 
+     
+     
+         <entry>
+           <title>How to convert your data to jsonb?</title>
+           <link href="http://erthalion.info/2016/06/05/convert-into-jsonb/"/>
+           <updated>2016-06-05T02:16:21+02:00</updated>
+           <id>http://erthalion.info/2016/06/05/convert-into-jsonb</id>
+           
+           <content type="html">&lt;p&gt;“How to start” is always a difficult question, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jsonb&lt;/code&gt; isn’t an exception. Here are few notes about converting different types of data into &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jsonb&lt;/code&gt;, that someone can find useful.&lt;/p&gt; &lt;p&gt;Basically there are three possible cases of data conversion:&lt;/p&gt; &lt;ul&gt; &lt;li&gt;Convert data from inside PostgreSQL&lt;/li&gt; &lt;li&gt;Convert data from other database&lt;/li&gt; &lt;li&gt;Convert plain data outside database&lt;/li&gt; &lt;/ul&gt; &lt;!--break--&gt; &lt;h2 id=&quot;from-inside-postgresql&quot;&gt;From inside PostgreSQL&lt;/h2&gt; &lt;p&gt;First of all we shouldn’t forget we can build data in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jsonb&lt;/code&gt; format manually:&lt;/p&gt; &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{&quot;id&quot;: 1, &quot;data&quot;: &quot;aaa&quot;}'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jsonb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt; &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; jsonb &lt;span class=&quot;nt&quot;&gt;--------------------------&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;id&quot;&lt;/span&gt;: 1, &lt;span class=&quot;s2&quot;&gt;&quot;data&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;aaa&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt; &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;jsonb_build_object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'id'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'data'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'aaa'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt; &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; jsonb_build_object &lt;span class=&quot;nt&quot;&gt;--------------------------&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;id&quot;&lt;/span&gt;: 1, &lt;span class=&quot;s2&quot;&gt;&quot;data&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;aaa&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt; &lt;p&gt;If we already have some relational data we can easy perform one-to-one conversion for both complex and simple data types:&lt;/p&gt; &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;to_jsonb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;timestamp&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'2016-06-05'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt; &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; to_jsonb &lt;span class=&quot;nt&quot;&gt;-----------------------&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;2016-06-05T00:00:00&quot;&lt;/span&gt; &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt; &lt;div class=&quot;language-sql...</content>
+           
+         </entry>
+     
+     
+ 
+     
+     
+     
+ 
+     
+     
+         <entry>
+           <title>Compare incomparable: PostgreSQL vs Mysql vs Mongodb</title>
+           <link href="http://erthalion.info/2015/12/29/json-benchmarks/"/>
+           <updated>2015-12-29T02:14:21+01:00</updated>
+           <id>http://erthalion.info/2015/12/29/json-benchmarks</id>
+           
+           <content type="html">&lt;blockquote&gt; &lt;p&gt;As such, there’s really no “standard” benchmark that will inform you about the best technology to use for your application. Only your requirements, your data, and your infrastructure can tell you what you need to know.&lt;/p&gt; &lt;/blockquote&gt; &lt;p&gt;NoSql is everywhere and we can’t escape from it (although I can’t say we want to escape). Let’s leave the question about reasons outside this text, and just note one thing - this trend isn’t related only to new or existing NoSql solutions. It has another side, namely the schema-less data support in traditional relational databases. It’s amazing how many possibilities hiding at the edge of the relational model and everything else. But of course there is a balance that you should find for your specific data. It can’t be easy, first of all because it’s required to compare incomparable things, e.g. performance of a NoSql solution and traditional database. Here in this post I’ll make such attempt and show the comparison of jsonb in PostgreSQL, json in Mysql and bson in Mongodb.&lt;/p&gt; &lt;!--break--&gt; &lt;h2 id=&quot;what-the-hell-is-going-on-here&quot;&gt;What the hell is going on here?&lt;/h2&gt; &lt;p&gt;Breaking news:&lt;/p&gt; &lt;ul&gt; &lt;li&gt;&lt;a href=&quot;http://www.postgresql.org/docs/9.4/static/datatype-json.html&quot;&gt;PostgreSQL 9.4&lt;/a&gt; - a new data type &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jsonb&lt;/code&gt; with slightly extended support in the...</content>
+           
+         </entry>
+     
+     
+ 
+     
+ 
+     
+ 
+     
+ 
+     
+ 
+     
+ 
+     
+ 
+     
+ 
+     
+ 
+     
+ 
+
+</feed>

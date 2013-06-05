@@ -1,0 +1,222 @@
+\documentclass[crop, tikz, dvipsnames]{standalone}
+\RequirePackage{luatex85}
+
+\usepackage{amsmath}
+\usepackage{fontawesome}
+\usepackage{fontspec}
+\usepackage{ifthen}
+\usetikzlibrary{
+    backgrounds,
+    patterns,
+    mindmap,
+    shapes,
+    shapes.misc,
+    fit,
+    trees,
+    tikzmark,
+    arrows,
+    arrows.meta,
+    positioning,
+    decorations.pathmorphing,
+    shapes.geometric,
+    decorations.pathreplacing
+}
+
+\newfontfamily{\ttfamily}{Fira Code}
+\usepackage{fontspec}
+\setmainfont{Liberation Sans}
+\newfontfamily\ExtraLight{Liberation Sans}
+\newfontfamily\Light{Liberation Sans}
+\newfontfamily\Book{Liberation Sans}
+\newfontfamily\Medium{Liberation Sans}
+
+\definecolor{greenGood}{HTML}{99FF99}
+\definecolor{font}{HTML}{80391E}
+\definecolor{redBad}{HTML}{FF9980}
+
+\makeatletter
+\tikzset{btree-key/.style={minimum height=1cm, pattern=north west lines, draw}}
+\tikzset{btree-pointer/.style={minimum height=1cm, draw}}
+\tikzset{btree-empty/.style={btree-pointer, dashed}}
+\tikzset{btree-leaf/.style={fill=greenGood}}
+\tikzset{btree-branch/.style={fill=gray!20}}
+\tikzset{btree-line/.style={line width=0.5pt}}
+\tikzset{btree-path/.style={btree-pointer, minimum width=0.5cm, fill=red, opacity=0.5}}
+\tikzset{btree-hide/.style={draw opacity=0, line width=0, pattern=none}}
+\tikzset{box/.style={draw, dashed, rounded corners, behind path}}
+\tikzset{btree-node/.style={draw, inner sep=0, minimum width=1cm, minimum height=1cm, rounded corners}}
+\tikzset{btree-partition1/.style={draw, inner sep=0, minimum width=1cm, minimum height=1cm, rounded corners, fill=red!20}}
+\tikzset{btree-partition2/.style={draw, inner sep=0, minimum width=1cm, minimum height=1cm, rounded corners, fill=green!20}}
+\tikzset{btree-partition3/.style={draw, inner sep=0, minimum width=1cm, minimum height=1cm, rounded corners, fill=blue!20}}
+\tikzset{>=latex}
+\tikzset{arrow-pointer/.style={
+        single arrow,
+        minimum height=1.5cm,
+        inner sep=3pt,
+        line width=1pt,
+        draw,
+        color=gray,
+        single arrow tip angle=45,
+        single arrow head extend=0.1cm
+    }
+}
+\tikzset{smallbtree-node/.style={btree-node, minimum width=0.4cm, minimum height=0.4cm, rounded corners=0.1cm}}
+\tikzset{bloom-filter/.style={
+    draw,
+    isosceles triangle,
+    minimum width=1.2cm,
+    shape border rotate=-90,
+    isosceles triangle apex angle=60,
+    rounded corners
+}}
+\tikzset{box/.style={draw, dashed, rounded corners, behind path}}
+\tikzset{green-box/.style={box, fill=greenGood}}
+\tikzset{blue-box/.style={box, fill=blue!20}}
+\tikzset{btree-node/.style={draw, inner sep=0, minimum width=1cm, minimum height=1cm, rounded corners}}
+\tikzset{btree-leaf-node/.style={btree-node, fill=greenGood}}
+\tikzset{btree-branch-node/.style={btree-node, fill=gray!20}}
+\tikzset{dp-tree-log/.style={draw, minimum width=0.5cm, minimum height=0.5cm, rounded corners=0.1cm}}
+\tikzset{trie-node/.style={draw, circle, minimum size=0.5cm}}
+
+\newcommand{\smallbtree}[6] {
+    \node[smallbtree-node, #4, #3] (node#11) {};
+
+    \node[smallbtree-node, #4, below=0.4cm * #2 of node#11.south west, xshift=-0.4cm * #2] (node#12) {};
+    \node[smallbtree-node, #4, below=0.4cm * #2 of node#11.south] (node#13) {};
+    \node[smallbtree-node, #4, below=0.4cm * #2 of node#11.south east, xshift=0.4cm * #2] (node#14) {};
+
+    \draw[->, btree-line, #5] (node#11) -- (node#12);
+    \draw[->, btree-line, #5] (node#11) -- (node#13);
+    \draw[->, btree-line, #5] (node#11) -- (node#14);
+    \node[#6, rounded corners=0.2cm, inner sep=0.2cm,
+          fit=(node#11)(node#12)(node#13)(node#14)] (nodebox#1) {};
+
+    % redraw
+    \node[smallbtree-node, #4, #3] (node#11) {};
+
+    \node[smallbtree-node, #4, below=0.4cm * #2 of node#11.south west, xshift=-0.4cm * #2] (node#12) {};
+    \node[smallbtree-node, #4, below=0.4cm * #2 of node#11.south] (node#13) {};
+    \node[smallbtree-node, #4, below=0.4cm * #2 of node#11.south east, xshift=0.4cm * #2] (node#14) {};
+
+    \draw[->, btree-line, #5] (node#11) -- (node#12);
+    \draw[->, btree-line, #5] (node#11) -- (node#13);
+    \draw[->, btree-line, #5] (node#11) -- (node#14);
+}
+
+\newcommand{\btreenode}[5] {
+    \path
+      node[btree-pointer, #2, #3] (pointer1#1) {}
+      node[btree-key, right=0 of pointer1#1, #3] (sep1#1) {}
+      node[btree-key, left=0 of pointer1#1, #3] (sep2#1) {}
+      node[btree-pointer, right=0 of sep1#1, #3] (pointer2#1) {}
+      node[btree-pointer, left=0 of sep2#1, #3] (pointer3#1) {}
+      node[btree-key, right=0 of pointer2#1, #3] (sep3#1) {}
+      node[btree-key, left=0 of pointer3#1, #3] (sep4#1) {}
+      node[draw, inner sep=0, behind path, #4,
+          fit=(pointer1#1)(pointer2#1)(pointer3#1)
+              (sep1#1)(sep2#1)(sep3#1)(sep4#1)
+      ] (node#1) {};
+
+      \ifthenelse{ \equal{#5}{show-pointers} } {
+            \coordinate[below=0.5 of pointer1#1] (heap-pointer1#1);
+            \coordinate[below=0.5 of pointer2#1] (heap-pointer2#1);
+            \coordinate[below=0.5 of pointer3#1] (heap-pointer3#1);
+
+            \draw[->, btree-line] (pointer1#1.south) -- (heap-pointer1#1.north);
+            \draw[->, btree-line] (pointer2#1.south) -- (heap-pointer2#1.north);
+            \draw[->, btree-line] (pointer3#1.south) -- (heap-pointer3#1.north);
+      } {}
+}
+
+\newcommand{\basicbtree}[1] {
+    \node[btree-branch-node] (node1) {};
+
+    \node[btree-branch-node, below=0.5cm of node1.south west, xshift=-2.5cm] (node2) {};
+    \node[btree-branch-node, below=0.5cm of node1.south] (node3) {};
+    \node[btree-branch-node, below=0.5cm of node1.south east, xshift=2.5cm] (node4) {};
+
+    \node[btree-leaf-node, below=0.5cm of node2.south west, xshift=-0.2cm] (node5) {};
+    \node[btree-leaf-node, below=0.5cm of node2.south east, xshift=0.2cm] (node6) {};
+
+    \node[btree-leaf-node, below=0.5cm of node3.south west, xshift=-0.2cm] (node7) {};
+    \node[btree-leaf-node, below=0.5cm of node3.south east, xshift=0.2cm] (node8) {};
+
+    \node[btree-leaf-node, below=0.5cm of node4.south west, xshift=-0.2cm] (node9) {};
+    \node[btree-leaf-node, below=0.5cm of node4.south east, xshift=0.2cm] (node10) {};
+
+    \ifthenelse{ \equal{#1}{show-connections} } {
+        \draw[->, btree-line] (node1) -- (node2);
+        \draw[->, btree-line] (node1) -- (node3);
+        \draw[->, btree-line] (node1) -- (node4);
+
+        \draw[->, btree-line] (node2) -- (node5);
+        \draw[->, btree-line] (node2) -- (node6);
+
+        \draw[->, btree-line] (node3) -- (node7);
+        \draw[->, btree-line] (node3) -- (node8);
+
+        \draw[->, btree-line] (node4) -- (node9);
+        \draw[->, btree-line] (node4) -- (node10);
+    } {}
+
+    \ifthenelse{ \equal{#1}{show-fade-connections} } {
+        \draw[->, btree-line, color=gray] (node1) -- (node2);
+        \draw[->, btree-line, color=gray] (node1) -- (node3);
+        \draw[->, btree-line, color=gray] (node1) -- (node4);
+
+        \draw[->, btree-line, color=gray] (node2) -- (node5);
+        \draw[->, btree-line, color=gray] (node2) -- (node6);
+
+        \draw[->, btree-line, color=gray] (node3) -- (node7);
+        \draw[->, btree-line, color=gray] (node3) -- (node8);
+
+        \draw[->, btree-line, color=gray] (node4) -- (node9);
+        \draw[->, btree-line, color=gray] (node4) -- (node10);
+    } {}
+}
+
+\newcommand{\basicleafconnection}[1] {
+    \ifthenelse{ \equal{#1}{active} } {
+        \draw[->, btree-line] (node5) -- (node6);
+        \draw[->, btree-line] (node6) -- (node7);
+        \draw[->, btree-line] (node7) -- (node8);
+        \draw[->, btree-line] (node8) -- (node9);
+        \draw[->, btree-line] (node9) -- (node10);
+    } {
+        \draw[->, btree-line, color=gray] (node5) -- (node6);
+        \draw[->, btree-line, color=gray] (node6) -- (node7);
+        \draw[->, btree-line, color=gray] (node7) -- (node8);
+        \draw[->, btree-line, color=gray] (node8) -- (node9);
+        \draw[->, btree-line, color=gray] (node9) -- (node10);
+    }
+}
+
+\newcommand{\trienode}[5] {
+    \node[trie-node, below=0.35cm of node#1, xshift=#4] (node#2) {};
+    \coordinate[above=0.22cm of node#2.center] (node#2-anchor);
+    \node[below=0.0cm of node#2-anchor] (node#2-value) {\footnotesize{#3}};
+    \draw[-, btree-line] (node#1) -- (node#2);
+
+    \ifthenelse{ \equal{#5}{} } {}
+    {
+        \node[below=0.05cm of node#2, color=gray] (node#2-total-value) {\tiny{#5}};
+    }
+}
+
+\makeatother
+
+\begin{document}
+\color{font}
+\begin{center}
+Which part of
+
+\begin{equation*}
+    \begin{cases}
+        \rho \frac{\partial{\boldsymbol{u}}}{\partial t} + \rho (\boldsymbol{u} \cdot \Delta) - \Delta \cdot \sigma (\boldsymbol{u}, \rho) = \boldsymbol{f} \\
+        \Delta \cdot \boldsymbol{u} = 0
+    \end{cases}
+\end{equation*}
+
+don't you understand?
+\end{center}
+\end{document}

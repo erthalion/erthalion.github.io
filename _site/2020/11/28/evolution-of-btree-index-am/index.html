@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+
+  <title>
+    Evolution of tree data structures for indexing: more exciting than it sounds &middot; 
+    Erthalion's blog
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/touch-icon-144-precomposed.png">
+  <link href='/img/favicon.ico' rel='shortcut icon' type='image/png'>
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-24190660-5', 'erthalion.info');
+      ga('send', 'pageview');
+
+    </script>
+</head>
+
+
+  <body>
+
+    <header class="masthead">
+      <div class="masthead-inner">
+        <a href="http://erthalion.info/blog"><h1>Blog</h1></a>
+        <p class="lead">My thoughts and experiments.</p>
+
+        <div class="colophon">
+          <ul class="colophon-links">
+            <li>
+              <a href="http://erthalion.info/">About me</a>
+            </li>
+            <li>
+              <a href="http://andhyde.com/">Hyde Jekyll theme</a>
+            </li>
+          </ul>
+
+          <p>&copy; 2020. Dmitry Dolgov All rights reserved.</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="content container">
+      <div class="post">
+  <h1>Evolution of tree data structures for indexing: more exciting than it sounds</h1>
+  <span class="post-date">28 Nov 2020</span>
+  <h2 id="0-how-to-read-me">0. How to read me?</h2>
+
+<p>I have to admit, my research blog posts are getting longer and longer. From one
+side I find it genuinely encouraging, because if one gets so much information
+just by scratching the topic, imagine what’s hidden beneath the surface! One
+university professor once said “what could be interesting in databases?”, and
+it turns out freaking a lot! On the other side it certainly poses problems for
+potential readers. To overcome them I would suggest an interesting approach:
+print this blog post out, or open it on your tablet/e-reader, where you can
+make notes with a pencil or markers. Now while reading it try to spot ideas
+particularly exciting for you and mark them. Along the way there would be
+definitely some obscure parts or questions, write them on the sides as well.
+You can experiment with the diagrams, changing or extending them, or just
+drawing funny faces. But do not read everything at once, have no fear of
+putting it aside for a while, and read in chunks that are convenient for you.
+Some parts could be skipped as the text is build out of relatively independent
+topics. The table of contents can help and guide you. Having said that we’re
+ready to embark on the journey.</p>
+
+<ul style="width:100%">
+  <li>
+    <a href="#1-introduction">Introduction</a>
+  </li>
+  <li>
+    <a href="#2-rum-conjecture">RUM conjecture</a>
+  </li>
+  <li>
+    <a href="#3-b-tree-basics">B-tree basics</a>
+  </li>
+  <li>
+    <a href="#4-beyond-the-hard-leaves-of-basics">Beyond the hard leavers of
+    basics</a>
+    <ul>
+        <li>
+            <a href="#41-key-normalization">Key normalization</a>
+        </li>
+        <li>
+            <a href="#42-prefix-truncation">Prefix truncation</a>
+        </li>
+        <li>
+            <a href="#43-dynamic-prefix-truncation">Dynamic prefix truncation</a>
+        </li>
+        <li>
+            <a href="#44-suffix-truncation">Suffix truncation</a>
+        </li>
+        <li>
+            <a href="#45-indirection-vector">Indirection vector</a>
+        </li>
+        <li>
+            <a href="#46-sb-tree">SB-tree</a>
+        </li>
+    </ul>
+  </li>
+  <li>
+    <a href="#5-why-is-it-not-enough">Why is it not enough?</a>
+    <ul>
+        <li>
+        <a href="#51-partitioned-b-tree">Partitioned B-tree</a>
+        </li>
+        <li>
+        <a href="#52-hybrid-indexes">Hybrid indexes</a>
+        </li>
+        <li>
+        <a href="#53-bw-tree">Bw-Tree</a>
+        </li>
+        <li>
+        <a href="#54-dptree">DPTree</a>
+        </li>
+    </ul>
+  </li>
+  <li>
+    <a href="#6-trie">Trie</a>
+  </li>
+  <li>
+    <a href="#7-learned-indexes">Learned indexes</a>
+  </li>
+  <li>
+    <a href="#8-is-that-all">Is that all?</a>
+  </li>
+  <li>
+    <a href="#references">References</a>
+  </li>
+</ul>
+
+<h2 id="1-introduction">1. Introduction</h2>
+
+<p>Whenever we speak about indexes, especially in PostgreSQL context, there is a
+lot to talk about: B-tree, Hash, GiST, SP-GiST, GIN, BRIN, RUM. But what if I
+tell you that even the first item in this list alone hiding astonishing number
+of interesting details and years of research? In this blog post I’ll try to
+prove this statement, and we will be concerned mostly with B-tree as a data
+structure.</p>
+
+<p><img src="/public/img/btree-joke.png" border="0" width="80%" style="margin: auto" /></p>
+
+<!--break-->
+
+<p>Let’s start systematically and take a look at the definition first:</p>
+
+<blockquote>
+  <p>B-tree is a self-balancing tree data structure that maintains sorted data and
+allows searches, sequential access, insertions, and deletions in logarithmic
+time.</p>
+</blockquote>
+
+<p>What is your first association with the concept of B-tree? Mine is “old and
+well researched, or in other words boring”. And indeed apparently it was first
+introduced in <a href="https://infolab.usc.edu/csci585/Spring2010/den_ar/indexing.pdf">1970</a>! Not only that, already in 1979 they
+were <a href="http://cgi.di.uoa.gr/~ad/M149/ubiquitous_btree.pdf">ubiquitous</a>. Does it mean there is nothing exciting left any
+more? Once upon a time I came across a remarkable read called
+<a href="https://dl.acm.org/doi/10.1561/1900000028">Modern B-Tree techniques</a> which inspired me to dig
+deeper into the topic and read bunch of shiny new whitepapers. Afterwards
+totally by chance I’ve stumbled upon a book “Database Internals: A Deep Dive
+into How Distributed Data Systems Work”, which contains great sections on
+B-tree design. Both works were the triggers to write this blog post. What was I
+saying about nothing exciting left? At the end I couldn’t be more wrong.</p>
+
+<p>It turns out that there are multitude of interesting ideas and techniques
+around B-Trees. They’re all coming from the desire to satisfy different (often
+incompatible) needs, as well as adapt to emerging hardware. To demonstrate how
+many of those exist, lets play a game. Below you can find a table of names I’ve
+found in various science papers, together with a couple of silly names I’ve
+come up myself. Can you find out the fake ones?</p>
+
+<table width="100%">
+  <tbody>
+    <tr>
+      <td>B-tree</td>
+      <td>B<sup>+</sup>-tree</td>
+      <td>B<sub>link</sub>-tree</td>
+      <td>DPTree</td>
+    </tr>
+    <tr>
+      <td>wB<sup>+</sup>-tree</td>
+      <td>NV Tree</td>
+      <td>FPTree</td>
+      <td>FASTFAIR</td>
+    </tr>
+    <tr>
+      <td>HiKV</td>
+      <td>Masstree</td>
+      <td>Skip List</td>
+      <td>ART</td>
+    </tr>
+    <tr>
+      <td>WORT</td>
+      <td>CDDS Tree</td>
+      <td>Bw Tree</td>
+      <td>HOT</td>
+    </tr>
+    <tr>
+      <td>KISS Tree</td>
+      <td>VAST Tree</td>
+      <td>FAST</td>
+      <td>HV Tree</td>
+    </tr>
+    <tr>
+      <td>UB Tree</td>
+      <td>LHAM</td>
+      <td>MDAM</td>
+      <td>Hybrid B<sup>+</sup> Tree</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<p>Any ideas? Well, I have a confession to make – all of them are real, I just
+don’t have enough imagination to come up with such names. Having this in mind
+hopefully you understand that if we want to make a survey, the first step would
+be to establish some classification. Not only this will help us to structure
+the material, but also will explain why on earth anyone would need to invent so
+many variations of what we though was so simple!</p>
+
+<h2 id="2-rum-conjecture">2. RUM conjecture</h2>
+
+<p>To classify different index access methods we need to think about the following
+ambitious question – is there anything common between almost any index access
+method? The authors of <a href="https://stratos.seas.harvard.edu/files/stratos/files/rum.pdf">RUM conjecture</a> provide an interesting
+insight about this topic:</p>
+
+<blockquote>
+  <p>The fundamental challenges that every researcher, systems architect, or
+designer faces when designing a new access method are how to minimize, i)
+read times, ii) update cost , and iii) memory (or storage) overhead.</p>
+
+  <p>In this paper, we conjecture that when optimizing the read-update-memory
+overheads, optimizing in any two areas negatively impacts the third</p>
+</blockquote>
+
+<p>This essentially states that if an index access method could be specified as a
+point inside “Read”, “Update” (on the Fig. 1 it’s called “Write” for
+convenience of drawing), “Memory” space we can observe an interesting
+invariant. Every time we modify one index access method to have less overhead
+for reading or memory footprint (i.e. shift the corresponding point closer to
+“Read”/”Memory” corners), we inevitably loose on the updating workload (i.e.
+getting further away from “Write” corner).</p>
+
+<figure>
+<img src="/public/img/rum.png" border="0" width="50%" style="margin: auto" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 1. RUM space
+</figcaption>
+</figure>
+
+<p>In fact as a non-scientist I would even speculate that there should be another
+dimension called “Complexity”, but the idea is still clear. I will try to show
+this invariant at work via examples in this blog post, but it already gives us
+some ground under the feet and opportunity to visually represent different
+versions of B-tree by moving point on the triangle back and forth. But first
+let’s recall the basics.</p>
+
+<h2 id="3-b-tree-basics">3. B-tree basics</h2>
+
+<p>So what is B-tree? Well, it’s a tree data structure: a root node, some number
+of branch nodes (marked grey) and a bunch of leaf nodes (marked green):</p>
+
+<figure>
+<img src="/public/img/btree.png" border="0" width="100%" style="margin: auto" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 2. B-tree nodes arrangement
+</figcaption>
+</figure>
+
+<p>Every node of this tree is usually a page of some certain size and contains
+keys (shaded slices of a node) and pointers to other nodes (empty slices with
+arrows). Keys on page are kept in sorted order to facilitate fast search within
+a page.</p>
+
+<p>The original B-tree design assumed to have user data in all nodes,
+branch and leaf. But nowadays the standard approach is a variation called
+B<sup>+</sup>-tree, where user data is present only in leaf nodes and branch
+nodes contains separator keys (pivot tuples in PostgreSQL terminology). In this
+way separation between branch and leave nodes become more strict, allowing
+better flexibility for choosing format of former and making deletion operations
+can affect only latter. In fact the original B-tree design is barely worth
+mentioning these days and I’m doing this just to be precise. Since
+B<sup>+</sup>-tree is sort of default design, we’ll use B-tree and
+B<sup>+</sup>-tree interchangeably in this text from now on. An interesting
+thing to mention here is that the only requirements for separator keys is to
+guide search algorithm to a correct leaf node. As long as they fulfil this
+condition they can contain anything, no other requirements exist.</p>
+
+<p>Strictly speaking, only child pointers are truly necessary in this design, but
+quite often databases also maintain additional neighbour pointers, e.g. what you
+can see on the Fig. 2 between the leaf nodes. It could be helpful for some
+operations like index scan, but need to be taken into account for node
+split/merge operations. PostgreSQL uses <a href="https://www.csd.uoc.gr/~hy460/pdf/p650-lehman.pdf">Lehman-Yao</a> version,
+called B<sub>link</sub>-tree, with links to both left and right sibling nodes
+(the left link one is actually not presented in the original
+B<sub>link</sub>-tree design, and it makes backward scan somewhat interesting),
+and there are even implementations like WiredTiger with
+<a href="https://github.com/wiredtiger/wiredtiger/blob/f08bc4b18612ef95a39b12166abcccf207f91596/src/include/btmem.h#L550">parent pointers</a>.</p>
+
+<p>Having all this in place one can perform a search query by following the path
+marked red on the Fig. 2, first hitting the root, finding a proper separator
+key, following a downlink and landing on a correct page where we deploy binary
+search to find the resulting key.</p>
+
+<p>Until now, we were talking only about static parts of B-tree design, but of
+course there is more to it. For example there is one dynamic aspect of much
+importance (quite often it even scares developers like a nightmare), namely
+page splits. What do we need to do when there is a new value to insert, but the
+target page does not have enough space like on the following diagram?</p>
+
+<figure>
+<img src="/public/img/page-split-1.png" border="0" width="60%" style="margin: auto" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 3. B-tree page split (a)
+</figcaption>
+</figure>
+
+<p>What happens here is we’re trying to insert the new value (shaded box) into the
+page with not enough space for it. To maintain the three balanced we need to
+allocate another leaf page, distribute keys between old and new leaf, promote a
+new separator key into the parent page and update all required links
+(left/right siblings if present):</p>
+
+<figure>
+<img src="/public/img/page-split-2.png" border="0" width="60%" style="margin: auto" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 4. B-tree page split (b)
+</figcaption>
+</figure>
+
+<p>Curiously enough the new separator key could be chosen freely, it could be any
+value as long as it separates both pages. We can see what does it change in the
+optimization section.</p>
+
+<p>Locking is obviously an important part of a page split. No one wants to end up
+with concurrency issues when pages get updated while in the middle of a split,
+so a page to be split is write-locked as well as e.g. right sibling to update
+left-link if present.</p>
+
+<p>As you can see, page splits are introducing performance overhead. We need to
+bring in a new page, move elements around and everything should be consistent
+and correctly locked. And already at this pretty much basic point we already
+can see some interesting trade-offs. For example B*-tree modification tries to
+rebalance data between neighbouring nodes to postpone page split as long as
+possible. In terms of trade-offs it looks like a balance between complexity and
+insert overhead.</p>
+
+<p>I didn’t tell you everything about B<sub>link</sub>-tree and it’s going to be our next
+topic example in this section. Not only Lehman-Yao version adds a link to the
+neighbour, it also introduces a “high key” to each page, which is an upper bound
+on the keys that are allowed on page. While obviously introducing a bit memory
+overhead those two changes make it possible to detect a concurrent page split
+by checking the page high key, which allows the tree to be searched without
+holding any read locks (except to keep a single page from being modified while
+reading it) <a href="https://git.postgresql.org/gitweb/?p=postgresql.git;a=blob;f=src/backend/access/nbtree/README;h=9692e4cdf64419e6f5ceb58b46bbeb192295d64a;hb=HEAD">[6]</a>. We can think of it as a balance between memory
+footprint and insert overhead.</p>
+
+<p>We’ve spent so much time talking about page splits and their importance. For the
+sake of symmetry one can expect the same from page merges, but surprisingly
+it’s usually not the case. There is even the <a href="http://sidsen.azurewebsites.net/papers/ravl-trees-journal.pdf">paper</a> that
+states:</p>
+
+<blockquote>
+  <p>By adding periodic rebuilding of the tree, we obtain a data structure that is
+theoreticaly superior to standard B-trees in many ways. Our results suggest
+that rebalancing on deletion no only unnecessary but may be harmful.</p>
+</blockquote>
+
+<p>But of course vacuum in PostgreSQL can still reclaim empty pages (see “Page
+Deletion” in <a href="https://git.postgresql.org/gitweb/?p=postgresql.git;a=blob;f=src/backend/access/nbtree/README;h=9692e4cdf64419e6f5ceb58b46bbeb192295d64a;hb=HEAD">[6]</a>).</p>
+
+<p>Now just to get taste of a real B-tree let’s generate an index in PostgreSQL
+and visualize it. The easiest way would be probably to create a small data set
+with pgbench and then plot the resulting graph of B-tree nodes and connections
+using a script from <a href="https://github.com/petergeoghegan/pg_query_internals/blob/master/graphviz-query.sql">pg_query_internals</a>, you can see the
+result on Fig. 4:</p>
+
+<p><br /></p>
+<figure>
+<img src="/public/img/real-btree.png" border="0" width="80%" style="margin: auto" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 4. Real B-tree visualized
+</figcaption>
+</figure>
+
+<p>Are you confused, what is this bumpy line? Well, it’s my attempt to fit the
+visualization into the screen, because in reality B-trees are extremely wide.
+Now let’s play a bit and modify the visualization script to show every node as
+a small dot and use “neato” layout for graphviz:</p>
+
+<figure>
+<img src="/public/img/neato-btree.png" border="0" width="80%" style="margin: auto" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 5. Real B-tree visualized with "neato"
+</figcaption>
+</figure>
+
+<p>Fig 5. demonstrates nicely another observation about B-trees, they’re indeed
+extremely wide, short and even sort of bushy. And the very same picture can
+also help us to understand another important aspect of B-tree that makes it
+indeed ubiquitous in database systems. The reason is that with B-tree one can
+address many kinds of workloads with reasonable efficiency, it’s not designed
+with only one target in mind. How is that possible? It’s thoroughly explained
+in “Modern B-tree techniques”, particularly in “B-tree versus Hash Indexes”
+section, so I’ll just formulate the summary.</p>
+
+<p>For one, B-tree can effectively exploit memory hierarchy, because as you can
+see it’s extremely wide, and if an index is “warm” it means most likely all
+branches nodes will be present in the buffer pool or could be fetched into the
+buffer pool while preparing the query. For leaf pages an efficient eviction
+policy could be deployed as well to address non-uniform workload. In general
+space management in B-tree is rather straightforward and an index can grow or
+shrink smoothly, whereas graceful grow or shrinking e.g. hash indexes is not
+fully solved yet.</p>
+
+<p>Another property of B-tree that helps to address different workloads is its
+ability to support different form of queries (search with a prefix of the index
+key, or index skip scan) using only one index.</p>
+
+<p>Last but not least is B-tree flexibility in terms of optimizations. One could
+compose different optimizations at different levels to be able to address some
+particular type of workloads mostly without negatively affecting performance in
+other cases.</p>
+
+<p>Having said all that we can also pinpoint where in the RUM space we can place
+B-tree. Since it’s pretty good in read workload, but could be better with
+memory footprint and insert workload, we can put it somewhere here:</p>
+
+<figure>
+<img src="/public/img/rum-btree.png" border="0" width="60%" style="margin: auto" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 6. Approximate position of B-tree in the RUM space
+</figcaption>
+</figure>
+
+<h2 id="4-beyond-the-hard-leaves-of-basics">4. Beyond the hard leaves of basics</h2>
+
+<p>As we already mentioned, one of the reasons why B-trees are so universal in the
+databases world is their flexibility and extensibility. On can apply variety of
+different local optimizations which could be nicely composed without
+sacrificing on something else. Let’s take a loot at some of them.</p>
+
+<h3 id="41-key-normalization">4.1 Key normalization</h3>
+
+<p>Probably the simplest we can do is key normalization, which is apparently a
+quite old technique <a href="https://dl.acm.org/doi/10.1561/1900000028">[3]</a>. The idea is pretty simple,
+if there is an index record with several keys for every column we transform
+them into a binary string like on Fig. 7:</p>
+
+<figure>
+<img src="/public/img/key-normalization.png" border="0" width="100%" style="margin: auto" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 7. Normalized keys
+</figcaption>
+</figure>
+
+<p>This allows to use simple binary comparison to sort the records during index
+creation or when guiding a search to the correct record. Such an encoded value
+need to take care about nulls and collations and can even include sort
+direction. But as always there are pros and cons and in this particular case
+the trick is that generally speaking it is impossible to reclaim the original
+data. In certain situations it can even happen that two different values
+produce the same normalized key (e.g. for languages with lower/upper case
+sorted case-insensitive). This means that we either:</p>
+
+<ul>
+  <li>
+    <p>need to keep both original data and normalized key or somehow else make
+sure precise recovery is possible.</p>
+  </li>
+  <li>
+    <p>use key normalization only for branch nodes.</p>
+  </li>
+</ul>
+
+<p>By itself this modification looks pretty innocent, but in fact it enables us to
+implement more optimizations on top of it.</p>
+
+<h3 id="42-prefix-truncation">4.2 Prefix truncation</h3>
+
+<p>One of such optimizations, which could be much easier implemented with the help
+of normalized keys is prefix truncation. And you will be surprised how
+straightforward it is. Imagine we have the following keys on one page:</p>
+
+<figure>
+<img src="/public/img/prefix-truncation-1.png" border="0" width="80%" style="margin: auto" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 7. Prefix truncation (a)
+</figcaption>
+</figure>
+
+<p>Note that the value we store start with the same prefix, which is sort of data
+duplication. If we’re going to do a bit of bookkeeping, it’s possible to store
+this prefix only once and truncate it from all the keys.</p>
+
+<figure>
+<img src="/public/img/prefix-truncation-2.png" border="0" width="80%" style="margin: auto" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 8. Prefix truncation (b)
+</figcaption>
+</figure>
+
+<p>As you can imagine this optimization is about trade-off between consuming less
+space on leave pages, but doing more job at run-time. To reduce code complexity
+and run-time overhead, usually prefix truncation is done over the whole
+possible key range based on fence keys (those are copies of separator keys
+posted to the parent during split), although more fine-grained approach can give
+better compression ratio (and more headache for insert operation).</p>
+
+<p>One example of databases using this approach is
+<a href="https://web.stanford.edu/class/cs276a/projects/docs/berkeleydb/api_c/db_set_bt_prefix.html">Berkeley DB</a>.</p>
+
+<h3 id="43-dynamic-prefix-truncation">4.3 Dynamic prefix truncation</h3>
+
+<p>Even if prefix truncation is not implemented directly and B-tree pages format
+is not changed, dynamic prefix truncation could be used to reduce comparison
+costs based on the knowledge about shared prefix and fence keys. Following the
+diagram on Fig. 9, if we want to add a new key (an outstanding item) and fence
+keys on a page have common prefix (marked as red parts), it means all the keys
+have it and could be omitted from comparison (leaving us with only blue part to
+deal with):</p>
+
+<figure>
+<img src="/public/img/dynamic-prefix-truncation.png" border="0" width="40%" style="margin: auto" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 9. An example of dynamic prefix truncation
+</figcaption>
+</figure>
+
+<p>You may also know this approach under <a href="https://patents.google.com/patent/US7680791B2/en">common prefix skipping</a>
+name in the context of sorting algorithms. Unfortunately terminology
+inconsistencies happen relatively often as you can notice throughout the whole
+blog post (another interesting example is B*-tree, which called
+“most misused term in B-tree literature” in <a href="http://cgi.di.uoa.gr/~ad/M149/ubiquitous_btree.pdf">Ubiquitous B-tree</a>).</p>
+
+<h3 id="44-suffix-truncation">4.4 Suffix truncation</h3>
+
+<p>Despite the similar name, suffix truncation is a bit different beast. This
+trick could be applied to separator keys on branch pages and the easiest way to
+explain it is to show the diagram. Let’s say we have a page to split:</p>
+
+<figure>
+<img src="/public/img/suffix-truncation-2.png" border="0" width="80%" style="margin: auto" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 10. Suffix truncation (a)
+</figcaption>
+</figure>
+
+<p>In case if this page would be split right in the middle, we end up with the key
+“Miller Mary”, and to fully distinguish splitted parts the minimal separation
+key should be “Miller M”. But as I’ve mentioned above we can actually choose
+any available separation key as long as it separates both pages, so why not
+take something shorter like in the following example?</p>
+
+<figure>
+<img src="/public/img/suffix-truncation-1.png" border="0" width="80%" style="margin: auto" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 11. Suffix truncation (b)
+</figcaption>
+</figure>
+
+<p>That is pretty much the whole idea, to pick up a split point in a such way that
+the resulting separation key will be minimal.</p>
+
+<p>Worth mentioning that starting from version 12 PostgreSQL does whole-colum
+suffix truncation without actually implementing key normalization. There is
+even a good overview of all these techniques in the corresponding
+<a href="https://wiki.postgresql.org/wiki/Key_normalization">wiki page</a>.</p>
+
+<h3 id="45-indirection-vector">4.5 Indirection vector</h3>
+
+<p>Normally we have to deal with values of variable length, and the regular
+approach to handle them is to have an indirection vector on every page with
+pointers to actual values. In PostgreSQL terminology those pointers are called
+line pointers. Every time when we have a key to compare, we first follow a
+pointer and fetch the value it points to. But what if we extend this design a
+bit and equip every such pointer with some useful information, for example a
+first few bytes of the normalized key we’re going to find after following the
+pointer, as with the diagram on Fig. 12 (e.g. first characters a,b,c,d)?</p>
+
+<figure>
+<img src="/public/img/indirection-vector.png" border="0" width="80%" style="margin: auto" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 12. Indirection vector
+</figcaption>
+</figure>
+
+<p>Such a small change allow us to figure out if the value we’re looking for could
+be not found following this pointer since the first few bytes are already
+different. This makes the design more CPU cache friendly, as the indirection
+vector is usually small enough to fit into the cache. For more details take a
+look at <a href="https://dl.acm.org/doi/10.5555/645484.656370">[9]</a>.</p>
+
+<p>Another interesting approach I find somehow similar is overflow pages, when
+only a fixed number of payload bytes is actually stored in the page directly
+and the rest goes to the overflow page. Few examples are
+<a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-row-format.html">MySQL InnoDB</a> and <a href="https://www.sqlite.org/src/artifact/620ab4c7235f4357">SQLite</a>.</p>
+
+<h3 id="46-sb-tree">4.6 SB-tree</h3>
+
+<p>Page splits are a big deal in B-tree design, and obviously interesting
+variations could be found in the wild about how to deal with
+them. <a href="https://dl.acm.org/doi/10.1007/BF01185680">SB-tree</a> is one such example, where to improve page split
+efficiency disk space is allocated in large contiguous extents of many pages.
+This leaves free pages in each extent and whenever a node needs to be split,
+another node is “allocated” within the same extent from already preallocated
+space, like in the following diagram on Fig. 13:</p>
+
+<figure>
+<img src="/public/img/sb-tree.png" border="0" width="90%" style="margin: auto" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 13. SB-tree nodes organization
+</figcaption>
+</figure>
+
+<p>Of course, it means that an extent itself could reach the point when there is no
+more free space and it needs to be split following the same ideas as normal
+page split. You maybe surprised what SB-tree is doing here, in basics section,
+since it’s not a standard approach. Yes, it’s not basic, but I’ve decided to
+mention it here anyway mostly due to its almost intuitive idea.</p>
+
+<h2 id="5-why-is-it-not-enough">5. Why is it not enough?</h2>
+
+<p>Indeed, everything looks great, why do we need to come up with some other
+designs? Well, as you can remember on the RUM space we put B-tree closer to the
+“Read” corner and not without the reason. There are several common downsides of
+B-tree design:</p>
+
+<ul>
+  <li>
+    <p>It’s not particularly CPU cache friendly due to pointer-chase, since to
+perform an operation we need to follow many pointers.</p>
+  </li>
+  <li>
+    <p>Memory footprint and insert performance are located on different sides of
+balance, we can improve inserts by preallocating pages and keep track of free
+space on the page which requires more memory. The same is valid for data
+compression.</p>
+  </li>
+  <li>
+    <p>B-tree requires lock coupling on page level to synchronize an access, which
+doesn’t scale that well on many-core CPUs or in-memory systems (see
+<a href="https://db.in.tum.de/~leis/papers/artsync.pdf">[10]</a>, <a href="https://15721.courses.cs.cmu.edu/spring2019/papers/07-oltpindexes1/kissinger-damon2012.pdf">[11]</a>).</p>
+  </li>
+  <li>
+    <p>Bulk inserts is also not particularly efficient out of the box, and in
+general index maintenance could be pretty tricky (my favorite description of
+this part is paper <a href="https://btw.informatik.uni-rostock.de/download/tagungsband/B2-2.pdf">“Waves of Misery After Index Creation”</a>).</p>
+  </li>
+</ul>
+
+<p>At the same time there are some alternative data structures that provide
+similar functionality but different set of trade-offs. All this makes the topic
+pretty dynamic and full of interesting ideas. I’ll try to describe some of
+those designs I find interesting in the following sections. Keep your eyes
+opened, you will probably notice many common patterns.</p>
+
+<h3 id="51-partitioned-b-tree">5.1 Partitioned B-tree</h3>
+
+<p>If SB-tree could be called intuitive, partitioned B-tree idea sounds rather
+confusing at first. Essentially the suggestion is to maintain partitions within
+a single B-tree via adding an artificial leading key field (see
+<a href="http://www-db.cs.wisc.edu/cidr/cidr2003/program/p1.pdf">[14]</a>). Those partitions are nothing but temporary,
+and after some time will be merged together in background so that in the normal
+state there is only one partition. Why on earth would we add artificial data to
+an index, which is clearly an overhead? The original paper suggests that this
+design could be beneficial if we need to assemble an index from smaller chunks.
+For example if we want to build a new index from number of merge sort runs.
+Normally what happens is that intermediate sort runs are kept separately, and
+in case if we maintain partitions within a B-tree it’s possible to store these
+intermediate runs as partitions:</p>
+
+<figure>
+<img src="/public/img/partitioned-b-tree-1.png" border="0" width="80%" style="margin: auto" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 14. Partitioned B-tree with multiple partitions
+</figcaption>
+</figure>
+
+<p>This makes a B-tree available for queries much earlier effectively reducing
+index creation time. Of course at the beginning it will not deliver the same
+performance due to partitions overhead, but as soon as partitions will be
+merged this overhead disappears. This whole approach not only makes the index
+available earlier, but also makes resources consumption more predictable.</p>
+
+<p>After I originally discovered this approach, I’ve got an impression that
+unfortunately it never went further and ended up being just a curiosity. But
+then I’ve found more recent paper with somewhat similar ideas
+<a href="https://dl.acm.org/doi/10.1145/3151759.3151814">[15]</a>. The main idea here is to have one partition to
+accumulate all inserts, updates or deletes and all the others are immutable:</p>
+
+<figure>
+<img src="/public/img/partitioned-b-tree-2.png" border="0" width="80%" style="margin: auto; margin-left:100px" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 15. Partitioned B-tree with a "hot" partition
+</figcaption>
+</figure>
+
+<p>This special partition is stored in a separate area called PBT-Buffer
+(Partitioned B-Tree) which is supposed to be small and fast. As soon as
+PBT-Buffer gets full it selects a victim partition and writes it out
+sequentially to secondary storage. Once a partition is evicted a new one is
+created. Another important optimization is that every partition has a
+corresponding bloom filter, which allows excluding partitions that do not have
+required key.</p>
+
+<p>One can think of partitioned B-tree as few B-trees combined to produce a more
+complicated structure. For me the idea of using B-tree as a part of something
+bigger was quite a revelation. It turns out that similar ideas about
+incorporating multiple smaller data structures, immutable partitions and bloom
+filter found their representation in other researches as well. Obviously you
+can also note how close this design comes to LSM, in fact some <a href="http://smalldatum.blogspot.com/2018/06/the-original-lsm-paper.html">LSM
+implementations</a> also use a B-tree per sorted run.</p>
+
+<h3 id="52-hybrid-indexes">5.2 Hybrid indexes</h3>
+
+<p>What would you do to optimize B-tree memory footprint? Normally I would answer
+“nothing, it’s good as it is”, but in the context of in-memory databases we
+need to think twice. One of interesting suggestions could be derived directly
+from understanding of insert performance/memory footprint trade-off. So, we
+want to reduce memory consumption, but still do reasonably good on insert. Why
+not use for that two different things at once? The authors of
+<a href="https://www.cs.cmu.edu/~pavlo/papers/zhang-sigmod2016.pdf">hybrid index</a> suggests a dual-stage architecture with a dynamic
+“hot” part to absorb writes and read-only “cold” part to actually store
+compacted data. Obviously dynamic part is being merged from time to time into
+the read-only part. In fact there could be pretty much anything in place of
+“hot” part, but the simplest way to do it is to use B-tree as well:</p>
+
+<figure>
+<img src="/public/img/hybrid-index.png" border="0" width="90%" style="margin: auto;" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 16. Hybrid index
+</figcaption>
+</figure>
+
+<p>Due to read-only nature of the “cold” or “static” part the data in there could
+be pretty aggressively compacted and compressed data structures could be used
+to reduce memory footprint and fragmentation. The original whitepaper
+<a href="https://www.cs.cmu.edu/~pavlo/papers/zhang-sigmod2016.pdf">[16]</a> is pretty entertaining and contains more rigorous
+explanations, I’m just abusing my status as non-scientist here to do a bit of
+hand-waving.</p>
+
+<h3 id="53-bw-tree">5.3 Bw-Tree</h3>
+
+<p>Fine, we can do something about memory footprint, what about multi-core
+scalability? It’s another hot topic, often mentioned in the context of main
+memory databases, and one interesting approach to tackle the question is
+<a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/bw-tree-icde2013-final.pdf">Bw-tree</a> and its latch-free nature.</p>
+
+<p>Let’s break it down into small points. First thing to notice is that Bw-tree
+avoids using physical pointers to pages, using logical pointers and a mapping
+table (which maps a logical pointer to a particular page) as an extra level of
+indirection:</p>
+
+<figure>
+<img src="/public/img/bw-tree-1.png" border="0" width="80%" style="margin: auto; margin-left:100px" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 17. Bw-tree pages organization
+</figcaption>
+</figure>
+
+<p>This change, while not being particularly unique by itself, enables us to
+implement another important part, namely delta updating. And the idea is again
+vaguely reminds me something about immutable pages from previous sections. So
+instead of doing any direct modifications on the page, let’s add a delta record
+describing the change, then perform an atomic CAS (compare-and-swap) to change
+the corresponding logical pointer so that it will point not to the original
+page, but to a delta record (the authors in <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/bw-tree-icde2013-final.pdf">[17]</a> call this process
+“installing a new page”). The next change will introduce another delta record,
+which are forming a delta chain and at some point will be consolidated into a
+new merged page, like on Fig. 18:</p>
+
+<figure>
+<img src="/public/img/bw-tree-2.png" border="0" width="80%" style="margin: auto;" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 18. Bw-tree page structure
+</figcaption>
+</figure>
+
+<p>The thing is it works pretty well for data modifications, but structure
+modifications are getting more complicated and require a split delta record,
+merge delta record, node removal delta record. Overall Bw-Tree performance is
+tricky, <a href="https://db.cs.cmu.edu/papers/2018/mod342-wangA.pdf">benchmarks</a> shows that even with some optimizations it
+could be outperformed by other in-memory data structures.</p>
+
+<p>Few examples of databases using this type of index are in-memory database
+<a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/modde734-levandoski.pdf">Hekaton</a>, embeddable <a href="https://github.com/spacejam/sled/blob/c022b747f1dc5bb3a0ec2c3a5120123e1c3454e3/src/doc/sled_architectural_outlook/mod.rs#L23">Sled</a> (although the latter one
+moved away from it with time), <a href="https://dbdb.io/db/cosmos-db">Cosmos DB</a> and fresh
+<a href="https://github.com/cmu-db/noisepage">NoisePage</a>.</p>
+
+<h3 id="54-dptree">5.4 DPTree</h3>
+
+<p>In previous sections we were discussing a lot of intriguing ideas, which
+explore different possibilities in the index access method design to achieve
+something new. It’s already a vast field, and then comes a tectonic plate shift
+and opens even more to discover. One example of such changes is non-volatile
+memory and <a href="http://www.vldb.org/pvldb/vol13/p421-zhou.pdf">DPTree</a> as a question how could we exploit it. One of the
+main issues with using persistent memory for index structures is write-back
+nature of CPU cache which poses questions about index consistency and logging.
+To prevent that we need to use fencing (e.g. clwb + mfence instructions for
+x86), which is somewhat similar to fsync and write-back cache. But a lot of
+fencing is introduces an obvious overhead, so how to find a balance here? The
+authors of DPTree propose dual-stage index architecture (hm…where did we see
+this already?):</p>
+
+<figure>
+<img src="/public/img/dptree.png" border="0" width="100%" style="margin: auto;" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 19. DPTree structure
+</figcaption>
+</figure>
+
+<p>Here we have the buffer tree, which resides in DRAM and absorbs incoming
+writes. This part is backed up by a redo log stored in persistent memory. When
+the buffer tree reaches certain size threshold, it’s being merged in-place
+(thanks to non-volatile memory byte addressability feature) into a base tree,
+which represents the main data and lives in persistent memory as well. After
+such merge all changes are flushed with a little fencing overhead. One
+interesting thing about the base tree is that only its leaves are kept in
+persistent memory, and all the branch nodes are stored just like that in DRAM.
+On crash internal nodes and required meta information is rebuild cooperatively
+with some running query.</p>
+
+<p>There is much more to it than I’ve just described, i.e. efficient concurrent
+implementation of DPTree and other alternatives. I can only direct an
+interested reader to the <a href="http://www.vldb.org/pvldb/vol13/p421-zhou.pdf">whitepaper</a> for more details.</p>
+
+<p>It’s remarkable that sometimes research in this area turns into a reverse
+engineering, like in case of <a href="http://www.vldb.org/pvldb/vol13/p1078-liu.pdf">LB<sup>+</sup>-tree</a>, where the
+authors were guided by discoveries and assumptions about 3DXPoint (on which
+Intel Optane persistent memory is based), e.g. that number of modified words in
+a cache line doesn’t matter for performance.</p>
+
+<h2 id="6-trie">6. Trie</h2>
+
+<p>Now let’s try to expand our exploration area a bit more. What is it about those
+alternative data structures I’ve mentioned above? Are they even a thing?</p>
+
+<p>It turns out yes, and the data structure with confusing pronunciation Trie
+(/ˈtriː/) is one of them. Do not be surprised if you know it as a radix tree,
+prefix tree or even digital search tree – it’s still the same. Generally
+speaking trie is a search tree where the value of the key is distributed across
+the structure, and all the descendants of a node have a common prefix of the
+string associated with that node. In a way it’s similar to a thumb-index found
+in many alphabetically ordered dictionary books, when the first character of a
+word could be used to jump right away to all words starting with that
+character. Take a look at the example below, and try to follow one path from
+top to bottom assembling values on the way:</p>
+
+<figure>
+<img src="/public/img/art.png" border="0" width="100%" style="margin: auto;" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 20. Trie with compound nodes
+</figcaption>
+</figure>
+
+<p>The main difference from B-tree here is that the tree heigh depends not on the
+number of elements in the tree, but rather on the length of the keys (and its
+value distribution). I already see you, confused like Ryan Reynolds, asking why
+do we even need to bother with all that? The idea is that a well-designed trie
+could be more memory efficient than B-tree and utilize SIMD instructions to
+perform multiple comparisons at once <a href="https://db.in.tum.de/~leis/papers/ART.pdf">[19]</a>, <a href="https://dbis.uibk.ac.at/sites/default/files/2018-04/hot-height-optimized-author-version.pdf">[20]</a>. Binary
+tries are too simple and of course do not provide good performance due to large
+tree heigh, it’s correct. But there are many techniques to reduce the heigh by
+creating a “compound” nodes, which are a result of combining several binary
+nodes together (dashed nodes in the diagram on Fig. 20). But the question of how
+exactly to create such nodes is not that easy, especially in the presence
+sparsely of distributed keys. For example <a href="https://db.in.tum.de/~leis/papers/ART.pdf">Adaptive Radix Tree</a> uses one
+most suitable of four node types for every group and adapt better to
+distribution of keys. It’s not always enough, so <a href="https://dbis.uibk.ac.at/sites/default/files/2018-04/hot-height-optimized-author-version.pdf">Height Optimized Trie</a>
+goes even further and suggest adapting every compound node
+depending on the data distribution to limit tree heigh by some predefined value
+(something like in the following diagram, where each colour representing a
+node):</p>
+
+<figure>
+<img src="/public/img/hot.png" border="0" width="100%" style="margin: auto;" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 21. HOT index structure
+</figcaption>
+</figure>
+
+<p>In return for all these complications we get possibility to use node layout
+that allow us searching multiple keys in parallel via SIMD instructions.</p>
+
+<p>Another interesting example in this series is <a href="https://pdos.csail.mit.edu/papers/masstree:eurosys12.pdf">Masstree</a>, which is a
+trie where every node is a B-tree, and each node handles only a fixed-length
+slice of a variable-length key. Such design allows supporting efficiently many
+key distributions, including variable-length binary keys where many keys might
+have long common prefixes.</p>
+
+<p>Few examples of using these ideas are <a href="http://people.csail.mit.edu/stephentu/papers/silo.pdf">Silo</a> in-memory database,
+<a href="https://github.com/ClickHouse/ClickHouse/blob/0eed697623afd251c1908073c4a2850a9bfc9cdc/contrib/libbtrie/include/btrie.h">ClickHouse</a> with another modification
+called <a href="https://people.eng.unimelb.edu.au/jzobel/fulltext/vldbj09.pdf">B-trie</a> being used, main-memory-based relational DBMS <a href="http://hyper-db.de/">HyPer</a>, <a href="https://github.com/couchbase/forestdb">ForestDB</a> key-value storage
+engine based on HB+-Trie, and there are discussion about using trie for
+<a href="https://cwiki.apache.org/confluence/display/CASSANDRA/CEP-7%3A+Storage+Attached+Index#CEP7:StorageAttachedIndex-Textindexes">Cassandra</a>.</p>
+
+<h2 id="7-learned-indexes">7. Learned indexes</h2>
+
+<p>To attract more readers I’ve decided to add one section about machine learning…</p>
+
+<p><a href="https://en.wikipedia.org/wiki/Joke#/media/File:Boris_Yeltsin_with_Bill_Clinton-1.jpg" target="_blank">
+<img src="/public/img/machine-learning.png" border="0" width="100%" style="margin: auto;" />
+</a></p>
+
+<p>Never mind the joke, it turns out there are a lot of fascinating ideas arise
+when one applies machine learning methods to indexing. But let’s start
+from the beginning.</p>
+
+<p>Already “Modern B-tree techniques” mentions interpolation search, the key
+idea of which is to estimate the position of the key we’re looking for on the
+page instead of doing binary search. Of course this requires some knowledge
+about the data distribution, at the very least we need to know if e.g. linear
+estimation is going to be good enough.</p>
+
+<p>The authors of <a href="https://arxiv.org/pdf/1712.01208.pdf">[21]</a> say more, what if we replace the
+whole index structure with a neural network that will learn the data
+distribution to “predict” position of any entry in a database? In this case we
+get something similar to B-tree, except searching through a tree we find a page
+where the key is located and predicting the key location we get its position
+with some predefined error range. It’s possible to formalize this if we notice
+that “position” we’re talking about is proportional to a cumulative
+distribution function (CDF) since the dataset is ordered.</p>
+
+<p>At the moment there are few different suggestions for approximating CDF, one
+can go with a neural network (like here <a href="https://arxiv.org/pdf/1712.01208.pdf">[21]</a>) or do
+polynomial interpolation using piece-wise linear functions (like here
+<a href="https://arxiv.org/pdf/1801.10207.pdf">[23]</a>) and more fancy stuff with Chebyshev/Bernstein Polynomial
+(like here <a href="http://renata.borovica-gajic.com/data/2020_adc.pdf">[22]</a>). For example on the plot below
+(Fig. 22) you can see the idea behind the interpolation, where CDF function
+between key space and position in index is being roughly approximated by linear
+segments, which of course introduces and error (marked as red delta):</p>
+
+<figure>
+<img src="/public/img/learned.png" border="0" width="100%" style="margin: auto;" />
+<br />
+<figcaption style="text-align: center; font-size: 14px; font-style: italic">
+Fig 22. An example of approximation error
+</figcaption>
+</figure>
+
+<p>But the trade-offs in both cases are in fact pretty similar:</p>
+
+<ul>
+  <li>
+    <p>On one side this gives a new flexibility dimention, now we can tune an index
+to consume less space but be less efficient by making it more coarse and
+working with bigger error intervals.</p>
+  </li>
+  <li>
+    <p>On the other side the model has to learn new incoming data, and it’s hard.
+One could train a neural network incrementally, or amortize inserts, but it’s
+not exactly a solved problem.</p>
+  </li>
+</ul>
+
+<p>Overall we can probably put learned indexes even more far away from the insert
+corner of RUM space.</p>
+
+<h2 id="8-is-that-all">8. Is that all?</h2>
+
+<p><a href="https://www.youtube.com/watch?v=_dRra4786Ww" target="_blank">
+<img src="/public/img/nein.jpg" border="0" width="100%" style="margin: auto;" />
+</a></p>
+
+<p>We have discussed so many topics, only the strongest have made to this point!
+But there is always more out there, the story is never fully completed. Off the
+top of my head we haven’t (and we’re not going to) talked about:</p>
+
+<ul>
+  <li>
+    <p>Buffered (Lazy) B-Tree</p>
+  </li>
+  <li>
+    <p>Cache conscious B-Tree</p>
+  </li>
+  <li>
+    <p>UB-Tree</p>
+  </li>
+  <li>
+    <p>Skip List</p>
+  </li>
+  <li>
+    <p>LSM stuff</p>
+  </li>
+  <li>
+    <p>And I’m sure much more.</p>
+  </li>
+</ul>
+
+<p>In fact, I would be very interested to know if you can suggest more, let me
+know in the commentaries.</p>
+
+<p>Now you may ask what for you may need all this information, isn’t it too
+academical?</p>
+
+<p><img src="/public/img/equation.png" border="0" width="100%" style="margin: auto;" /></p>
+
+<p>Yes, it is too academical in a way, but you should not be afraid of it. No one
+is going to ask you about Bw-Tree on an interview (hopefully), but throughout
+the blog post I have tried to show that pretty theoretical stuff could be very
+entertaining and even inspiring at times. And theory tend to become a practice
+one day after all.</p>
+
+<p>One more thing I want to do is to express my appreciation to all those authors
+I’ve mentioned in the blog post, which is nothing more than just a survey of
+interesting ideas they come up with. I’ve tried to carefully collect all the
+references below in no particular order, so you can check them out directly
+(I’ve probably messed up the format of the references to make them more
+compact, do not get mad if you’re a professional scientist).</p>
+
+<h2 id="acknowlegements">Acknowlegements</h2>
+
+<p>Thanks a lot to
+Mark Callaghan (<a href="https://twitter.com/MarkCallaghanDB">@MarkCallaghanDB</a>),
+Peter Geoghegan (<a href="https://twitter.com/petervgeoghegan"> @petervgeoghegan</a>)
+and Andy Pavlo (<a href="https://twitter.com/andy_pavlo">@andy_pavlo</a>)
+for review and commentaries!</p>
+
+<h2 id="references">References</h2>
+
+<p>[1] Bayer R., McCreight E. (1970).
+<a href="https://infolab.usc.edu/csci585/Spring2010/den_ar/indexing.pdf">Organization and maintenance of large ordered indices</a>.
+Proceedings of the 1970 ACM SIGFIDET Workshop on Data Description, Access and
+Control. doi:10.1145/1734663.1734671.</p>
+
+<p>[2] Comer D. (1979). <a href="http://cgi.di.uoa.gr/~ad/M149/ubiquitous_btree.pdf">The Ubiquitous B-Tree</a>.
+Computing Surveys, 11 (2). doi:10.1145/356770.356776.</p>
+
+<p>[3] Graefe G. (2011). <a href="https://dl.acm.org/doi/10.1561/1900000028">Modern B-Tree Techniques</a>.
+Foundations and Trends in Databases. doi:10.1561/1900000028.</p>
+
+<p>[4] Manos A, Stratos I. (2016).
+<a href="https://stratos.seas.harvard.edu/files/stratos/files/rum.pdf">Designing Access Methods: The RUM Conjecture.</a>
+EDBT. doi:10.1145/2882903.2912569.</p>
+
+<p>[5] Lehman P., Yao S. (1981).
+<a href="https://www.csd.uoc.gr/~hy460/pdf/p650-lehman.pdf">Efficient Locking for Concurrent Operations on B-Trees</a>.
+ACM Transactions on Database Systems. doi:10.1145/319628.319663</p>
+
+<p>[6] PostgreSQL nbtree: <a href="https://git.postgresql.org/gitweb/?p=postgresql.git;a=blob;f=src/backend/access/nbtree/README;h=9692e4cdf64419e6f5ceb58b46bbeb192295d64a;hb=HEAD">src/backend/access/nbtree/README</a></p>
+
+<p>[7] Sen S., Tarjan R. E. (2009).
+<a href="http://sidsen.azurewebsites.net/papers/ravl-trees-journal.pdf">Deletion without rebalancing in multiway search trees</a>
+ACM Transactions on Database Systems, doi:10.1007/978-3-642-10631-6_84</p>
+
+<p>[8] PostgreSQL Wiki:
+[Key Normalization][https://wiki.postgresql.org/wiki/Key_normalization]</p>
+
+<p>[9] Graefe G., Larson P. (2001).
+<a href="https://dl.acm.org/doi/10.5555/645484.656370">B-tree indexes and CPU caches</a>,
+International Conference on Data Engineering, doi:10.1109/ICDE.2001.914847</p>
+
+<p>[10] Kissinger T., Schlegel B., Habich D., Lehner W. (2012)
+<a href="https://15721.courses.cs.cmu.edu/spring2019/papers/07-oltpindexes1/kissinger-damon2012.pdf">KISS-Tree: smart latch-free in-memory indexing on modern architectures</a>.
+In Proceedings of the Eighth International Workshop on Data Management on New
+Hardware. doi:10.1145/2236584.2236587</p>
+
+<p>[11] Leis V., Scheibner F, Kemper A., Neumann T. (2016).
+<a href="https://db.in.tum.de/~leis/papers/artsync.pdf">The ART of practical synchronization</a>.
+In Proceedings of the 12th International Workshop on Data Management on New
+Hardware. doi:10.1145/2933349.2933352</p>
+
+<p>[12] Glombiewski N., Seeger B., Graefe G. (2019).
+<a href="https://btw.informatik.uni-rostock.de/download/tagungsband/B2-2.pdf">Waves of Misery After Index Creation</a>.
+BTW 2019. Gesellschaft für Informatik. doi:10.18420/btw2019-06</p>
+
+<p>[13] O’Neil P. E. (1992).
+<a href="https://dl.acm.org/doi/10.1007/BF01185680">The SB-tree: An index-sequential structure for high performance sequential access</a>.
+Acta Informatica. doi:10.1007/BF01185680</p>
+
+<p>[14] Graefe G. (2003).
+<a href="http://www-db.cs.wisc.edu/cidr/cidr2003/program/p1.pdf">Sorting and indexing with partitioned B-Trees</a>,
+Classless Inter Domain Routing, 2003</p>
+
+<p>[15] Riegger C., Vincon T., Petrov I. (2017).
+<a href="https://dl.acm.org/doi/10.1145/3151759.3151814">Write-optimized indexing with partitioned b-trees</a>.
+doi:10.1145/3151759.3151814</p>
+
+<p>[16] Zhang H., Andersen D. G., Pavlo A., Kaminsky M., Ma L., Shen R. (2016).
+<a href="https://www.cs.cmu.edu/~pavlo/papers/zhang-sigmod2016.pdf">Reducing the Storage Overhead of Main-Memory OLTP Databases with Hybrid Indexes</a>.
+In Proceedings of the 2016 International Conference on Management of Data (SIGMOD ’16).
+doi:10.1145/2882903.2915222</p>
+
+<p>[17] Levandoski J., Lomet D., Sengupta S. (2012).
+<a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/bw-tree-icde2013-final.pdf">The Bw-Tree: A B-tree for New Hardware Platforms</a>.
+International Conference on Data Engineering. doi:10.1109/ICDE.2013.6544834</p>
+
+<p>[18] Zhou Xinjing, Shou Lidan, Chen Ke, Hu Wei, Chen Gang. (2019).
+<a href="http://www.vldb.org/pvldb/vol13/p421-zhou.pdf">DPTree: differential indexing for persistent memory</a>.
+Proceedings of the VLDB Endowment. doi:10.14778/3372716.3372717</p>
+
+<p>[19] Leis V., Kemper A., Neumann T. (2013).
+<a href="https://db.in.tum.de/~leis/papers/ART.pdf">The adaptive radix tree: ARTful indexing for main-memory databases</a>.
+International Conference on Data Engineering. doi:10.1109/ICDE.2013.6544812</p>
+
+<p>[20] Binna R., Zangerle E., Pichl M., Specht G., Leis V. (2018).
+<a href="https://dbis.uibk.ac.at/sites/default/files/2018-04/hot-height-optimized-author-version.pdf">HOT: A Height Optimized Trie Index for Main-Memory Database Systems</a>.
+2018 International Conference on Management of Data. doi:10.1145/3183713.3196896</p>
+
+<p>[21] Kraska T., Beutel A., Chi E. H., Dean J., Polyzotis N. (2018).
+<a href="https://arxiv.org/pdf/1712.01208.pdf">The Case for Learned Index Structures</a>.
+2018 International Conference on Management of Data (SIGMOD ‘18).
+doi:10.1145/3183713.3196909</p>
+
+<p>[22] Setiawan N., Rubinstein B., Borovica-Gajic R. (2020).
+<a href="http://renata.borovica-gajic.com/data/2020_adc.pdf">Function Interpolation for Learned Index Structures</a>.
+doi:10.1007/978-3-030-39469-1_6.</p>
+
+<p>[23] Galakatos A., Markovitch M., Binnig C., Fonseca R., Kraska T. (2019).
+<a href="https://arxiv.org/pdf/1801.10207.pdf">FITing-Tree: A Data-aware Index Structure</a>.
+2019 International Conference on Management of Data (SIGMOD ‘19).
+doi:10.1145/3299869.3319860</p>
+
+
+</div>
+
+<div class="related">
+  <h2>Other Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2021/03/03/subscripting/">
+            How many engineers does it take to make subscripting work?
+            <small>03 Mar 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2020/08/07/chess-and-optimizer/">
+            Query optimizer and chess?
+            <small>07 Aug 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2019/12/06/postgresql-stay-curious/">
+            PostgreSQL at low level: stay curious!
+            <small>06 Dec 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'erthalion'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </div>
+
+  </body>
+</html>

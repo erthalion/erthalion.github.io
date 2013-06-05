@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+
+  <title>
+    PostgreSQL at low level: stay curious! &middot; 
+    Erthalion's blog
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/touch-icon-144-precomposed.png">
+  <link href='/img/favicon.ico' rel='shortcut icon' type='image/png'>
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-24190660-5', 'erthalion.info');
+      ga('send', 'pageview');
+
+    </script>
+</head>
+
+
+  <body>
+
+    <header class="masthead">
+      <div class="masthead-inner">
+        <a href="http://erthalion.info/blog"><h1>Blog</h1></a>
+        <p class="lead">My thoughts and experiments.</p>
+
+        <div class="colophon">
+          <ul class="colophon-links">
+            <li>
+              <a href="http://erthalion.info/">About me</a>
+            </li>
+            <li>
+              <a href="http://andhyde.com/">Hyde Jekyll theme</a>
+            </li>
+          </ul>
+
+          <p>&copy; 2020. Dmitry Dolgov All rights reserved.</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="content container">
+      <div class="post">
+  <h1>PostgreSQL at low level: stay curious!</h1>
+  <span class="post-date">06 Dec 2019</span>
+  <h2 id="0-how-to-read-me">0. How to read me?</h2>
+
+<p>Yes, I know, it’s a long text, and it was my conscious decision to write it in
+this way. But fear not! Imagine that you read a book, take a look at the
+introduction and first few interesting sections, think about it and then find
+time to read further. I hope I’ve left enough references, so if you don’t get
+some ideas you’ll be able to read more information about interesting parts. Or
+you can even skip some sections, since they are relatively independent. This
+table of contents will guide you:</p>
+
+<ul style="width:100%">
+  <li>
+    <a href="#1-introduction">Introduction</a>
+  </li>
+  <li>
+    <a href="#2-shared-memory">Interesting stuff</a>
+    <ul>
+    <li>
+        <a href="#2-shared-memory">Strace</a>
+        <ul>
+            <li>
+                <a href="#2-shared-memory">Shared memory</a>
+            </li>
+            <li>
+                <a href="#3-vdso">vDSO</a>
+            </li>
+        </ul>
+    </li> 
+    <li>
+        <a href="#4-cpu-migrations">Perf</a>
+        <ul>
+            <li>
+                <a href="#4-cpu-migrations">CPU migrations</a>
+            </li>
+            <li>
+                <a href="#5-mds">MDS</a>
+            </li>
+            <li>
+                <a href="#6-lock-holderwaiter-preemption">Lock holder/waiter preemption</a>
+            </li>
+            <li>
+                <a href="#7-huge-pages">Huge pages</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="#8-bpf">BPF</a>
+        <ul>
+            <li>
+                <a href="#8-bpf">Overview</a>
+            </li>
+            <li>
+                <a href="#9-llc">LLC</a>
+            </li>
+            <li>
+                <a href="#10-writeback">Writeback</a>
+            </li>
+            <li>
+                <a href="#11-memory-reclaim">Memory reclaim</a>
+            </li>
+            <li>
+                <a href="#12-io-scheduler">IO scheduler</a>
+            </li>
+            <li>
+                <a href="#13-butbut-isnt-it-slow">But...but isn't it slow?</a>
+            </li>
+            <li>
+                <a href="#14-im-going-to-use-it-in-production-immediately">I'm going to use it in production immediately!</a>
+            </li>
+        </ul>
+    </li>
+    </ul>
+  </li>
+  <li>
+      <a href="#15-conclusions">Conclusions</a>
+  </li>
+</ul>
+
+<h2 id="1-introduction">1. Introduction</h2>
+
+<blockquote>
+  <p>In mathematics it is too easy to concentrate very hard on one specific
+problem. If your methods are not good enough to handle the problem, you will
+eventually grind to a halt, baffled and defeated. Often the key to further
+progress is to stand back, forget about the special problem, and see if you
+can spot any general features of the surrounding area which might be of use.</p>
+
+  <p>Ian Stewart, Concepts of Modern Mathematics.</p>
+</blockquote>
+
+<p>It’s not a secret that databases are damn complicated systems. And they tend to
+run on top of even more complicated stacks of software. Nowadays you will not
+surprise anyone (or at least not that much) by running your database on a
+Kubernetes cluster or inside a virtual machine. It’s probably still
+questionable whether it’s good and appropriate, but this approach is
+something we have to face — sometimes it’s at least convenient, sometimes it
+allows to be more resource efficient and sometimes it’s the only available
+infrastructure in a company.</p>
+
+<!--break-->
+
+<p><img src="/public/img/layers.png" border="0" width="100%" style="margin: auto" /></p>
+
+<p>And one of the problems in this situation is that reasoning about the
+performance is not that easy any more. Well, it’s not like it was much easier
+before, but still. An issue, that could be in a database and sometimes in OS
+configuration, now has much more places to hide. At the same time every piece
+of software we have in our layers provide different and rather not unified ways
+to analyze its performance. In this kind of situations what usually happens if
+we’ve been hit by a strange and transient performance bug, hidden so well in
+between? Most of the time people tend to use a “time efficient” solution, like
+scaling up or restarting the whole thing, just to make this problem go away.
+Not only it usually returns, but people also loosing an important knowledge for
+themselves and for a community of whatever software they use.</p>
+
+<p>All of this make me think that quite often it would be very beneficial to stand
+back, forget about one particular layer of the system and apply more holistic
+approach to the problem. Ironically this holistic approach would mean an
+investigation of what’s going on a low level, since everything would be
+presented there relatively unified and without that much of borders between
+different layers. For example, let’s remember what happens when a database
+specialist is after a slow query? Well, most of the time there is a long stare
+at the query plan in attempt to understand how the database will execute it,
+and then change of the query, or dataset, or rarely the database parameters.
+But no matter how long we will stare at it, in this way it’s impossible to
+figure out that the query became slower e.g. due to the database, that runs on
+a K8S node, got few noisy neighbours scheduled on the same node.</p>
+
+<p>But so far it sounds too fuzzy. What if you want to apply this approach, how
+would you do this? Just randomly and without any plan using utilities you’ve
+found on the internet?</p>
+
+<blockquote>
+  <p>So this is how a performance analysis looks like, people with expensive
+tools running around. Not how I pictured it.</p>
+
+  <p>Elliot Alderson could have said that</p>
+</blockquote>
+
+<p>Fortunately no, there is a nice <a href="http://www.brendangregg.com/methodology.html">guideline</a> from Brendan Gregg,
+that also includes frequent anti-patterns. One of the mentioned methods I find
+especially practical is <a href="http://www.brendangregg.com/usemethod.html">USE</a>, that could be summarized as:</p>
+
+<blockquote>
+  <p>For every resource, check utilization, saturation, and errors.</p>
+</blockquote>
+
+<p>If you’re interested more in computational performance, I can also suggest
+<a href="https://easyperf.net/blog/2019/02/09/Top-Down-performance-analysis-methodology">Top-Down performance analysis</a>. Taking this into account will help
+you to solve a lot of complicated performance issues.</p>
+
+<p>Having said all of that, now I want to show few examples for situations that I
+find interesting or useful, when one can use tools from the outside of the
+Postgres itself to figure out what’s going on.</p>
+
+<h2 id="2-shared-memory">2. Shared memory</h2>
+
+<p>What if you want to execute some analytical query against your relatively fresh
+Postgres installation, and suddenly see this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ERROR:  could not resize shared memory segment
+"/PostgreSQL.699663942" to 50438144 bytes:
+    No space left on device
+</code></pre></div></div>
+
+<p>Seems pretty strange, and it’s actually not that easy to get more insight from
+the logs. But if you’re curious enough, spin up <code class="language-plaintext highlighter-rouge">strace</code>, attach it to your
+Postgres backend, and see what system calls your database is doing. There is
+even not that well known option <a href="https://github.com/strace/strace/blob/master/strace.c#L265">-k</a>, that allow us to see the
+stack trace between each syscall! There is an <a href="https://medium.com/@FranckPachot/strace-k-build-with-libunwind-f949d4802322">information</a>
+that this options is not available everywhere, so maybe you need to compile
+<code class="language-plaintext highlighter-rouge">strace</code> yourself for that, but I would even advise you to do so, since it’s
+relatively trivial and allow you to transform it more for your needs (e.g.
+statically compiled <code class="language-plaintext highlighter-rouge">strace</code> can be pretty useful). Anyway, what can we see
+using this tool?</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># strace -k -p PID
+openat(AT_FDCWD, "/dev/shm/PostgreSQL.62223175"
+ftruncate(176, 50438144)                = 0
+fallocate(176, 0, 0, 50438144)          = -1 ENOSPC
+ &gt; libc-2.27.so(posix_fallocate+0x16) [0x114f76]
+ &gt; postgres(dsm_create+0x67) [0x377067]
+   ...
+ &gt; postgres(ExecInitParallelPlan+0x360) [0x254a80]
+ &gt; postgres(ExecGather+0x495) [0x269115]
+ &gt; postgres(standard_ExecutorRun+0xfd) [0x25099d]
+   ...
+ &gt; postgres(exec_simple_query+0x19f) [0x39afdf]
+</code></pre></div></div>
+
+<p>Now things are getting clear. We know that starting from PostgreSQL 10 query
+parallelism was improved significantly, and it seems like out backend indeed
+was doing something with parallel workers here. Each parallel worker require
+some amount of dynamic shared memory, which in case of POSIX implementation
+allocates something under <code class="language-plaintext highlighter-rouge">/dev/shm</code>. And now we do something, what software
+engineers usually don’t do — read the documentation, from which we learn that
+default value for <code class="language-plaintext highlighter-rouge">/dev/shm</code> size in Docker is <a href="https://github.com/moby/moby/blob/master/daemon/config/config.go#L42">64Mb</a>.
+Sometimes it could be not enough, and we’re in troubles.</p>
+
+<h2 id="3-vdso">3. vDSO</h2>
+
+<p>One can say that the previous example is a cheat, since obviously it’s rather
+complicated to analyze an issue in some software from the software itself, so
+here is another one. There is a nice Linux kernel mechanism called vDSO
+(virtual dynamic shared object). It allows us to call some kernel space
+routines in-process, without incurring the performance penalty of a mode switch
+from user to kernel mode. Some of those routines are quite important for
+databases, e.g. <code class="language-plaintext highlighter-rouge">gettimeofday</code>. But unfortunately this mechanism is not always
+available on VMs, it depends on a hypervisor (see more details in this nice
+<a href="https://blog.packagecloud.io/eng/2017/03/08/system-calls-are-much-slower-on-ec2/">blogpost</a>). And now imagine you have a situation, when your
+K8S cluster consists of mixture of nodes from different AWS generations, how to
+figure out on which of them your databases are doing extra work? Attach
+<code class="language-plaintext highlighter-rouge">strace</code>, and see if there are any real system calls done:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># strace -k -p PID on XEN
+gettimeofday({tv_sec=1550586520, tv_usec=313499}, NULL) = 0
+</code></pre></div></div>
+
+<h2 id="4-cpu-migrations">4. CPU migrations</h2>
+
+<p>Here I have few naive experiments with pgbench on my laptop. Not exactly
+reliable benchmarking setup, but good enough to show some interesting stuff.
+The first experiment was running some heavy stuff, sorting a lot of data. In
+the second experiment I’ve utilized cool pgbench option
+<a href="https://www.postgresql.org/docs/12/pgbench.html#PGBENCH-RUN-OPTIONS">–file=filename[@weight]</a> to use different scripts in
+specified proportions, and the second script was doing something short, just
+select one record by index:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Experiment 1
+SQL script: pg_long.sql
+- latency average = 1312.903 ms
+
+# Experiment 2
+SQL script 1: pg_long.sql
+- weight: 1 (targets 50.0% of total)
+- latency average = 1426.928 ms
+
+SQL script 2: pg_short.sql
+- weight: 1 (targets 50.0% of total)
+- latency average = 303.092 ms
+</code></pre></div></div>
+
+<p>I was a bit confused, when I saw the results. Why when we replace half of the
+heavy workload with something more lightweight, it’s getting worse? It’s one of
+those situations, when no matter how silly is the combination of parameters,
+it’s always interesting to check why. Most likely our bottleneck is not some
+syscall, so <code class="language-plaintext highlighter-rouge">strace</code> will not help and probably we need to deploy <code class="language-plaintext highlighter-rouge">perf</code> to
+record hardware performance events:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># perf record -e cache-misses,cpu-migrations
+
+# Experiment 1
+12,396,382,649      cache-misses # 28.562%
+%2,750              cpu-migrations
+
+# Experiment 2
+20,665,817,234      cache-misses # 28.533%
+10,460              cpu-migrations
+</code></pre></div></div>
+
+<p>Now we see something interesting. My original idea that it has something to do
+with cache misses is wrong, in both cases this metrics is almost the same. But
+<code class="language-plaintext highlighter-rouge">cpu-migrations</code> is three times bigger for the second experiment, due to
+different type of workload introducing disbalance in CPU consumption and not
+big enough value for <a href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/sched/fair.c#n87">sched_migration_cost_ns</a> make
+kernel think that it makes sense to migrate backends between CPUs. Most likely
+that’s the reason for our higher latency.</p>
+
+<h2 id="5-mds">5. MDS</h2>
+
+<p>I know, everyone tired of hardware vulnerabilities. But they are good
+opportunity to practice your profiling skills, so I just can’t resist to write
+this section. MDS (Microarchitectural Data Sampling) is another of those issues
+similar to Meltdown and Spectre. Every such public vulnerability has an extra
+mitigation mechanism in the Linux kernel and it means an overhead of some kind.
+Actually, there is a nice <a href="https://www.postgresql.org/message-id/flat/20190514223052.2iufhkjmgod2h7ic%40alap3.anarazel.de">overview</a> of what does it mean for
+Postgres, but let’s imagine for a minute that we live in a fantasy world where
+there is no Andres Freund. How would you evaluate an influence of this
+mitigation for your database? Well, let’s start to profile:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Children      Self  Symbol                                        
+# ........  ........  ...................................
+    71.06%     0.00%  [.] __libc_start_main
+    71.06%     0.00%  [.] PostmasterMain
+    56.82%     0.14%  [.] exec_simple_query
+    25.19%     0.06%  [k] entry_SYSCALL_64_after_hwframe
+    25.14%     0.29%  [k] do_syscall_64
+    23.60%     0.14%  [.] standard_ExecutorRun
+</code></pre></div></div>
+
+<p>If we would compare this profile, taken from a system with mitigation in place,
+with another one without it, we will notice that <code class="language-plaintext highlighter-rouge">do_syscall_64</code> is suddenly
+quite at the top. What does it mean? No idea, let’s zoom in:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Percent     Disassembly of kcore for cycles
+# ........    ................................
+    0.01% :   nopl   0x0(%rax,%rax,1)
+   28.94% :   verw   0xffe9e1(%rip)
+    0.55% :   pop    %rbx
+    3.24% :   pop    %rbp
+</code></pre></div></div>
+
+<p>Oh, here we are. We know via our strange habit of reading the documentation,
+that the mitigation <a href="https://www.kernel.org/doc/html/latest/x86/mds.html#mitigation-strategy">mechanism for MDS</a> implies overloading <code class="language-plaintext highlighter-rouge">verw</code>
+instruction to flush CPU buffers, which kernel does via
+<code class="language-plaintext highlighter-rouge">mds_clear_cpu_buffers()</code>. And exactly that we can see in our profile! But
+please be aware of <a href="https://easyperf.net/blog/2018/08/29/Understanding-performance-events-skid">skid</a>, since sometimes collected samples could be
+corresponding to the wrong instruction.</p>
+
+<h2 id="6-lock-holderwaiter-preemption">6. Lock holder/waiter preemption</h2>
+
+<p>Have you heard about such thing? It turns out it’s quite a problem, even worth
+few white papers, e.g. from <a href="https://www.usenix.org/system/files/conference/atc14/atc14-paper-ding.pdf">Usenix</a> or
+<a href="https://www.cs.hs-rm.de/~kaiser/events/wamos2017/wamos17-proceedings.pdf#page=27">WAMOS</a>. Let’s try to understand where is this issue
+coming from. Imagine we have a Postgres running inside a VM and taking two
+vCPU (vC1, vC2):</p>
+
+<p><img src="/public/img/lock_holder_start.png" border="0" width="70%" style="margin: auto" /></p>
+
+<p>In this scenario at some point the backend on vC2 is waiting on a spin lock for
+something owned by another backend on vC1. Normally it’s not a problem, but what
+happens if hypervisor will suddenly decide to preempt vC1?</p>
+
+<p><img src="/public/img/lock_holder_end.png" border="0" width="70%" style="margin: auto" /></p>
+
+<p>Now we’re in troubles, because what supposed to be a short waiting time for the
+first backend now takes who knows how long. Fortunately for us there are such
+technologies as Intel <a href="https://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-vol-3c-part-3-manual.pdf#page=37">PAUSE-Loop Exiting</a> that are able to prevent
+useless spinning via sending <code class="language-plaintext highlighter-rouge">VM exit</code> to a corresponding VM. Or not
+fortunately, since of course it introduces an overhead of switching between VM
+and hypervisor, and if a pause was triggered incorrectly then this overhead was
+for nothing.</p>
+
+<p>And now the question, how to measure it? Well, probably we can take a look at
+what kind of VM related tracepoints <code class="language-plaintext highlighter-rouge">perf</code> can offer to us. For KVM there is
+actually a <code class="language-plaintext highlighter-rouge">kvm:kvm_exit</code> event, which also contains a reason code for an exit.
+Let’s try to run Postgres inside a KVM (with number of vCPU more that real
+cores) and see:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># experiment 1: pgbench, read write
+# latency average = 17.782 ms
+
+$ modprobe kvm-intel ple_gap=128
+$ perf record -e kvm:kvm_exit
+
+# reason PAUSE_INSTRUCTION 306795
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># experiment 2: pgbench, read write
+# latency average = 16.858 ms
+
+$ modprobe kvm-intel ple_gap=0
+$ perf record -e kvm:kvm_exit
+
+# reason PAUSE_INSTRUCTION 0
+</code></pre></div></div>
+
+<p>In the first experiment we keep the default configuration for PLE and see that
+we’ve recorded quite a number of pause instructions. In the second experiment
+we disable PLE completely, and not surprisingly got 0 pause instructions. And
+you know what? In the second experiment our average latency was visibly lower!
+Most likely it means that our CPUs were too much oversubscribed, and PLE was
+falsely identifying real waiting for useless and pausing them.</p>
+
+<h2 id="7-huge-pages">7. Huge pages</h2>
+
+<p>Somehow it happened that in databases world people not always understand what
+huge pages are and when they are useful. Let’s apply our secret weapon to fight
+this off. First, do not mix up classical huge pages with transparent huge
+pages. The last one is a daemon that tries to merge regular memory pages into a
+huge pages in background and usually it’s advised to disable it due to
+unpredictable resource consumption. Now let’s check the
+<a href="https://www.kernel.org/doc/html/latest/admin-guide/mm/concepts.html#huge-pages">documentation</a>:</p>
+
+<blockquote>
+  <p>Usage of huge pages significantly reduces pressure on TLB, improves TLB
+hit-rate and thus improves overall system performance.</p>
+</blockquote>
+
+<p>Interesting, but how can we check what does it mean for our databases? No
+surprise, there are TLB related tracepoints we can record via <code class="language-plaintext highlighter-rouge">perf</code>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Experiment 1, pgbench read/write, huge_pages off
+# perf record -e dTLB-loads,dTLB-stores -p PID
+
+Samples: 894K of event 'dTLB-load-misses'
+Event count (approx.): 784439650
+Samples: 822K of event 'dTLB-store-misses'
+Event count (approx.): 101471557
+
+# Experiment 2, pgbench read/write, huge_pages on
+# perf record -e dTLB-loads,dTLB-stores -p PID
+
+Samples: 832K of event 'dTLB-load-misses'
+Event count (approx.): 640614445
+Samples: 736K of event 'dTLB-store-misses'
+Event count (approx.): 72447300
+</code></pre></div></div>
+
+<p>Again, two experiments with pgbench TPC-B workload, the first one was done
+without huge pages, the second one with <code class="language-plaintext highlighter-rouge">huge_pages=on</code>. Indeed, in the second
+case we have about 20% less TLD load misses, which correlates good with what we
+have read in the documentation. No latencies here, just to make a point that we
+measure just one particular thing, not the whole system, when we can get some
+noise from other components.</p>
+
+<h2 id="8-bpf">8. BPF</h2>
+
+<p>Oh, this famous Buddhist Peace Fellowship! Or was it Berkeley Packet Filter
+Compiler Collection? What about classic British Pacific Fleet? Sounds like an
+extended Badminton Players Federation. No idea, decide for
+<a href="https://cilium.readthedocs.io/en/latest/bpf/">yourself</a>. The point is that BPF is conquering the world!</p>
+
+<p>On the serious note, I think it’s important to talk about BPF in this blog
+post, since it changes rules of our game a bit. What we had before could be
+described as “stateless tracing/profing”. We’ve got some event, processed it
+and went for the next one, no state in between. And BPF allows us to do an
+efficient “statefull tracing/profiling”, which is honestly just mind-blowing.</p>
+
+<p><img src="/public/img/bpf.png" border="0" width="70%" style="margin: auto" /></p>
+
+<p>It’s a bit cumbersome to write plain BPF bytecode, but fortunately there are
+better ways to do it. Yes, I’m talking about <a href="https://github.com/iovisor/bcc/">BCC</a>, which is not only an
+amazing tool to generate BPF programs, but also a set of already existing
+useful scripts. While <a href="https://github.com/iovisor/bcc/pull/1940">working with it</a> I’ve got an idea to extend this
+set by something more Postgres specific and ended up creating an experimental
+<a href="https://github.com/erthalion/postgres-bcc">postgres-bcc</a>. So what can we do with that?</p>
+
+<h2 id="9-llc">9. LLC</h2>
+
+<p>You can be surprised how important could be last level cache sometimes. But
+before I was thinking about measuring LLC numbers only globally, e.g. per node.
+And it was totally mind-blowing for me to realize, that it’s possible to
+extract LLC numbers and connect them with a backend information. In simplest
+situations it can give us something like cache misses per query:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># llcache_per_query.py bin/postgres
+
+PID  QUERY                      CPU REFERENCE MISS   HIT%
+9720 UPDATE pgbench_tellers ... 0        2000 1000 50.00%
+9720 SELECT abalance FROM   ... 2        2000  100 95.00%
+...
+
+Total References: 3303100 Total Misses: 599100 Hit Rate: 81.86%
+</code></pre></div></div>
+
+<h2 id="10-writeback">10. Writeback</h2>
+
+<p>Since Postgres is doing buffered IO, it’s quite important to understand
+writeback behaviour under your database. Imagine a situation, when your IO
+monitoring went crazy without any activity from the Postgres side. At this
+point we already know, that most likely there are some tracepoints for us.</p>
+
+<p>As an important side note, I need to mention that you actually don’t need to
+have <code class="language-plaintext highlighter-rouge">perf</code> to explore all those tracepoints. There is such an amazing tool as
+<a href="https://www.kernel.org/doc/Documentation/trace/ftrace.txt">ftrace</a> that allow us to do a lot without installing anything at all.
+To try it out mount <code class="language-plaintext highlighter-rouge">tracefs</code> (usually it’s already mounted on
+<code class="language-plaintext highlighter-rouge">/sys/kernel/debug/tracing</code>), pick up an event from <code class="language-plaintext highlighter-rouge">events</code> directory and
+enable it.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># cd /sys/kernel/debug/tracing
+# echo 1 &gt; events/writeback/writeback_written/enable
+# tail trace
+
+kworker/u8:1 reason=periodic   nr_pages=101429
+kworker/u8:1 reason=background nr_pages=MAX_ULONG
+kworker/u8:3 reason=periodic   nr_pages=101457
+</code></pre></div></div>
+
+<p>What you see above is a shortened version of the output. <code class="language-plaintext highlighter-rouge">MAX_ULONG</code> is a short
+replacement for maximum unsigned long.</p>
+
+<p><img src="/public/img/max_ulong.png" border="0" width="70%" style="margin: auto" /></p>
+
+<p>We can see that indeed, Linux kernel starts doing writeback in background
+trying to flush as much as possible from the filesystem cache. But of course
+it’s not the whole story, sometimes kernel will make backends
+<a href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/page-writeback.c#n1782">wait</a> if it’s not keeping up with the amount of generated
+dirty pages. This information we can extract via another script from
+<code class="language-plaintext highlighter-rouge">postgres-bcc</code>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># pgbench insert workload
+# io_timeouts.py bin/postgres
+
+[18335] END: MAX_SCHEDULE_TIMEOUT
+[18333] END: MAX_SCHEDULE_TIMEOUT
+[18331] END: MAX_SCHEDULE_TIMEOUT
+[18318] truncate pgbench_history: MAX_SCHEDULE_TIMEOUT
+</code></pre></div></div>
+
+<p>It’s worth noting that one can control writeback behaviour via different
+<a href="https://www.kernel.org/doc/Documentation/admin-guide/sysctl/vm.rst">parameters</a>, like <code class="language-plaintext highlighter-rouge">dirty_background_bytes</code>. Another
+<a href="https://www.postgresql.org/message-id/20190618164849.l6b6o4kc4kguzquo%40alap3.anarazel.de">possibility</a> would be to configure <code class="language-plaintext highlighter-rouge">bgwriter</code> or
+<code class="language-plaintext highlighter-rouge">checkpointer</code> via <code class="language-plaintext highlighter-rouge">bgwriter_flush_after</code> / <code class="language-plaintext highlighter-rouge">checkpointer_flush_after</code>.</p>
+
+<h2 id="11-memory-reclaim">11. Memory reclaim</h2>
+
+<p>This part requires some context. If you ever faced with Kubernetes, you
+probably have seen this black magic incantations:</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">resources</span><span class="pi">:</span>
+  <span class="na">requests</span><span class="pi">:</span>
+    <span class="na">memory</span><span class="pi">:</span> <span class="s2">"</span><span class="s">64Mi"</span>
+    <span class="na">cpu</span><span class="pi">:</span> <span class="s2">"</span><span class="s">250m"</span>
+  <span class="na">limits</span><span class="pi">:</span>
+    <span class="na">memory</span><span class="pi">:</span> <span class="s2">"</span><span class="s">128Mi"</span>
+    <span class="na">cpu</span><span class="pi">:</span> <span class="s2">"</span><span class="s">500m"</span>
+</code></pre></div></div>
+
+<p>In this way one can specify an amount of resources an application needs. And
+now remember that Kubernetes utilize cgroups v1 and we have there:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>memory.limit_in_bytes
+memory.soft_limit_in_bytes
+</code></pre></div></div>
+
+<p>What would be the first reaction looking at those two examples? Right, they’re
+not correlated. Well, only partially, since resources memory limit is indeed
+mapped to <code class="language-plaintext highlighter-rouge">memory.limit_in_bytes</code>. But memory request is actually used only
+internally e.g. to calculate <code class="language-plaintext highlighter-rouge">oom_adj</code> and QoS.</p>
+
+<p>When I discovered this, my idea was that it means there would be no memory
+reclaim problems, since when an application inside a cgroup goes over a soft
+memory limit, it starts to reclaim pages. How to prove or disprove this idea?
+Try it out!</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># only under the memory pressure
+# page_reclaim.py --container 89c33bb3133f
+
+[7382] postgres: 928K
+[7138] postgres: 152K
+[7136] postgres: 180K
+[7468] postgres: 72M
+[7464] postgres: 57M
+[5451] postgres: 1M
+</code></pre></div></div>
+
+<p>Of course there are a lot of memory reclaims anyway if we come close enough to
+the memory limit. And indeed we’ve seen such examples when a database inside a
+K8S pod due to misconfiguration was doing page reclaims too often incurring
+more overhead. Things are getting more interesting, when we remember that
+Postgres is using shared memory to keep the data available between different
+backends. The way how shared memory is implemented is via COW (copy on write)
+mechanism, and essentially every shared memory page can be duplicated and
+accounted against cgroup limits. This whole situation introduce more chaos,
+since Postgres and Linux kernel use and evict those pages using different
+strategy, so it makes sense to at least check this stuff out from time to time.</p>
+
+<p>By the way, it’s not that straightforward even to run <code class="language-plaintext highlighter-rouge">BCC</code> on Kubernetes,
+since most of the time you need to specify an exact Linux kernel version via
+<code class="language-plaintext highlighter-rouge">BCC_LINUX_VERSION_CODE</code> (e.g. for the kernels 4.14.96 it should be in the
+format <code class="language-plaintext highlighter-rouge">4 * 65536 + 14 * 256 + 96</code>) and Linux headers via <code class="language-plaintext highlighter-rouge">BCC_KERNEL_SOURCE</code>
+(which you probably need to fake via symlink, in case if headers available in
+your pod are not matching to the kernel version of the node). Another catch
+could be if you run on a relatively old kernel versions, since before <code class="language-plaintext highlighter-rouge">v4.18</code>
+overlayfs does not <a href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f0a2aa5a2a406d0a57aa9b320ffaa5538672b6c5">support uprobes</a></p>
+
+<h2 id="12-io-scheduler">12. IO scheduler</h2>
+
+<p>Some time ago it was a common wisdom, that on modern storage devices one need
+no IO scheduler. Is it still true? Why do I have then so many options here?</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># cat /sys/block/nvme0n1/queue/scheduler
+[mq-deadline] kyber bfq none
+</code></pre></div></div>
+
+<p>Well, the situation is more interesting that I thought originally. Here is a
+diagram, inspired by <a href="https://www.thomas-krenn.com/en/wiki/Linux_Storage_Stack_Diagram">Werner Fischer</a> of something called <code class="language-plaintext highlighter-rouge">blk-mq</code>
+(Multi-Queue Block IO Queueing Mechanism), which allow us to utilize multi
+queue storage devices more efficiently:</p>
+
+<p><img src="/public/img/sched.png" border="0" width="100%" style="margin: auto" /></p>
+
+<p>Such IO schedulers as <code class="language-plaintext highlighter-rouge">none</code>, <code class="language-plaintext highlighter-rouge">kyber</code>, <code class="language-plaintext highlighter-rouge">mq-deadline</code> are actually implemented
+via this mechanism and not for nothing. For example <a href="https://www.kernel.org/doc/Documentation/block/kyber-iosched.rst">kyber</a> will try to
+throttle IO requests by reducing software queues depth in order to meet some
+predefined target latency. This could be cool e.g. for those cases when there
+are no mechanisms of IO isolation (hello K8S), and some too greedy applications
+can skew latencies a lot. But this is just a theory, is there any way to get
+some practical and measurable knowledge from it? Let’s create a BPF program
+that will be executed when a new request is inserted into a software queue and
+completed. Then at the completion event we can check if a completed request was
+not issued from a cgroup of our interest and there are other requests in the
+same queue from our cgroup - in this situation we can consider this just
+completed request a noise for our application, a latency that some other
+application requests had to wait before they can be successfully executed.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># blk_mq.py --container 89c33bb3133f
+
+ latency (us)   : count  distribution
+    16 -&gt; 31    : 0     |                                        |
+    32 -&gt; 63    : 19    |***                                     |
+    64 -&gt; 127   : 27    |****                                    |
+   128 -&gt; 255   : 6     |*                                       |
+   256 -&gt; 511   : 8     |*                                       |
+   512 -&gt; 1023  : 17    |***                                     |
+  1024 -&gt; 2047  : 40    |*******                                 |
+  2048 -&gt; 4095  : 126   |**********************                  |
+  4096 -&gt; 8191  : 144   |*************************               |
+  8192 -&gt; 16383 : 222   |****************************************|
+ 16384 -&gt; 32767 : 120   |*********************                   |
+ 32768 -&gt; 65535 : 44    |*******                                 |
+</code></pre></div></div>
+
+<p>The example above is pretty artificial, because it was measured only on one
+software queue (I had to enable <code class="language-plaintext highlighter-rouge">blk-mq</code> via adding <code class="language-plaintext highlighter-rouge">scsi_mod.use_blk_mq=1</code>
+into the Linux boot cmdline), but nevertheless interesting.</p>
+
+<h2 id="13-butbut-isnt-it-slow">13. But…but isn’t it slow?</h2>
+
+<p>All this <code class="language-plaintext highlighter-rouge">BCC</code> stuff is pretty amazing and convenient, but requires to execute
+some python and compile some generated C code into BPF program via LLVM
+backend. Sometimes it’s fine, but sometimes an object of your investigation is
+so overloaded it’s impossible even start python interpreter there. There are
+some interesting initiatives to overcome this issue, e.g. <a href="http://vger.kernel.org/bpfconf2019_talks/bpf-core.pdf#page=2">CORE</a>, but
+as an interesting experiment I’ve decided to do something similar without
+having <code class="language-plaintext highlighter-rouge">BCC</code> in place. What do we need to reproduce the same functionality and
+write a small BPF program to measure latency of a query execution?</p>
+
+<p>Well we need to create an uprobe for whatever event we want to attach to. Sounds
+straightforward:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># perf probe -x bin/postgres exec_simple_query
+# perf probe -x bin/postgres exec_simple_query%return
+
+# cat /sys/kernel/debug/tracing/uprobe_events
+
+p:probe_postgres/exec_simple_query /bin/postgres:0x000000000044aa7c
+r:probe_postgres/exec_simple_query__return /bin/postgres:0x000000000044aa7c
+</code></pre></div></div>
+
+<p>Next step is to write our BPF program in C. For that one can draw some
+inspiration in <code class="language-plaintext highlighter-rouge">linux/samples/bpf/</code> that contains interesting examples and how
+to compile them, taking into account you have LLVM and kernel headers
+installed (<code class="language-plaintext highlighter-rouge">make headers_install</code>). In this program we will define a BPF map:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">struct</span> <span class="n">bpf_map_def</span> <span class="n">SEC</span><span class="p">(</span><span class="s">"maps"</span><span class="p">)</span> <span class="n">latencies</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="p">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">BPF_MAP_TYPE_HASH</span><span class="p">,</span>
+	<span class="p">.</span><span class="n">key_size</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">u32</span><span class="p">),</span>
+	<span class="p">.</span><span class="n">value_size</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">u64</span><span class="p">),</span>
+	<span class="p">.</span><span class="n">max_entries</span> <span class="o">=</span> <span class="n">MAX_ENTRIES</span><span class="p">,</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>and one function for each uprobe:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">SEC</span><span class="p">(</span><span class="s">"tracepoint/probe_postgres/exec_simple_query"</span><span class="p">)</span>
+<span class="kt">int</span> <span class="nf">trace_enter_open</span><span class="p">(</span><span class="k">struct</span> <span class="n">syscalls_enter_open_args</span> <span class="o">*</span><span class="n">ctx</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">u32</span> <span class="n">key</span> <span class="o">=</span> <span class="n">bpf_get_current_pid_tgid</span><span class="p">();</span>
+	<span class="n">u64</span> <span class="n">init_val</span> <span class="o">=</span> <span class="n">bpf_ktime_get_ns</span><span class="p">();</span>
+	<span class="n">bpf_map_update_elem</span><span class="p">(</span><span class="o">&amp;</span><span class="n">latencies</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">key</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">init_val</span><span class="p">,</span> <span class="n">BPF_ANY</span><span class="p">);</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">SEC</span><span class="p">(</span><span class="s">"tracepoint/probe_postgres/exec_simple_query__return"</span><span class="p">)</span>
+<span class="kt">int</span> <span class="nf">trace_enter_exit</span><span class="p">(</span><span class="k">struct</span> <span class="n">syscalls_enter_open_args</span> <span class="o">*</span><span class="n">ctx</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">u32</span> <span class="n">key</span> <span class="o">=</span> <span class="n">bpf_get_current_pid_tgid</span><span class="p">();</span>
+	<span class="n">u64</span> <span class="o">*</span><span class="n">value</span> <span class="o">=</span> <span class="n">bpf_map_lookup_elem</span><span class="p">(</span><span class="o">&amp;</span><span class="n">latencies</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">key</span><span class="p">);</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span>
+		<span class="o">*</span><span class="n">value</span> <span class="o">=</span> <span class="n">bpf_ktime_get_ns</span><span class="p">()</span> <span class="o">-</span> <span class="o">*</span><span class="n">value</span><span class="p">;</span>
+
+	<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>There was only one catch, somehow it wasn’t working for me for tracepoints, I
+had to tell that my BPF program is of <code class="language-plaintext highlighter-rouge">BPF_PROG_TYPE_KPROBE</code> type. If you know
+why it could be, let me know too :)</p>
+
+<p>The last step would be to actually run and inspect our compiled stuff. To make
+it more convenient, we can pin our BPF map, so that we can read it from another
+process:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># mount -t bpf none /sys/fs/bpf
+# mkdir -p /sys/fs/bpf/maps/
+# pg_latencies
+...
+</code></pre></div></div>
+
+<p>And now when it was started successfully, let’s inspect it! For that we can use
+an amazing tool called <a href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/bpf/bpftool">bpftool</a>. Here is our BPF program loaded:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># bpftool prog list
+42: kprobe  tag 9ce97a0a428052f3  gpl
+        loaded_at 2019-11-22T17:39:51+0100  uid 0
+        xlated 224B  not jited  memlock 4096B  map_ids 54
+</code></pre></div></div>
+
+<p>And here is our pinned BPF map:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># bpftool map list
+54: hash  name latencies  flags 0x0
+        key 4B  value 8B  max_entries 1000  memlock 81920B
+</code></pre></div></div>
+
+<p>But we still have to do something about Linux kernel versions, since we’ve
+compiled it only for one particular. In fact at this moment our BPF program has
+something like:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// in hex format value of this section is "2c130400"</span>
+<span class="c1">// which can be decoded as 8-bit unsigned integer</span>
+<span class="c1">// 44 19 4 0 (the version was 4 19 44)</span>
+<span class="n">u32</span> <span class="n">_version</span> <span class="n">SEC</span><span class="p">(</span><span class="s">"version"</span><span class="p">)</span> <span class="o">=</span> <span class="mi">267052</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>At this point I’ve got tired and just replaced the corresponding section in the
+binary with <code class="language-plaintext highlighter-rouge">xxd</code>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># new version</span>
+<span class="nv">FORMAT</span><span class="o">=</span><span class="s2">"{0:02x}{1:02x}{2:02x}{3:02x}"</span>
+<span class="nv">VERSION_HEX</span><span class="o">=</span><span class="si">$(</span>python <span class="nt">-c</span> <span class="s1">'print(r"'</span><span class="nv">$FORMAT</span><span class="s1">'".format(46, 19, 4, 0))'</span><span class="si">)</span>
+
+<span class="c"># original version</span>
+<span class="nv">ORIG_HEX</span><span class="o">=</span><span class="s2">"2c130400"</span>
+
+xxd <span class="nt">-p</span> pg_latency_kern.o |<span class="se">\</span>
+    <span class="nb">sed</span> <span class="s1">'s/'</span><span class="nv">$ORIG_HEX</span><span class="s1">'/'</span><span class="nv">$VERSION_HEX</span><span class="s1">'/'</span> |<span class="se">\</span>
+    xxd <span class="nt">-p</span> <span class="nt">-r</span> <span class="o">&gt;</span> pg_latency_kern_new.o
+</code></pre></div></div>
+
+<p>And looks like this even works!</p>
+
+<h2 id="14-im-going-to-use-it-in-production-immediately">14. I’m going to use it in production immediately!</h2>
+
+<p>Great, but please do this carefully. With a great power comes great
+responsibility, and before you’ll jump into it, there are few concerns you need
+to be aware.</p>
+
+<p>The first one is how much overhead would it mean for your system? E.g. <code class="language-plaintext highlighter-rouge">strace</code>
+is a great tool, but due to how it is implemented it can be <a href="http://www.brendangregg.com/blog/2014-05-11/strace-wow-much-syscall.html">quite
+slow</a>. <code class="language-plaintext highlighter-rouge">perf</code> normally is faster, but be careful with the disk
+space consumption, since in some cases (let’s say if you want to trace some
+scheduler events) it can easily generate gigabytes of data in seconds. BPF by
+itself is also <a href="https://www.slideshare.net/ennael/kernel-recipes-2019-bpf-at-facebook#11">pretty fast</a>, but of course if a custom BPF
+program is doing something too computation expensive, it will slow down your
+target. As an example, <code class="language-plaintext highlighter-rouge">lwlock.py</code> script from <code class="language-plaintext highlighter-rouge">postgres-bcc</code>, that tracks
+Postgres LWLocks, under a heavy lock contended workload could slow down my
+experimental database to about 30%.</p>
+
+<p>The second concern are potential bugs in a tracing tool itself. It’s not what
+we see so often to worry too much about it, but from time to time it could
+happen. I had already such an experience, when due to some strange location of
+stars on the night sky an old version of <code class="language-plaintext highlighter-rouge">perf</code> crashed Postgres backend it was
+attached to, or stuck waiting on <code class="language-plaintext highlighter-rouge">uprobe_events</code> in a non interruptible mode
+without any chances to stop or kill it. BPF in this sense it a bit more safe,
+since the verifier will reject any incorrect BPF programs. So before trying
+this on production, make sure you’re using a reasonably new version and first
+experiment on staging (do I even need to say that?).</p>
+
+<h2 id="15-conclusions">15. Conclusions</h2>
+
+<p>That was the last example I have for today. I hope it was enough to make you at
+least a bit interested in tracing and profiling your databases, and look deeper
+into what happens inside and outside. Don’t get me wrong, it’s not like when
+you run <code class="language-plaintext highlighter-rouge">perf</code> or something BPF based any issues will disappear automagically,
+but you will definitely get more interesting information in your hands.</p>
+
+<p>The magic of the more holistic approach is that it’s useful not only in
+situations, when your database is wrapped in multiple layers. When you profile
+a database, most of the time you can trace down precisely what activity or even
+function have caused this or that problem. E.g. when Postgres is doing
+unexpectedly too much of IO, one can see in profiles let’s say a lot of full
+page writes happening at this moment. Looking at this from higher perspective I
+find it good having a habit to spin up <code class="language-plaintext highlighter-rouge">perf</code> from time to time. Not only it
+gives you a deeper insight of what happens in your system, but also makes
+benchmarking more transparent. You need to understand an influence of huge
+pages on your database? No need to read outdated blog posts, just go and
+measure it! Why is it important to make benchmarking more transparent? One of
+the reasons is presented here:</p>
+
+<iframe src="//www.slideshare.net/slideshow/embed_code/key/zk910sGUHqKQ6b?startSlide=36" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen=""> </iframe>
+<div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/brendangregg/lisa2019-linux-systems-performance" title="LISA2019 Linux Systems Performance" target="_blank">LISA2019 Linux Systems Performance</a> </strong> from <strong><a href="//www.slideshare.net/brendangregg" target="_blank">Brendan Gregg</a></strong> </div>
+
+<p>One can reasonably notice that 90% of time, when a database does not deliver
+expected performance, it’s due to an inefficiently written query or badly
+designed schema, and this kind of problems we can easily troubleshoot from
+within Postgres itself without involving any other tools. And this is perfectly
+correct, but no one said that those two approaches could not work hand by hand.
+At the end of the day I’m advocating just for an extension of our arsenal, so
+that when one technique doesn’t help, other will solve a mystery.</p>
+
+<p>And actually I didn’t mention the last reason why one may want to try out this
+approach - it’s just a lot of fun! When was the last time you had fun hacking
+something?</p>
+
+<h2 id="acknowlegements">Acknowlegements</h2>
+
+<p>Thanks a lot to
+Peter Eisentraut (<a href="https://twitter.com/petereisentraut">@petereisentraut</a>),
+Lorenzo Fontana (<a href="https://twitter.com/fntlnz">@fntlnz</a>)
+and Franck Pachot (<a href="https://twitter.com/FranckPachot">@FranckPachot</a>)
+for helping me with proof reading of this text and suggesting various
+improvements, you rock!</p>
+
+
+</div>
+
+<div class="related">
+  <h2>Other Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2021/03/03/subscripting/">
+            How many engineers does it take to make subscripting work?
+            <small>03 Mar 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2020/11/28/evolution-of-btree-index-am/">
+            Evolution of tree data structures for indexing: more exciting than it sounds
+            <small>28 Nov 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2020/08/07/chess-and-optimizer/">
+            Query optimizer and chess?
+            <small>07 Aug 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'erthalion'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,147 @@
+---
+layout: post
+title:  "Little guide about the gnuchess"
+date:   2014-05-24 22:20:42
+comments: true
+---
+
+I'm at the beginning of my journey into the world of gnuchess. Its interface is a slightly tricky, than I've expected, but I was interested. So I've decided to make some notes about this.
+
+> GNU Chess performs at the senior master/weak international master strength of 2500+ on the Elo rating system
+
+I don't know, what does this mean really, but sounds cool =)
+
+> It is often used in conjunction with a GUI program such as XBoard or glChess
+
+No, it's not our way. Let's try to use original teminal-based client (more terminal for the terminal god, mwuahahahaha =).
+
+<!--break-->
+
+{% highlight bash %}
+$ gnuchess
+
+GNU Chess 6.1.1
+Copyright (C) 2013 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+White (1) : e2e4
+TimeLimit[0] = 0
+TimeLimit[1] = 0
+1. e2e4
+
+black  KQkq  e3
+r n b q k b n r 
+p p p p p p p p 
+. . . . . . . . 
+. . . . . . . . 
+. . . . P . . . 
+. . . . . . . . 
+P P P P . P P P 
+R N B Q K B N R 
+ 
+Thinking...
+
+white  KQkq
+r n b q k b . r 
+p p p p p p p p 
+. . . . . n . . 
+. . . . . . . . 
+. . . . P . . . 
+. . . . . . . . 
+P P P P . P P P 
+R N B Q K B N R
+
+{% endhighlight %}
+
+Gnuchess uses the standard algebraic notation (SAN) required by FIDE, so we can type something like this to play:
+
+{% highlight bash %}
+Nf3
+g1f3
+O-O
+e1g1
+{% endhighlight %}
+
+Ok. But what is it? Gnuchess uses the most of the CPU all time, even at the player's move. It's super, but it would be more convenient to limit the thinking time for gnuchess engine. In the documentation we can see, that the `--easy` options is responsible for this.
+
+> --easy, -e:  Disable thinking in opponent's time.  By default, the program runs in hard mode, i.e.  it thinks opponent's time to think too.
+
+Now better. But how we can pause the game and continue later? There are an obvious commands for this: `save` and `load`, which save the game position into `EPD` format
+
+{% highlight bash %}
+White (2) : save game_file
+TimeLimit[0] = 0
+TimeLimit[1] = 0
+White (2) : load game_file
+TimeLimit[0] = 0
+TimeLimit[1] = 0
+
+ : Best move = 1
+
+white  KQkq
+r n b q k b . r 
+p p p p p p p p 
+. . . . . n . . 
+. . . . . . . . 
+. . . . P . . . 
+. . . . . . . . 
+P P P P . P P P 
+R N B Q K B N R 
+ 
+White (1) : 
+{% endhighlight %}
+
+And little bit about usability - we can use the pseudo graphical mode (a unicode symbols will be used for output), but ... it looks ugly. Classical mode provides convenient enouth game, except the board's coordinates. To avoid this inconvenience, we can use the patch below:
+
+<div style="font-size:14px">
+<script src="https://gist.github.com/erthalion/370a82f17ba95c23e4f5.js"></script>
+</div>
+
+
+{% highlight bash %}
+$ gnuchess -e
+GNU Chess 6.1.1
+Copyright (C) 2013 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+White (1) : e2e4
+TimeLimit[0] = 0
+TimeLimit[1] = 0
+1. e2e4
+
+black  KQkq  e3
+
+8  r n b q k b n r 
+7  p p p p p p p p 
+6  . . . . . . . . 
+5  . . . . . . . . 
+4  . . . . P . . . 
+3  . . . . . . . . 
+2  P P P P . P P P 
+1  R N B Q K B N R 
+  
+   a b c d e f g h 
+
+Thinking...
+
+white  KQkq
+
+8  r n b q k b . r 
+7  p p p p p p p p 
+6  . . . . . n . . 
+5  . . . . . . . . 
+4  . . . . P . . . 
+3  . . . . . . . . 
+2  P P P P . P P P 
+1  R N B Q K B N R 
+  
+   a b c d e f g h 
+
+
+My move is : Nf6
+White (2) : 
+{% endhighlight %}
+
+Have a nice game!

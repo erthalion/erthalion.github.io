@@ -1,0 +1,18 @@
+digraph {
+    layout=neato;
+    esep=0.1;
+    overlap=false;
+
+    node [margin=0.5 fontcolor=black fontsize=32 width=0.5 shape=rectangle style="rounded,filled"]
+
+    "main_Main.sat_ss49" ->             "main_Main.$s$wfoldlM'_loop_ss41" [color=green, xlabel="24875"]
+    "main_Main.sat_ss4y" ->             "main_Main.$s$wfoldlM'_loop_ss4q" [color=green, xlabel="24875"]
+    "main_Main.sat_srTa" ->             "main_Main.$s$wfoldlM'_loop_srSW" [color=green, xlabel="19900"]
+    "main_Main.sat_srU5" ->             "main_Main.$s$wfoldlM'_loop_srTQ" [color=green, xlabel="16490"]
+    "main_Main.sat_srZo" ->             "main_Main.$s$wfoldlM'_loop1_srXI" [color=green, xlabel="13595"]
+    "main_Main.$s$wfoldlM'_loop_ss41"	-> "main_Main.sat_ss49" [color=violet, xlabel="24875"]
+    "main_Main.$s$wfoldlM'_loop_ss4q"	-> "main_Main.sat_ss4y" [color=violet, xlabel="24875"]
+    "main_Main.$s$wfoldlM'_loop_srSW"	-> "main_Main.sat_srTa" [color=violet, xlabel="19900"]
+    "main_Main.$s$wfoldlM'_loop_srTQ"	-> "main_Main.sat_srU5" [color=violet, xlabel="16490"]
+    "main_Main.$s$wfoldlM'_loop1_srXI"	-> "main_Main.sat_srZo" [color=violet, xlabel="13595"]
+}

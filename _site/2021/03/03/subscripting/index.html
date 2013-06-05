@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+
+  <title>
+    How many engineers does it take to make subscripting work? &middot; 
+    Erthalion's blog
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/touch-icon-144-precomposed.png">
+  <link href='/img/favicon.ico' rel='shortcut icon' type='image/png'>
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-24190660-5', 'erthalion.info');
+      ga('send', 'pageview');
+
+    </script>
+</head>
+
+
+  <body>
+
+    <header class="masthead">
+      <div class="masthead-inner">
+        <a href="http://erthalion.info/blog"><h1>Blog</h1></a>
+        <p class="lead">My thoughts and experiments.</p>
+
+        <div class="colophon">
+          <ul class="colophon-links">
+            <li>
+              <a href="http://erthalion.info/">About me</a>
+            </li>
+            <li>
+              <a href="http://andhyde.com/">Hyde Jekyll theme</a>
+            </li>
+          </ul>
+
+          <p>&copy; 2020. Dmitry Dolgov All rights reserved.</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="content container">
+      <div class="post">
+  <h1>How many engineers does it take to make subscripting work?</h1>
+  <span class="post-date">03 Mar 2021</span>
+  <p>Are you tired of this syntax in PostgreSQL?</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">jsonb_column</span><span class="o">-&gt;</span><span class="s1">'key'</span> <span class="k">FROM</span> <span class="k">table</span><span class="p">;</span>
+<span class="k">UPDATE</span> <span class="k">table</span> <span class="k">SET</span> <span class="n">jsonb_column</span> <span class="o">=</span>
+            <span class="n">jsonb_set</span><span class="p">(</span><span class="n">jsonb_column</span><span class="p">,</span> <span class="s1">'{"key"}'</span><span class="p">,</span> <span class="s1">'"value"'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>The select part is actually fine. But for updates, especially for complex
+updates, it could be pretty verbose and far from being ergonomic. What would
+you say to this syntax instead?</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">jsonb_column</span><span class="p">[</span><span class="s1">'key'</span><span class="p">]</span> <span class="k">FROM</span> <span class="k">table</span><span class="p">;</span>
+<span class="k">UPDATE</span> <span class="k">table</span> <span class="k">SET</span> <span class="n">jsonb_column</span><span class="p">[</span><span class="s1">'key'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'"value"'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<!--break-->
+
+<p>With subscripting it looks more concise and probably even familiar for
+developers due to its “pythonic” style. If you like this syntax more I have
+good news for you, recently a <a href="https://git.postgresql.org/gitweb/?p=postgresql.git;a=commit;h=676887a3b0b8e3c0348ac3f82ab0d16e9a24bd43">patch</a> implementing
+this functionality landed in PostgreSQL:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>commit 676887a3b0b8e3c0348ac3f82ab0d16e9a24bd43
+Author: Alexander Korotkov
+Date:   Sun Jan 31 23:50:40 2021 +0300
+
+Implementation of subscripting for jsonb
+...
+Author: Dmitry Dolgov
+Reviewed-by: Tom Lane, Arthur Zakirov, Pavel Stehule, Dian M Fay
+Reviewed-by: Andrew Dunstan, Chapman Flack, Merlin Moncure
+Reviewed-by: Peter Geoghegan, Alvaro Herrera, Jim Nasby
+Reviewed-by: Josh Berkus, Victor Wagner, Aleksander Alekseev
+Reviewed-by: Robert Haas, Oleg Bartunov
+</code></pre></div></div>
+
+<p>So hopefully in PostgreSQL 14 you would be able to use it. Theoretically I
+could finish writing at this point and it would be the shortest blog post I’ve
+ever written.</p>
+
+<h1 id="the-end">The end?</h1>
+
+<p>But do you see anything strange in the commit mentioned above? From a user
+point of view this change is probably not the most exciting one, then why so
+untypical many people were involved in the development? Let’s try to find out
+and for that we need to explore the development timeline of this patch and how
+it’s design changed over this time.</p>
+
+<p>Originally Oleg Bartunov shared with me an interesting idea:</p>
+
+<p><img src="/public/img/bartunov.png" border="0" width="80%" style="margin: auto" /></p>
+
+<p>Long story short, after some time I’ve posted a PoC patch in hackers:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>From: Dmitry Dolgov
+Date: Tue, 18 Aug 2015 00:57:48 +0700
+Subject: jsonb array-style subscripting
+To: PostgreSQL-development &lt;pgsql-hackers@postgresql.org&gt;
+
+Hi,
+
+Some time ago the array-style subscripting for the jsonb data type
+was discussed in this mailing list. I think it will be quite
+convenient to have a such nice syntax to update jsonb objects,
+so I'm trying to implement this. I created a patch, that allows
+doing something like this:
+</code></pre></div></div>
+
+<p>First thing to notice is the date, it happened sooo long time ago! To give you
+an impression, in this time scientists have discovered gravitational waves,
+confirmed several properties of Higgs boson predicted by Standard Model, Magnus
+Carlsen managed to defend his World Chess Champion title two times, and AC/DC
+have released a new album.</p>
+
+<p>This version of patch had dead-simple design, it was just extending the
+existing array subscripting implementation to understand jsonb data type. But
+it was good enough to start the discussion and in fact all the important use
+cases were working. Feedback from the community was mostly positive, it was
+clear that this feature is useful. But the design of course had to be improved,
+and there were even suggestions about making it so generic that any arbitrary
+data type could use such functionality.</p>
+
+<h1 id="in-search-for-extensibility">In search for extensibility</h1>
+
+<p>Indeed, that was an interesting idea, and based in this feedback I’ve written a
+new more generic implementation. The trick was to extend <code class="language-plaintext highlighter-rouge">pg_type</code> with a new
+field <code class="language-plaintext highlighter-rouge">typsubscript</code>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>                   Table "pg_catalog.pg_type"
+     Column     |     Type     | Collation | Nullable | Default
+----------------+--------------+-----------+----------+---------
+...
+ typrelid       | oid          |           | not null |
+ typsubscript   | regproc      |           | not null |
+ typelem        | oid          |           | not null |
+...
+</code></pre></div></div>
+
+<p>This column contains a function which would be an entry point for every custom
+subscripting implementation. This function must construct and return a
+structure describing how subscripting would work for this particular data type:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* Execution step methods used for SubscriptingRef */</span>
+<span class="k">typedef</span> <span class="k">struct</span> <span class="n">SubscriptExecSteps</span>
+<span class="p">{</span>
+	<span class="cm">/* process subscripts */</span>
+	<span class="n">ExecEvalBoolSubroutine</span> <span class="n">sbs_check_subscripts</span><span class="p">;</span>
+	<span class="cm">/* fetch an element */</span>
+	<span class="n">ExecEvalSubroutine</span> <span class="n">sbs_fetch</span><span class="p">;</span>
+	<span class="cm">/* assign to an element */</span>
+	<span class="n">ExecEvalSubroutine</span> <span class="n">sbs_assign</span><span class="p">;</span>
+	<span class="cm">/* fetch old value for assignment */</span>
+	<span class="n">ExecEvalSubroutine</span> <span class="n">sbs_fetch_old</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">SubscriptExecSteps</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Following this interface an extension developer can implement subscripting
+support for any custom data type. Of course on top of that there was a
+structure containing necessary state:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="k">struct</span> <span class="n">SubscriptingRef</span>
+<span class="p">{</span>
+	<span class="cm">/* type of the container proper */</span>
+	<span class="n">Oid</span>		 <span class="n">refcontainertype</span><span class="p">;</span>
+	<span class="cm">/* the container type's pg_type.typelem */</span>
+	<span class="n">Oid</span>		 <span class="n">refelemtype</span><span class="p">;</span>
+	<span class="p">...</span>
+	<span class="cm">/* expressions that evaluate to container indexes */</span>
+	<span class="n">List</span>		<span class="o">*</span><span class="n">refupperindexpr</span><span class="p">;</span>
+	<span class="n">List</span>		<span class="o">*</span><span class="n">reflowerindexpr</span><span class="p">;</span>
+	<span class="p">...</span>
+<span class="p">}</span> <span class="n">SubscriptingRef</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>These structures are coming from the latest committed version, the original
+ones were a bit different, but followed the same idea. Having this at hand
+you’re free to implement whatever is needed.</p>
+
+<p>This version was pretty good in many ways, but had one significant flaw – it
+was simply big and rather invasive from the code point of view. This of course
+caused reluctance from anyone to review it. I’ve even tried to clean dust from
+my sense of humour and add something catchy into commentaries:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*
+ * Perform preparation for the jsonb subscripting. This
+ * function produces an expression that represents the
+ * result of extracting a single container element or
+ * the new container value with the source data inserted
+ * into the right part of the container. If you have read
+ * until this point, and will submit a meaningful review
+ * of this patch series, I'll owe you a beer at the next
+ * PGConfEU.
+ */</span>
+</code></pre></div></div>
+
+<p>Fortunately after some time the patch picked up again some activity.</p>
+
+<p><img src="/public/img/array-slow-down.png" border="0" width="80%" style="margin: auto" /></p>
+
+<p>One of the obvious concerns was performance influence on arrays, as array
+subscripting now goes through the same generic mechanism. Theoretically it
+should not be a problem, because the only change is an extra function call, but
+still it had to be proved. It turns out that the original implementation had
+about 2% slowdown for arrays, and as a side note I wanted to emphasize one
+interesting point – if you do any performance testing with PostgreSQL, do not
+forget to disable <code class="language-plaintext highlighter-rouge">--enable-cassert</code> which you have to use for development.
+It’s interesting that most of the overhead comes in this case not from the
+asserts themselves, but from memory checks that are enabled together with
+asserts:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*
+ * Define this to check memory allocation errors (scribbling on more
+ * bytes than were allocated).  Right now, this gets defined
+ * automatically if --enable-cassert or USE_VALGRIND.
+ */</span>
+<span class="cp">#if defined(USE_ASSERT_CHECKING) || defined(USE_VALGRIND)
+#define MEMORY_CONTEXT_CHECKING
+#endif
+</span></code></pre></div></div>
+
+<p>If you’re like me curious enough, checking the difference between PostgreSQL
+compiled with and without asserts you can see that significant part of the
+overhead could be attributed to this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ perf diff no-cassert.data cassert.data
+    ...
+    18.86%             postgres            [.] AllocSetCheck
+    12.07%             postgres            [.] sentinel_ok
+    ...
+</code></pre></div></div>
+
+<p>Returning to the original topic, why I like PostgreSQL community is that it’s
+always not enough. In this particular case it turns out one could shave off a
+bit more from the overhead (by reducing some intermediate calls, what was
+discovered and done by Tom Lane) and make it even more generic! The latter one
+could be achieved via adding more flexibility to the structures containing
+subscripting state so that it also can contain some opaque custom data.
+<code class="language-plaintext highlighter-rouge">SubscriptingRef</code> has to be fixed, because it’s a planner node and could be
+sent to other workers, so the only possibility for that is
+at execution step with <code class="language-plaintext highlighter-rouge">SubscriptingRefState</code>:</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">typedef</span> <span class="k">struct</span> <span class="n">SubscriptingRefState</span>
+<span class="p">{</span>
+	<span class="cm">/* workspace for type-specific subscripting code */</span>
+	<span class="kt">void</span>		<span class="o">*</span><span class="n">workspace</span><span class="p">;</span>
+	<span class="cm">/* filled at expression compile and runtime time */</span>
+	<span class="kt">int</span>		 <span class="n">numupper</span><span class="p">;</span>
+	<span class="n">bool</span>		<span class="o">*</span><span class="n">upperprovided</span><span class="p">;</span>
+	<span class="n">Datum</span>		<span class="o">*</span><span class="n">upperindex</span><span class="p">;</span>
+	<span class="n">bool</span>		<span class="o">*</span><span class="n">upperindexnull</span><span class="p">;</span>
+	<span class="p">...</span>
+	<span class="cm">/* sbs_fetch_old puts old value here */</span>
+	<span class="n">Datum</span>		 <span class="n">prevvalue</span><span class="p">;</span>
+	<span class="n">bool</span>		 <span class="n">prevnull</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">SubscriptingRefState</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Now together with other fields containing already known information there is a
+<code class="language-plaintext highlighter-rouge">workspace</code> which could be used to store anything you need between different
+stages.</p>
+
+<h1 id="further-improvements">Further improvements</h1>
+
+<p>Of course all of this doesn’t solve the problem of size and invasiveness. One
+way to solve it was obvious to split the patch into small(-ish) chunks to make
+everything more digestible. Another idea I find interesting came on the fly and
+I would like to put in into unexpected perspective. In chess there is an old
+wisdom called “The principle of two files” which says that the inferior side
+may be able to defend a position with one weakness, but a second weakness on
+the other side of the board will prove fatal. Broadly speaking one could apply
+this to pretty much anything, e.g. if your invasive patch instead of just one
+thing does couple of improvements it’s always better. Something similar
+happened in this case, when Tom used this opportunity to do some refactoring
+within the array type itself:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>commit c7aba7c14efdbd9fc1bb44b4cb83bedee0c6a6fc
+Author: Tom Lane &lt;tgl@sss.pgh.pa.us&gt;
+Date:   Wed Dec 9 12:40:37 2020 -0500
+
+One useful side-effect of this is that we now have a less squishy
+mechanism for identifying whether a data type is a "true" array:
+instead of wiring in weird rules about typlen, we can look to see
+if pg_type.typsubscript == F_ARRAY_SUBSCRIPT_HANDLER.
+</code></pre></div></div>
+
+<p>Somewhat similar happened with hstore data type, which acquired subscripting
+functionality as a sort of side effect to test this code even more and provide
+a simple example of implementing subscripting in an extension.</p>
+
+<p>Another interesting suggestion from Pavel Stehule was about taking this chance
+to improve jsonb user interface as well:</p>
+
+<p><img src="/public/img/stehule.png" border="0" width="80%" style="margin: auto" /></p>
+
+<p>The idea was to smooth some corner cases that were bothering developers in the
+past. Here are couple of examples:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- Where jsonb_field was NULL, it is now {"a": 1}</span>
+<span class="c1">-- For jsonb_set it will be NULL</span>
+<span class="k">UPDATE</span> <span class="k">table_name</span> <span class="k">SET</span> <span class="n">jsonb_field</span><span class="p">[</span><span class="s1">'a'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'1'</span><span class="p">;</span>
+
+<span class="c1">-- Where jsonb_field was [], it is now [null, null, 2];</span>
+<span class="c1">-- For jsonb_set it will be [2].</span>
+<span class="c1">-- For negative indexes it will return an out of range error.</span>
+<span class="k">UPDATE</span> <span class="k">table_name</span> <span class="k">SET</span> <span class="n">jsonb_field</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'2'</span><span class="p">;</span>
+
+<span class="c1">-- Where jsonb_field was {}, it is now {'a': [{'b': 1}]}</span>
+<span class="c1">-- For jsonb_set it will be {}</span>
+<span class="k">UPDATE</span> <span class="k">table_name</span> <span class="k">SET</span> <span class="n">jsonb_field</span><span class="p">[</span><span class="s1">'a'</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">'b'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'1'</span><span class="p">;</span>
+
+<span class="c1">-- An exception from the previous case.</span>
+<span class="c1">-- This will raise an error if any record's</span>
+<span class="c1">-- jsonb_field['a']['b'] is something other than</span>
+<span class="c1">-- an object. For example, the value {"a": 1}</span>
+<span class="c1">-- has no 'b' key.</span>
+<span class="k">UPDATE</span> <span class="k">table_name</span> <span class="k">SET</span> <span class="n">jsonb</span><span class="p">[</span><span class="s1">'a'</span><span class="p">][</span><span class="s1">'b'</span><span class="p">][</span><span class="s1">'c'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'1'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>In fact, I was originally hesitant to do this. My plan for this version of the
+patch was to function exactly as jsonb_set, and then implement any subsequent
+improvements separately. But eventually I’ve changed my mind and it turns out
+to be a good idea.</p>
+
+<h1 id="types-questions">Types questions</h1>
+
+<p>One of the questions about this functionality I’ve seen was regarding assign
+value – why should it be of jsonb type?</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- Update object value by key. Note the quotes</span>
+<span class="c1">-- around '1': -- the assigned value must be</span>
+<span class="c1">-- of the jsonb type as well</span>
+<span class="k">UPDATE</span> <span class="k">table_name</span> <span class="k">SET</span> <span class="n">jsonb_field</span><span class="p">[</span><span class="s1">'key'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'1'</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Why it couldn’t be simply like this, which is probably more intuitive?</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">UPDATE</span> <span class="k">table_name</span> <span class="k">SET</span> <span class="n">jsonb_field</span><span class="p">[</span><span class="s1">'key'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Well, in fact originally it was exactly like this. But after extensive
+discussions it turns out that it’s not the best idea. To quote
+<a href="https://www.postgresql.org/message-id/112397.1608236975%40sss.pgh.pa.us">Tom</a>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The background for my being so down on this is that it reminds me
+way too much of the implicit-casts-to-text mess that we cleaned up
+(with great pain and squawking) back around 8.3.  It looks to me
+like you're basically trying to introduce multiple implicit casts
+to jsonb, and I'm afraid that's just as bad an idea.
+</code></pre></div></div>
+
+<p>So, <code class="language-plaintext highlighter-rouge">jsonb_set</code> function was fine in this case because it was processing jsonb
+into another jsonb, and for subscripting to keep everything sane it had to work
+similarly. Hence, assigned value has to be jsonb as well.</p>
+
+<p>Another similar type question was about how to handle different types as
+subscripting argument? In particular Alexander Korotkov was interested in
+jsonpath support.</p>
+
+<p><img src="/public/img/korotkov.png" border="0" width="80%" style="margin: auto" /></p>
+
+<p>Essentially the patch already could do this:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- Extract object value by key</span>
+<span class="k">SELECT</span> <span class="p">(</span><span class="s1">'{"a": 1}'</span><span class="p">::</span><span class="n">jsonb</span><span class="p">)[</span><span class="s1">'a'</span><span class="p">];</span>
+
+<span class="c1">-- Extract array element by index</span>
+<span class="k">SELECT</span> <span class="p">(</span><span class="s1">'[1, "2", null]'</span><span class="p">::</span><span class="n">jsonb</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
+</code></pre></div></div>
+
+<p>The question was if it would be possible in the future to do this?</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">-- How to support jsonpath?</span>
+<span class="k">SELECT</span> <span class="p">(</span><span class="s1">'{"a": {"b": 1}}'</span><span class="p">::</span><span class="n">jsonb</span><span class="p">)[</span><span class="s1">'$.a'</span><span class="p">];</span>
+</code></pre></div></div>
+
+<p>Again after some discussion we’ve found out that it would be not enough just
+check which data type was received as an argument, because it will lead to
+subtle differences between different data types. The solution was to look at
+overloaded functions, and following this example the implementation should
+check whether the subscript expression can be implicitly coerced to either of
+the supported data types, and fail if neither coercion nor both coercions
+succeed. In this way we could have a sound design, although things like this
+would not work any more:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="p">(</span><span class="s1">'[1, "2", null]'</span><span class="p">::</span><span class="n">jsonb</span><span class="p">)[</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">];</span>
+</code></pre></div></div>
+
+<p>Another development in this area was proposed by Nikita Glukhov:</p>
+
+<p><img src="/public/img/glukhov.png" border="0" width="80%" style="margin: auto" /></p>
+
+<p>This suggestion was about making subscripting work more similar to the
+corresponding part of jsonpath specification and in top of that adding some
+performance improvements for integer use case. Unfortunately this part had to
+be reworked and eventually got lost on the way.</p>
+
+<h1 id="the-end-1">The end?</h1>
+
+<p>Now we finally have reached the starting point of this blog post, the commit
+with the jsonb subscripting functionality. Was it the end of the story? Well,
+not really. Right after the commit couple of buildfarm members started to show
+this type of error:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>=== stack trace: pgsql.build/src/test/regress/tmp_check/data/core ===
+[New LWP 2266507]
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/sparc64-linux-gnu/libthread_db.so.1".
+Core was generated by `postgres: nm regression [local] SELECT
+Program terminated with signal SIGILL, Illegal instruction.
+#0  0x000001000075c410 in jsonb_subscript_check_subscripts
+</code></pre></div></div>
+
+<p>It turns out that one part of the implementation was producing a misaligned
+memory access which was making some architectures upset. It was fixed, but
+this raised another question about how to identify such issues earlier, maybe
+even by CF bot. Fortunately this could be done with compiler support, i.e.
+using:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-fsanitize=alignment -fno-sanitize-recover=alignment
+</code></pre></div></div>
+
+<p>for gcc and</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-fsanitize=alignment -fsanitize-trap=alignment
+</code></pre></div></div>
+
+<p>for clang, except that the codebase already contains x86-specific crc32
+computation code, which uses unaligned access. Eventually this was addressed
+via another change:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>commit 994bdb9f935a751935a03c80d30857150ba2b645
+Author: Alexander Korotkov &lt;akorotkov@postgresql.org&gt;
+Date:   Fri Feb 12 17:14:33 2021 +0300
+
+pg_attribute_no_sanitize_alignment() macro
+</code></pre></div></div>
+
+<h1 id="summary">Summary</h1>
+
+<p>That was a long story, longer that I anticipated in the beginning. In a way I
+find this patch somewhat an interesting use case from which one can learn a
+thing or two about how to work on patches for PostgreSQL. Here are few
+learnings of my own in no particular order:</p>
+
+<ul>
+  <li>
+    <p>A new patch is always a threat to stability of the code base and maintenance
+burden, one needs to keep this in mind.</p>
+  </li>
+  <li>
+    <p>It’s always good to get feedback early. Not always possible, but helps
+figuring out design problems at the start.</p>
+  </li>
+  <li>
+    <p>Spliting a patch into small chunks always helps reviewers.</p>
+  </li>
+  <li>
+    <p>You maybe surprised, but there are not that many people who can follow the
+thread closely and be aware about the current state of things, especially in
+long run. To help a CFM or anyone else who wants to jump into the thread it
+would be nice to write summaries from time to time.</p>
+  </li>
+  <li>
+    <p>Even when it’s not obviously required, reasonable and reproducable
+performance tests could make things easier. Not only others can run those
+tests on different hardware and with different configurations, it could serve
+as documentation on where the patch performs well and what are the worst case
+scenarious.</p>
+  </li>
+  <li>
+    <p>If the patch achieve more than one goals (even of some of those are internal
+and not visible for users) it helps with the review efforts/produced value
+balance.</p>
+  </li>
+  <li>
+    <p>Having another perspective on user interface for the patch is always useful.</p>
+  </li>
+  <li>
+    <p>Last but not least – reviewing of a patch requires significant efforts, and
+it’s only fair to do the same and put significant efforts in review of
+patches from others.</p>
+  </li>
+</ul>
+
+<p>I hope the story together with those (maybe partially opinionated) points could
+be helpful for you, reader, or at least will provide some entertaining for the
+evening.</p>
+
+
+</div>
+
+<div class="related">
+  <h2>Other Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2020/11/28/evolution-of-btree-index-am/">
+            Evolution of tree data structures for indexing: more exciting than it sounds
+            <small>28 Nov 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2020/08/07/chess-and-optimizer/">
+            Query optimizer and chess?
+            <small>07 Aug 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2019/12/06/postgresql-stay-curious/">
+            PostgreSQL at low level: stay curious!
+            <small>06 Dec 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'erthalion'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </div>
+
+  </body>
+</html>
