@@ -1,0 +1,1130 @@
+This is LuaTeX, Version 1.0.4 (TeX Live 2017)  (format=lualatex 2018.10.11)  6 AUG 2020 16:51
+ system commands enabled.
+ file:line:error style messages enabled.
+**neo.tex
+(./neo.tex
+LaTeX2e <2017/01/01> patch level 3
+Lua module: luaotfload-main 2017/01/29 2.80001 OpenType layout system.
+Lua module: lualibs 2017-02-01 2.5 ConTeXt Lua standard libraries.
+Lua module: lualibs-extended 2017-02-01 2.5 ConTeXt Lua libraries -- extended co
+llection.(using write cache: /home/ddolgov/.texlive/texmf-var/luatex-cache/gener
+ic)(using read cache: //var/lib/texmf/luatex-cache/generic /home/ddolgov/.texliv
+e/texmf-var/luatex-cache/generic)
+luaotfload | conf : Root cache directory is /home/ddolgov/.texlive/texmf-var/lua
+tex-cache/generic/names.
+luaotfload | init : Loading fontloader “fontloader-2017-02-11.lua” from kpse
+-resolved path “/usr/share/texmf-dist/tex/luatex/luaotfload/fontloader-2017-02
+-11.lua”.
+Lua-only attribute luaotfload@state = 1
+Lua-only attribute luaotfload@noligature = 2
+Lua-only attribute luaotfload@syllabe = 3
+luaotfload | init : Context OpenType loader version “3.027”
+Inserting `luaotfload.node_processor' at position 1 in `pre_linebreak_filter'.
+Inserting `luaotfload.node_processor' at position 1 in `hpack_filter'.
+Inserting `luaotfload.define_font' at position 1 in `define_font'.
+Lua-only attribute luaotfload_color_attribute = 4
+luaotfload | conf : Root cache directory is /home/ddolgov/.texlive/texmf-var/lua
+tex-cache/generic/names.
+Inserting `luaotfload.aux.set_sscale_dimens' at position 1 in `luaotfload.patch_
+font'.
+Inserting `luaotfload.aux.patch_cambria_domh' at position 2 in `luaotfload.patch
+_font'.
+Inserting `luaotfload.aux.fixup_fontdata' at position 1 in `luaotfload.patch_fon
+t_unsafe'.
+Inserting `luaotfload.aux.set_capheight' at position 3 in `luaotfload.patch_font
+'.
+Inserting `luaotfload.rewrite_fontname' at position 4 in `luaotfload.patch_font'
+.
+luaotfload | main : initialization completed in 0.100 seconds
+Babel <3.10> and hyphenation patterns for 1 language(s) loaded.
+(/usr/share/texmf-dist/tex/latex/standalone/standalone.cls
+Document Class: standalone 2015/07/15 v1.2 Class to compile TeX sub-files standa
+lone
+(/usr/share/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX detected.
+)
+(/usr/share/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2017/03/15 v3.2 Provides the ifpdf switch
+)
+(/usr/share/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+(/usr/share/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
+
+(/usr/share/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+(/usr/share/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+\XKV@toks=\toks14
+\XKV@tempa@toks=\toks15
+
+(/usr/share/texmf-dist/tex/generic/xkeyval/keyval.tex))
+\XKV@depth=\count79
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+))
+\sa@internal=\count80
+\c@sapage=\count81
+
+(/usr/share/texmf-dist/tex/latex/standalone/standalone.cfg
+File: standalone.cfg 2015/07/15 v1.2 Default configuration file for 'standalone'
+ class
+)
+(/usr/share/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/share/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+luaotfload | db : Font names database loaded from /home/ddolgov/.texlive/texmf-v
+ar/luatex-cache/generic/names/luaotfload-names.luc(load luc: /home/ddolgov/.texl
+ive/texmf-var/luatex-cache/generic/fonts/otl/lmroman10-regular.luc))
+\c@part=\count82
+\c@section=\count83
+\c@subsection=\count84
+\c@subsubsection=\count85
+\c@paragraph=\count86
+\c@subparagraph=\count87
+\c@figure=\count88
+\c@table=\count89
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/share/texmf-site/tex/latex/pgf/frontendlayer/tikz.sty
+(/usr/share/texmf-site/tex/latex/pgf/basiclayer/pgf.sty
+(/usr/share/texmf-site/tex/latex/pgf/utilities/pgfrcs.sty
+(/usr/share/texmf-site/tex/generic/pgf/utilities/pgfutil-common.tex
+\pgfutil@everybye=\toks16
+\pgfutil@tempdima=\dimen103
+\pgfutil@tempdimb=\dimen104
+
+(/usr/share/texmf-site/tex/generic/pgf/utilities/pgfutil-common-lists.tex))
+(/usr/share/texmf-site/tex/generic/pgf/utilities/pgfutil-latex.def
+\pgfutil@abb=\box26
+
+(/usr/share/texmf-dist/tex/latex/ms/everyshi.sty
+Package: everyshi 2001/05/15 v3.00 EveryShipout Package (MS)
+))
+(/usr/share/texmf-site/tex/generic/pgf/utilities/pgfrcs.code.tex
+Package: pgfrcs 2015/08/07 v3.0.1 (rcs-revision 1.31)
+))
+Package: pgf 2015/08/07 v3.0.1 (rcs-revision 1.15)
+
+(/usr/share/texmf-site/tex/latex/pgf/basiclayer/pgfcore.sty
+(/usr/share/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2016/10/09 v1.0u Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(/usr/share/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: luatex.def on input line 99.
+
+(/usr/share/texmf-dist/tex/latex/graphics-def/luatex.def
+File: luatex.def 2017/01/12 v0.01h Graphics/Color for luaTeX
+
+(/usr/share/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
+)
+(/usr/share/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count90
+))
+\Gin@req@height=\dimen105
+\Gin@req@width=\dimen106
+)
+(/usr/share/texmf-site/tex/latex/pgf/systemlayer/pgfsys.sty
+(/usr/share/texmf-site/tex/generic/pgf/systemlayer/pgfsys.code.tex
+Package: pgfsys 2014/07/09 v3.0.1 (rcs-revision 1.48)
+
+(/usr/share/texmf-site/tex/generic/pgf/utilities/pgfkeys.code.tex
+\pgfkeys@pathtoks=\toks17
+\pgfkeys@temptoks=\toks18
+
+(/usr/share/texmf-site/tex/generic/pgf/utilities/pgfkeysfiltered.code.tex
+\pgfkeys@tmptoks=\toks19
+))
+\pgf@x=\dimen107
+\pgf@y=\dimen108
+\pgf@xa=\dimen109
+\pgf@ya=\dimen110
+\pgf@xb=\dimen111
+\pgf@yb=\dimen112
+\pgf@xc=\dimen113
+\pgf@yc=\dimen114
+\w@pgf@writea=\write3
+\r@pgf@reada=\read1
+\c@pgf@counta=\count91
+\c@pgf@countb=\count92
+\c@pgf@countc=\count93
+\c@pgf@countd=\count94
+\t@pgf@toka=\toks20
+\t@pgf@tokb=\toks21
+\t@pgf@tokc=\toks22
+
+(/usr/share/texmf-site/tex/generic/pgf/systemlayer/pgf.cfg
+File: pgf.cfg 2008/05/14  (rcs-revision 1.7)
+)
+Driver file for pgf: pgfsys-luatex.def
+
+(/usr/share/texmf-site/tex/generic/pgf/systemlayer/pgfsys-luatex.def
+File: pgfsys-luatex.def 2014/10/11  (rcs-revision 1.35)
+
+(/usr/share/texmf-site/tex/generic/pgf/systemlayer/pgfsys-common-pdf.def
+File: pgfsys-common-pdf.def 2013/10/10  (rcs-revision 1.13)
+)))
+(/usr/share/texmf-site/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.tex
+File: pgfsyssoftpath.code.tex 2013/09/09  (rcs-revision 1.9)
+\pgfsyssoftpath@smallbuffer@items=\count95
+\pgfsyssoftpath@bigbuffer@items=\count96
+)
+(/usr/share/texmf-site/tex/generic/pgf/systemlayer/pgfsysprotocol.code.tex
+File: pgfsysprotocol.code.tex 2006/10/16  (rcs-revision 1.4)
+))
+(/usr/share/texmf-site/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+
+(/usr/share/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: luatex.def on input line 225.
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
+Package xcolor Info: Model `RGB' extended on input line 1364.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
+)
+(/usr/share/texmf-site/tex/generic/pgf/basiclayer/pgfcore.code.tex
+Package: pgfcore 2010/04/11 v3.0.1 (rcs-revision 1.7)
+
+(/usr/share/texmf-site/tex/generic/pgf/math/pgfmath.code.tex
+(/usr/share/texmf-site/tex/generic/pgf/math/pgfmathcalc.code.tex
+(/usr/share/texmf-site/tex/generic/pgf/math/pgfmathutil.code.tex)
+(/usr/share/texmf-site/tex/generic/pgf/math/pgfmathparser.code.tex
+\pgfmath@dimen=\dimen115
+\pgfmath@count=\count97
+\pgfmath@box=\box27
+\pgfmath@toks=\toks23
+\pgfmath@stack@operand=\toks24
+\pgfmath@stack@operation=\toks25
+)
+(/usr/share/texmf-site/tex/generic/pgf/math/pgfmathfunctions.code.tex
+(/usr/share/texmf-site/tex/generic/pgf/math/pgfmathfunctions.basic.code.tex)
+(/usr/share/texmf-site/tex/generic/pgf/math/pgfmathfunctions.trigonometric.code
+.tex)
+(/usr/share/texmf-site/tex/generic/pgf/math/pgfmathfunctions.random.code.tex)
+(/usr/share/texmf-site/tex/generic/pgf/math/pgfmathfunctions.comparison.code.te
+x) (/usr/share/texmf-site/tex/generic/pgf/math/pgfmathfunctions.base.code.tex)
+(/usr/share/texmf-site/tex/generic/pgf/math/pgfmathfunctions.round.code.tex)
+(/usr/share/texmf-site/tex/generic/pgf/math/pgfmathfunctions.misc.code.tex)
+(/usr/share/texmf-site/tex/generic/pgf/math/pgfmathfunctions.integerarithmetics
+.code.tex))) (/usr/share/texmf-site/tex/generic/pgf/math/pgfmathfloat.code.tex
+\c@pgfmathroundto@lastzeros=\count98
+)) (/usr/share/texmf-site/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex
+File: pgfcorepoints.code.tex 2013/10/07  (rcs-revision 1.27)
+\pgf@picminx=\dimen116
+\pgf@picmaxx=\dimen117
+\pgf@picminy=\dimen118
+\pgf@picmaxy=\dimen119
+\pgf@pathminx=\dimen120
+\pgf@pathmaxx=\dimen121
+\pgf@pathminy=\dimen122
+\pgf@pathmaxy=\dimen123
+\pgf@xx=\dimen124
+\pgf@xy=\dimen125
+\pgf@yx=\dimen126
+\pgf@yy=\dimen127
+\pgf@zx=\dimen128
+\pgf@zy=\dimen129
+)
+(/usr/share/texmf-site/tex/generic/pgf/basiclayer/pgfcorepathconstruct.code.tex
+File: pgfcorepathconstruct.code.tex 2013/10/07  (rcs-revision 1.29)
+\pgf@path@lastx=\dimen130
+\pgf@path@lasty=\dimen131
+) (/usr/share/texmf-site/tex/generic/pgf/basiclayer/pgfcorepathusage.code.tex
+File: pgfcorepathusage.code.tex 2014/11/02  (rcs-revision 1.24)
+\pgf@shorten@end@additional=\dimen132
+\pgf@shorten@start@additional=\dimen133
+)
+(/usr/share/texmf-site/tex/generic/pgf/basiclayer/pgfcorescopes.code.tex
+File: pgfcorescopes.code.tex 2015/05/08  (rcs-revision 1.46)
+\pgfpic=\box28
+\pgf@hbox=\box29
+\pgf@layerbox@main=\box30
+\pgf@picture@serial@count=\count99
+)
+(/usr/share/texmf-site/tex/generic/pgf/basiclayer/pgfcoregraphicstate.code.tex
+File: pgfcoregraphicstate.code.tex 2014/11/02  (rcs-revision 1.12)
+\pgflinewidth=\dimen134
+)
+(/usr/share/texmf-site/tex/generic/pgf/basiclayer/pgfcoretransformations.code.t
+ex
+File: pgfcoretransformations.code.tex 2015/08/07  (rcs-revision 1.20)
+\pgf@pt@x=\dimen135
+\pgf@pt@y=\dimen136
+\pgf@pt@temp=\dimen137
+) (/usr/share/texmf-site/tex/generic/pgf/basiclayer/pgfcorequick.code.tex
+File: pgfcorequick.code.tex 2008/10/09  (rcs-revision 1.3)
+)
+(/usr/share/texmf-site/tex/generic/pgf/basiclayer/pgfcoreobjects.code.tex
+File: pgfcoreobjects.code.tex 2006/10/11  (rcs-revision 1.2)
+)
+(/usr/share/texmf-site/tex/generic/pgf/basiclayer/pgfcorepathprocessing.code.te
+x
+File: pgfcorepathprocessing.code.tex 2013/09/09  (rcs-revision 1.9)
+) (/usr/share/texmf-site/tex/generic/pgf/basiclayer/pgfcorearrows.code.tex
+File: pgfcorearrows.code.tex 2015/05/14  (rcs-revision 1.43)
+\pgfarrowsep=\dimen138
+)
+(/usr/share/texmf-site/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
+File: pgfcoreshade.code.tex 2013/07/15  (rcs-revision 1.15)
+\pgf@max=\dimen139
+\pgf@sys@shading@range@num=\count100
+)
+(/usr/share/texmf-site/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
+File: pgfcoreimage.code.tex 2013/07/15  (rcs-revision 1.18)
+
+(/usr/share/texmf-site/tex/generic/pgf/basiclayer/pgfcoreexternal.code.tex
+File: pgfcoreexternal.code.tex 2014/07/09  (rcs-revision 1.21)
+\pgfexternal@startupbox=\box31
+))
+(/usr/share/texmf-site/tex/generic/pgf/basiclayer/pgfcorelayers.code.tex
+File: pgfcorelayers.code.tex 2013/07/18  (rcs-revision 1.7)
+)
+(/usr/share/texmf-site/tex/generic/pgf/basiclayer/pgfcoretransparency.code.tex
+File: pgfcoretransparency.code.tex 2013/09/30  (rcs-revision 1.5)
+) (/usr/share/texmf-site/tex/generic/pgf/basiclayer/pgfcorepatterns.code.tex
+File: pgfcorepatterns.code.tex 2013/11/07  (rcs-revision 1.5)
+)))
+(/usr/share/texmf-site/tex/generic/pgf/modules/pgfmoduleshapes.code.tex
+File: pgfmoduleshapes.code.tex 2014/03/21  (rcs-revision 1.35)
+\pgfnodeparttextbox=\box32
+)
+(/usr/share/texmf-site/tex/generic/pgf/modules/pgfmoduleplot.code.tex
+File: pgfmoduleplot.code.tex 2015/08/03  (rcs-revision 1.13)
+)
+(/usr/share/texmf-site/tex/latex/pgf/compatibility/pgfcomp-version-0-65.sty
+Package: pgfcomp-version-0-65 2007/07/03 v3.0.1 (rcs-revision 1.7)
+\pgf@nodesepstart=\dimen140
+\pgf@nodesepend=\dimen141
+)
+(/usr/share/texmf-site/tex/latex/pgf/compatibility/pgfcomp-version-1-18.sty
+Package: pgfcomp-version-1-18 2007/07/23 v3.0.1 (rcs-revision 1.1)
+))
+(/usr/share/texmf-site/tex/latex/pgf/utilities/pgffor.sty
+(/usr/share/texmf-site/tex/latex/pgf/utilities/pgfkeys.sty
+(/usr/share/texmf-site/tex/generic/pgf/utilities/pgfkeys.code.tex))
+(/usr/share/texmf-site/tex/latex/pgf/math/pgfmath.sty
+(/usr/share/texmf-site/tex/generic/pgf/math/pgfmath.code.tex))
+(/usr/share/texmf-site/tex/generic/pgf/utilities/pgffor.code.tex
+Package: pgffor 2013/12/13 v3.0.1 (rcs-revision 1.25)
+
+(/usr/share/texmf-site/tex/generic/pgf/math/pgfmath.code.tex)
+\pgffor@iter=\dimen142
+\pgffor@skip=\dimen143
+\pgffor@stack=\toks26
+\pgffor@toks=\toks27
+))
+(/usr/share/texmf-site/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
+Package: tikz 2015/08/07 v3.0.1 (rcs-revision 1.151)
+
+(/usr/share/texmf-site/tex/generic/pgf/libraries/pgflibraryplothandlers.code.te
+x
+File: pgflibraryplothandlers.code.tex 2013/08/31 v3.0.1 (rcs-revision 1.20)
+\pgf@plot@mark@count=\count101
+\pgfplotmarksize=\dimen144
+)
+\tikz@lastx=\dimen145
+\tikz@lasty=\dimen146
+\tikz@lastxsaved=\dimen147
+\tikz@lastysaved=\dimen148
+\tikzleveldistance=\dimen149
+\tikzsiblingdistance=\dimen150
+\tikz@figbox=\box33
+\tikz@figbox@bg=\box34
+\tikz@tempbox=\box35
+\tikz@tempbox@bg=\box36
+\tikztreelevel=\count102
+\tikznumberofchildren=\count103
+\tikznumberofcurrentchild=\count104
+\tikz@fig@count=\count105
+ (/usr/share/texmf-site/tex/generic/pgf/modules/pgfmodulematrix.code.tex
+File: pgfmodulematrix.code.tex 2013/09/17  (rcs-revision 1.8)
+\pgfmatrixcurrentrow=\count106
+\pgfmatrixcurrentcolumn=\count107
+\pgf@matrix@numberofcolumns=\count108
+)
+\tikz@expandcount=\count109
+
+(/usr/share/texmf-site/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+topaths.code.tex
+File: tikzlibrarytopaths.code.tex 2008/06/17 v3.0.1 (rcs-revision 1.2)
+)))
+\sa@box=\box37
+) (/usr/share/texmf-dist/tex/generic/luatex85/luatex85.sty
+Package: luatex85 2016/06/15 v1.4 pdftex aliases for luatex
+)
+(/usr/share/texmf-dist/tex/latex/fontawesome/fontawesome.sty
+Package: fontawesome 2016/05/15 v4.6.3.1 font awesome icons
+
+(/usr/share/texmf-dist/tex/latex/fontawesome/fontawesomesymbols-generic.tex)
+(/usr/share/texmf-dist/tex/latex/fontspec/fontspec.sty
+(/usr/share/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2017/05/13 L3 programming layer (loader) 
+
+(/usr/share/texmf-dist/tex/latex/l3kernel/expl3-code.tex
+Package: expl3 2017/05/13 L3 programming layer (code)
+\ucharcat@table=\catcodetable5
+\c_max_int=\count110
+\l_tmpa_int=\count111
+\l_tmpb_int=\count112
+\g_tmpa_int=\count113
+\g_tmpb_int=\count114
+\g__prg_map_int=\count115
+\c_log_iow=\count116
+\l_iow_line_count_int=\count117
+\l__iow_line_target_int=\count118
+\l__iow_one_indent_int=\count119
+\l__iow_indent_int=\count120
+\c_zero_dim=\dimen151
+\c_max_dim=\dimen152
+\l_tmpa_dim=\dimen153
+\l_tmpb_dim=\dimen154
+\g_tmpa_dim=\dimen155
+\g_tmpb_dim=\dimen156
+\c_zero_skip=\skip43
+\c_max_skip=\skip44
+\l_tmpa_skip=\skip45
+\l_tmpb_skip=\skip46
+\g_tmpa_skip=\skip47
+\g_tmpb_skip=\skip48
+\c_zero_muskip=\muskip10
+\c_max_muskip=\muskip11
+\l_tmpa_muskip=\muskip12
+\l_tmpb_muskip=\muskip13
+\g_tmpa_muskip=\muskip14
+\g_tmpb_muskip=\muskip15
+\l_keys_choice_int=\count121
+\c__fp_leading_shift_int=\count122
+\c__fp_middle_shift_int=\count123
+\c__fp_trailing_shift_int=\count124
+\c__fp_big_leading_shift_int=\count125
+\c__fp_big_middle_shift_int=\count126
+\c__fp_big_trailing_shift_int=\count127
+\c__fp_Bigg_leading_shift_int=\count128
+\c__fp_Bigg_middle_shift_int=\count129
+\c__fp_Bigg_trailing_shift_int=\count130
+\c__fp_rand_size_int=\count131
+\c__fp_rand_four_int=\count132
+\c__fp_rand_eight_int=\count133
+\l__sort_length_int=\count134
+\l__sort_min_int=\count135
+\l__sort_top_int=\count136
+\l__sort_max_int=\count137
+\l__sort_true_max_int=\count138
+\l__sort_block_int=\count139
+\l__sort_begin_int=\count140
+\l__sort_end_int=\count141
+\l__sort_A_int=\count142
+\l__sort_B_int=\count143
+\l__sort_C_int=\count144
+\c_empty_box=\box38
+\l_tmpa_box=\box39
+\l_tmpb_box=\box40
+\g_tmpa_box=\box41
+\g_tmpb_box=\box42
+\l__box_top_dim=\dimen157
+\l__box_bottom_dim=\dimen158
+\l__box_left_dim=\dimen159
+\l__box_right_dim=\dimen160
+\l__box_top_new_dim=\dimen161
+\l__box_bottom_new_dim=\dimen162
+\l__box_left_new_dim=\dimen163
+\l__box_right_new_dim=\dimen164
+\l__box_internal_box=\box43
+\l__coffin_internal_box=\box44
+\l__coffin_internal_dim=\dimen165
+\l__coffin_offset_x_dim=\dimen166
+\l__coffin_offset_y_dim=\dimen167
+\l__coffin_x_dim=\dimen168
+\l__coffin_y_dim=\dimen169
+\l__coffin_x_prime_dim=\dimen170
+\l__coffin_y_prime_dim=\dimen171
+\c_empty_coffin=\box45
+\l__coffin_aligned_coffin=\box46
+\l__coffin_aligned_internal_coffin=\box47
+\l_tmpa_coffin=\box48
+\l_tmpb_coffin=\box49
+\l__coffin_display_coffin=\box50
+\l__coffin_display_coord_coffin=\box51
+\l__coffin_display_pole_coffin=\box52
+\l__coffin_display_offset_dim=\dimen172
+\l__coffin_display_x_dim=\dimen173
+\l__coffin_display_y_dim=\dimen174
+\l__coffin_bounding_shift_dim=\dimen175
+\l__coffin_left_corner_dim=\dimen176
+\l__coffin_right_corner_dim=\dimen177
+\l__coffin_bottom_corner_dim=\dimen178
+\l__coffin_top_corner_dim=\dimen179
+\l__coffin_scaled_total_height_dim=\dimen180
+\l__coffin_scaled_width_dim=\dimen181
+)
+(/usr/share/texmf-dist/tex/latex/l3kernel/l3pdfmode.def
+File: l3pdfmode.def 2017/03/18 v L3 Experimental driver: PDF mode
+\l__driver_color_stack_int=\count145
+\l__driver_tmp_box=\box53
+))
+(/usr/share/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+Package: xparse 2017/04/01 L3 Experimental document command parser
+\l__xparse_current_arg_int=\count146
+\g__xparse_grabber_int=\count147
+\l__xparse_m_args_int=\count148
+\l__xparse_mandatory_args_int=\count149
+\l__xparse_v_nesting_int=\count150
+)
+Package: fontspec 2017/03/31 v2.6a Font selection for XeLaTeX and LuaLaTeX
+Lua module: fontspec 2017/03/31 2.6a Font selection for XeLaTeX and LuaLaTeX
+(/usr/share/texmf-dist/tex/latex/fontspec/fontspec-luatex.sty
+Package: fontspec-luatex 2017/03/31 v2.6a Font selection for XeLaTeX and LuaLaTe
+X
+\l__fontspec_script_int=\count151
+\l__fontspec_language_int=\count152
+\l__fontspec_strnum_int=\count153
+\l__fontspec_tmp_int=\count154
+\l__fontspec_em_int=\count155
+\l__fontspec_emdef_int=\count156
+\l__fontspec_strong_int=\count157
+\l__fontspec_strongdef_int=\count158
+\l__fontspec_tmpa_dim=\dimen182
+\l__fontspec_tmpb_dim=\dimen183
+\l__fontspec_tmpc_dim=\dimen184
+\g__file_internal_ior=\read2
+
+(/usr/share/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2017/02/22 v2.0g Standard LaTeX package
+
+(/usr/share/texmf-dist/tex/latex/base/tuenc.def
+File: tuenc.def 2017/02/22 v2.0g Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding TU on input line 82.
+))
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \fontspec with sig. 'O{}mO{}' on line 475.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \setmainfont with sig. 'O{}mO{}' on line 486.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \setsansfont with sig. 'O{}mO{}' on line 506.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \setmonofont with sig. 'O{}mO{}' on line 526.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \setromanfont with sig. 'O{}mO{}' on line 546.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \setmathrm with sig. 'O{}mO{}' on line 550.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \setboldmathrm with sig. 'O{}mO{}' on line 558.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \setmathsf with sig. 'O{}mO{}' on line 566.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \setmathtt with sig. 'O{}mO{}' on line 574.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \newfontfamily with sig. 'mO{}mO{}' on line 589.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \newfontface with sig. 'mO{}mO{}' on line 606.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \defaultfontfeatures with sig. 't+om' on line 617.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \addfontfeatures with sig. 'm' on line 648.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \newfontfeature with sig. 'mm' on line 675.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \newAATfeature with sig. 'mmmm' on line 689.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \newopentypefeature with sig. 'mmm' on line 703.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \newICUfeature with sig. 'mmm' on line 723.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \aliasfontfeature with sig. 'mm' on line 727.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \aliasfontfeatureoption with sig. 'mmm' on line 748.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \newfontscript with sig. 'mm' on line 781.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \newfontlanguage with sig. 'mm' on line 785.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \DeclareFontsExtensions with sig. 'm' on line 789.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \IfFontFeatureActiveTF with sig. 'mmm' on line 800.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \EncodingCommand with sig. 'mO{}m' on line 3162.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \EncodingAccent with sig. 'mm' on line 3168.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \EncodingSymbol with sig. 'mm' on line 3174.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \EncodingComposite with sig. 'mmm' on line 3180.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \EncodingCompositeCommand with sig. 'mmm' on line 3186.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \DeclareUnicodeEncoding with sig. 'mm' on line 3211.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \UndeclareSymbol with sig. 'm' on line 3217.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \UndeclareComposite with sig. 'mm' on line 3225.
+.................................................
+
+(/usr/share/texmf-dist/tex/latex/fontspec/fontspec.cfg)
+LaTeX Info: Redefining \itshape on input line 3410.
+LaTeX Info: Redefining \slshape on input line 3415.
+LaTeX Info: Redefining \scshape on input line 3420.
+LaTeX Info: Redefining \upshape on input line 3425.
+LaTeX Info: Redefining \em on input line 3455.
+LaTeX Info: Redefining \emph on input line 3480.
+(load luc: /home/ddolgov/.texlive/texmf-var/luatex-cache/generic/fonts/otl/lmrom
+an10-bold.luc)(load luc: /home/ddolgov/.texlive/texmf-var/luatex-cache/generic/f
+onts/otl/lmroman10-italic.luc)
+LaTeX Info: Redefining \- on input line 3531.
+.................................................
+. LaTeX info: "xparse/redefine-command"
+. 
+. Redefining command \oldstylenums with sig. 'm' on line 3626.
+.................................................
+.................................................
+. LaTeX info: "xparse/define-command"
+. 
+. Defining command \liningnums with sig. 'm' on line 3630.
+.................................................
+))
+luaotfload | cache : Lookup cache loaded from /home/ddolgov/.texlive/texmf-var/l
+uatex-cache/generic/names/luaotfload-lookup-cache.luc.(load luc: /home/ddolgov/.
+texlive/texmf-var/luatex-cache/generic/fonts/otl/fontawesome.luc)
+luaotfload | aux : font no 18 (nil) defines no feature for script latn
+luaotfload | aux : no font with id 18
+.................................................
+. fontspec info: "no-scripts"
+. 
+. Font "FontAwesome" does not contain any OpenType `Script' information.
+.................................................
+\g__fontspec_family_FontAwesome_int=\count159
+.................................................
+. fontspec info: "no-font-shape"
+. 
+. Could not resolve font "FontAwesome/BI" (it probably doesn't exist).
+.................................................
+.................................................
+. fontspec info: "no-font-shape"
+. 
+. Could not resolve font "FontAwesome/B" (it probably doesn't exist).
+.................................................
+.................................................
+. fontspec info: "no-font-shape"
+. 
+. Could not resolve font "FontAwesome/I" (it probably doesn't exist).
+.................................................
+luaotfload | aux : font no 18 (nil) does not define feature smcp for script  wit
+h language 
+luaotfload | aux : no font with id 18
+.................................................
+. fontspec info: "defining-font"
+. 
+. Font family 'FontAwesome(0)' created for font 'FontAwesome' with options [].
+.  
+.  This font family consists of the following NFSS series/shapes:
+.  
+. - 'normal' (m/n) with NFSS spec.: <->"FontAwesome:mode=node;"
+. - 'small caps'  (m/sc) with NFSS spec.: 
+.................................................
+
+(/usr/share/texmf-dist/tex/latex/fontawesome/fontawesomesymbols-xeluatex.tex))
+(/usr/share/texmf-site/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+shapes.code.tex
+File: tikzlibraryshapes.code.tex 2008/01/09 v3.0.1 (rcs-revision 1.1)
+
+(/usr/share/texmf-site/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+shapes.geometric.code.tex
+File: tikzlibraryshapes.geometric.code.tex 2008/01/09 v3.0.1 (rcs-revision 1.1)
+
+(/usr/share/texmf-site/tex/generic/pgf/libraries/shapes/pgflibraryshapes.geomet
+ric.code.tex
+File: pgflibraryshapes.geometric.code.tex 2008/06/26 v3.0.1 (rcs-revision 1.1)
+))
+(/usr/share/texmf-site/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+shapes.misc.code.tex
+File: tikzlibraryshapes.misc.code.tex 2008/01/09 v3.0.1 (rcs-revision 1.1)
+
+(/usr/share/texmf-site/tex/generic/pgf/libraries/shapes/pgflibraryshapes.misc.c
+ode.tex
+File: pgflibraryshapes.misc.code.tex 2013/07/18 v3.0.1 (rcs-revision 1.5)
+))
+(/usr/share/texmf-site/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+shapes.symbols.code.tex
+File: tikzlibraryshapes.symbols.code.tex 2008/01/09 v3.0.1 (rcs-revision 1.1)
+
+(/usr/share/texmf-site/tex/generic/pgf/libraries/shapes/pgflibraryshapes.symbol
+s.code.tex
+File: pgflibraryshapes.symbols.code.tex 2013/09/11 v3.0.1 (rcs-revision 1.6)
+))
+(/usr/share/texmf-site/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+shapes.arrows.code.tex
+File: tikzlibraryshapes.arrows.code.tex 2008/01/09 v3.0.1 (rcs-revision 1.1)
+
+(/usr/share/texmf-site/tex/generic/pgf/libraries/shapes/pgflibraryshapes.arrows
+.code.tex
+File: pgflibraryshapes.arrows.code.tex 2008/06/26 v3.0.1 (rcs-revision 1.1)
+))
+(/usr/share/texmf-site/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+shapes.callouts.code.tex
+(/usr/share/texmf-site/tex/generic/pgf/libraries/shapes/pgflibraryshapes.callou
+ts.code.tex))
+(/usr/share/texmf-site/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+shapes.multipart.code.tex
+File: tikzlibraryshapes.multipart.code.tex 2008/01/09 v3.0.1 (rcs-revision 1.1)
+
+(/usr/share/texmf-site/tex/generic/pgf/libraries/shapes/pgflibraryshapes.multip
+art.code.tex
+File: pgflibraryshapes.multipart.code.tex 2010/01/07 v3.0.1 (rcs-revision 1.2)
+\pgfnodepartlowerbox=\box54
+\pgfnodeparttwobox=\box55
+\pgfnodepartthreebox=\box56
+\pgfnodepartfourbox=\box57
+\pgfnodeparttwentybox=\box58
+\pgfnodepartnineteenbox=\box59
+\pgfnodeparteighteenbox=\box60
+\pgfnodepartseventeenbox=\box61
+\pgfnodepartsixteenbox=\box62
+\pgfnodepartfifteenbox=\box63
+\pgfnodepartfourteenbox=\box64
+\pgfnodepartthirteenbox=\box65
+\pgfnodeparttwelvebox=\box66
+\pgfnodepartelevenbox=\box67
+\pgfnodeparttenbox=\box68
+\pgfnodepartninebox=\box69
+\pgfnodeparteightbox=\box70
+\pgfnodepartsevenbox=\box71
+\pgfnodepartsixbox=\box72
+\pgfnodepartfivebox=\box73
+)))
+(/usr/share/texmf-site/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+arrows.code.tex
+File: tikzlibraryarrows.code.tex 2008/01/09 v3.0.1 (rcs-revision 1.1)
+
+(/usr/share/texmf-site/tex/generic/pgf/libraries/pgflibraryarrows.code.tex
+File: pgflibraryarrows.code.tex 2013/09/23 v3.0.1 (rcs-revision 1.16)
+\arrowsize=\dimen185
+))
+(/usr/share/texmf-site/tex/generic/pgf/libraries/pgflibraryarrows.meta.code.tex
+File: pgflibraryarrows.meta.code.tex 2015/05/13 v3.0.1 (rcs-revision 1.13)
+\pgfarrowinset=\dimen186
+\pgfarrowlength=\dimen187
+\pgfarrowwidth=\dimen188
+\pgfarrowlinewidth=\dimen189
+)
+(/usr/share/texmf-site/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+positioning.code.tex
+File: tikzlibrarypositioning.code.tex 2008/10/06 v3.0.1 (rcs-revision 1.7)
+)
+(/usr/share/texmf-site/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+decorations.pathmorphing.code.tex
+(/usr/share/texmf-site/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+decorations.code.tex
+(/usr/share/texmf-site/tex/generic/pgf/modules/pgfmoduledecorations.code.tex
+\pgfdecoratedcompleteddistance=\dimen190
+\pgfdecoratedremainingdistance=\dimen191
+\pgfdecoratedinputsegmentcompleteddistance=\dimen192
+\pgfdecoratedinputsegmentremainingdistance=\dimen193
+\pgf@decorate@distancetomove=\dimen194
+\pgf@decorate@repeatstate=\count160
+\pgfdecorationsegmentamplitude=\dimen195
+\pgfdecorationsegmentlength=\dimen196
+)
+\tikz@lib@dec@box=\box74
+)
+(/usr/share/texmf-site/tex/generic/pgf/libraries/decorations/pgflibrarydecorati
+ons.pathmorphing.code.tex))
+(/usr/share/texmf-site/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary
+decorations.pathreplacing.code.tex
+(/usr/share/texmf-site/tex/generic/pgf/libraries/decorations/pgflibrarydecorati
+ons.pathreplacing.code.tex))(load luc: /home/ddolgov/.texlive/texmf-var/luatex-c
+ache/generic/fonts/otl/firacode-regular.luc)
+\g__fontspec_family_FiraCode_int=\count161
+(load luc: /home/ddolgov/.texlive/texmf-var/luatex-cache/generic/fonts/otl/firac
+ode-light.luc)(load luc: /home/ddolgov/.texlive/texmf-var/luatex-cache/generic/f
+onts/otl/firacode-bold.luc)
+luaotfload | aux : font no 19 (nil) does not define feature smcp for script latn
+ with language dflt
+luaotfload | aux : no font with id 19
+luaotfload | aux : font no 21 (nil) does not define feature smcp for script latn
+ with language dflt
+luaotfload | aux : no font with id 21
+luaotfload | aux : font no 20 (nil) does not define feature smcp for script latn
+ with language dflt
+luaotfload | aux : no font with id 20
+luaotfload | aux : font no 20 (nil) does not define feature smcp for script latn
+ with language dflt
+luaotfload | aux : no font with id 20
+.................................................
+. fontspec info: "defining-font"
+. 
+. Font family 'FiraCode(0)' created for font 'Fira Code' with options
+. [WordSpace={1,0,0},HyphenChar=None,PunctuationSpace=WordSpace].
+.  
+.  This font family consists of the following NFSS series/shapes:
+.  
+. - 'normal' (m/n) with NFSS spec.:
+. <->"FiraCode:mode=node;script=latn;language=DFLT;"
+. - 'small caps'  (m/sc) with NFSS spec.: 
+. and font adjustment code:
+. \fontdimen 2\font =1\fontdimen 2\font \fontdimen 3\font =0\fontdimen 3\font
+. \fontdimen 4\font =0\fontdimen 4\font \fontdimen 7\font =0\fontdimen 2\font
+. \hyphenchar \font =\c_minus_one 
+. - 'bold' (bx/n) with NFSS spec.:
+. <->"FiraCode/B:mode=node;script=latn;language=DFLT;"
+. - 'bold small caps'  (bx/sc) with NFSS spec.: 
+. and font adjustment code:
+. \fontdimen 2\font =1\fontdimen 2\font \fontdimen 3\font =0\fontdimen 3\font
+. \fontdimen 4\font =0\fontdimen 4\font \fontdimen 7\font =0\fontdimen 2\font
+. \hyphenchar \font =\c_minus_one 
+. - 'italic' (m/it) with NFSS spec.:
+. <->"FiraCode/I:mode=node;script=latn;language=DFLT;"
+. - 'italic small caps'  (m/itsc) with NFSS spec.: 
+. and font adjustment code:
+. \fontdimen 2\font =1\fontdimen 2\font \fontdimen 3\font =0\fontdimen 3\font
+. \fontdimen 4\font =0\fontdimen 4\font \fontdimen 7\font =0\fontdimen 2\font
+. \hyphenchar \font =\c_minus_one 
+. - 'bold italic' (bx/it) with NFSS spec.:
+. <->"FiraCode/BI:mode=node;script=latn;language=DFLT;"
+. - 'bold italic small caps'  (bx/itsc) with NFSS spec.: 
+. and font adjustment code:
+. \fontdimen 2\font =1\fontdimen 2\font \fontdimen 3\font =0\fontdimen 3\font
+. \fontdimen 4\font =0\fontdimen 4\font \fontdimen 7\font =0\fontdimen 2\font
+. \hyphenchar \font =\c_minus_one 
+.................................................
+LaTeX Info: Redefining \ttfamily on input line 16.
+(load luc: /home/ddolgov/.texlive/texmf-var/luatex-cache/generic/fonts/otl/liber
+ationsans-regular.luc)
+\g__fontspec_family_LiberationSans_int=\count162
+(load luc: /home/ddolgov/.texlive/texmf-var/luatex-cache/generic/fonts/otl/liber
+ationsans-bolditalic.luc)(load luc: /home/ddolgov/.texlive/texmf-var/luatex-cach
+e/generic/fonts/otl/liberationsans-bold.luc)(load luc: /home/ddolgov/.texlive/te
+xmf-var/luatex-cache/generic/fonts/otl/liberationsans-italic.luc)
+luaotfload | aux : font no 22 (nil) does not define feature smcp for script latn
+ with language dflt
+luaotfload | aux : no font with id 22
+luaotfload | aux : font no 24 (nil) does not define feature smcp for script latn
+ with language dflt
+luaotfload | aux : no font with id 24
+luaotfload | aux : font no 25 (nil) does not define feature smcp for script latn
+ with language dflt
+luaotfload | aux : no font with id 25
+luaotfload | aux : font no 23 (nil) does not define feature smcp for script latn
+ with language dflt
+luaotfload | aux : no font with id 23
+.................................................
+. fontspec info: "defining-font"
+. 
+. Font family 'LiberationSans(0)' created for font 'Liberation Sans' with
+. options [Ligatures=TeX].
+.  
+.  This font family consists of the following NFSS series/shapes:
+.  
+. - 'normal' (m/n) with NFSS spec.:
+. <->"LiberationSans:mode=node;script=latn;language=DFLT;+tlig;"
+. - 'small caps'  (m/sc) with NFSS spec.: 
+. - 'bold' (bx/n) with NFSS spec.:
+. <->"LiberationSans/B:mode=node;script=latn;language=DFLT;+tlig;"
+. - 'bold small caps'  (bx/sc) with NFSS spec.: 
+. - 'italic' (m/it) with NFSS spec.:
+. <->"LiberationSans/I:mode=node;script=latn;language=DFLT;+tlig;"
+. - 'italic small caps'  (m/itsc) with NFSS spec.: 
+. - 'bold italic' (bx/it) with NFSS spec.:
+. <->"LiberationSans/BI:mode=node;script=latn;language=DFLT;+tlig;"
+. - 'bold italic small caps'  (bx/itsc) with NFSS spec.: 
+.................................................
+LaTeX Info: Redefining \rmfamily on input line 18.
+luaotfload | aux : font no 22 (nil) does not define feature smcp for script latn
+ with language dflt
+luaotfload | aux : no font with id 22
+luaotfload | aux : font no 24 (nil) does not define feature smcp for script latn
+ with language dflt
+luaotfload | aux : no font with id 24
+luaotfload | aux : font no 25 (nil) does not define feature smcp for script latn
+ with language dflt
+luaotfload | aux : no font with id 25
+luaotfload | aux : font no 23 (nil) does not define feature smcp for script latn
+ with language dflt
+luaotfload | aux : no font with id 23
+.................................................
+. fontspec info: "defining-font"
+. 
+. Font family 'LiberationSans(1)' created for font 'Liberation Sans' with
+. options [].
+.  
+.  This font family consists of the following NFSS series/shapes:
+.  
+. - 'normal' (m/n) with NFSS spec.:
+. <->"LiberationSans:mode=node;script=latn;language=DFLT;"
+. - 'small caps'  (m/sc) with NFSS spec.: 
+. - 'bold' (bx/n) with NFSS spec.:
+. <->"LiberationSans/B:mode=node;script=latn;language=DFLT;"
+. - 'bold small caps'  (bx/sc) with NFSS spec.: 
+. - 'italic' (m/it) with NFSS spec.:
+. <->"LiberationSans/I:mode=node;script=latn;language=DFLT;"
+. - 'italic small caps'  (m/itsc) with NFSS spec.: 
+. - 'bold italic' (bx/it) with NFSS spec.:
+. <->"LiberationSans/BI:mode=node;script=latn;language=DFLT;"
+. - 'bold italic small caps'  (bx/itsc) with NFSS spec.: 
+.................................................
+ (./neo.aux)
+\openout1 = neo.aux
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 75.
+LaTeX Font Info:    ... okay on input line 75.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 75.
+LaTeX Font Info:    ... okay on input line 75.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 75.
+LaTeX Font Info:    ... okay on input line 75.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 75.
+LaTeX Font Info:    ... okay on input line 75.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 75.
+LaTeX Font Info:    ... okay on input line 75.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 75.
+LaTeX Font Info:    ... okay on input line 75.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 75.
+LaTeX Font Info:    ... okay on input line 75.
+ ABD: EveryShipout initializing macros
+(/usr/share/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count163
+\scratchdimen=\dimen197
+\scratchbox=\box75
+\nofMPsegments=\count164
+\nofMParguments=\count165
+\everyMPshowfont=\toks28
+\MPscratchCnt=\count166
+\MPscratchDim=\dimen198
+\MPnumerator=\count167
+\makeMPintoPDFobject=\count168
+\everyMPtoPDFconversion=\toks29
+) (/usr/share/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+
+(/usr/share/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+
+(/usr/share/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
+))
+(/usr/share/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+
+(/usr/share/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
+
+(/usr/share/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
+)))
+(/usr/share/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2017/03/19 v0.25 Utility functions of pdfTeX for LuaTeX (HO)
+
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+\pdftexcmds@toks=\toks30
+)
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 43
+8.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG
+,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 456.
+
+(/usr/share/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
+
+))
+.................................................
+. fontspec info: "setup-math"
+. 
+. Adjusting the maths setup (use [no-math] to avoid this).
+.................................................
+\symlegacymaths=\mathgroup4
+LaTeX Font Info:    Overwriting symbol font `legacymaths' in version `bold'
+(Font)                  OT1/cmr/m/n --> OT1/cmr/bx/n on input line 75.
+LaTeX Font Info:    Redeclaring math accent \acute on input line 75.
+LaTeX Font Info:    Redeclaring math accent \grave on input line 75.
+LaTeX Font Info:    Redeclaring math accent \ddot on input line 75.
+LaTeX Font Info:    Redeclaring math accent \tilde on input line 75.
+LaTeX Font Info:    Redeclaring math accent \bar on input line 75.
+LaTeX Font Info:    Redeclaring math accent \breve on input line 75.
+LaTeX Font Info:    Redeclaring math accent \check on input line 75.
+LaTeX Font Info:    Redeclaring math accent \hat on input line 75.
+LaTeX Font Info:    Redeclaring math accent \dot on input line 75.
+LaTeX Font Info:    Redeclaring math accent \mathring on input line 75.
+LaTeX Font Info:    Redeclaring math symbol \colon on input line 75.
+LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 75.
+LaTeX Font Info:    Redeclaring math symbol \Delta on input line 75.
+LaTeX Font Info:    Redeclaring math symbol \Theta on input line 75.
+LaTeX Font Info:    Redeclaring math symbol \Lambda on input line 75.
+LaTeX Font Info:    Redeclaring math symbol \Xi on input line 75.
+LaTeX Font Info:    Redeclaring math symbol \Pi on input line 75.
+LaTeX Font Info:    Redeclaring math symbol \Sigma on input line 75.
+LaTeX Font Info:    Redeclaring math symbol \Upsilon on input line 75.
+LaTeX Font Info:    Redeclaring math symbol \Phi on input line 75.
+LaTeX Font Info:    Redeclaring math symbol \Psi on input line 75.
+LaTeX Font Info:    Redeclaring math symbol \Omega on input line 75.
+LaTeX Font Info:    Redeclaring math symbol \mathdollar on input line 75.
+LaTeX Font Info:    Redeclaring symbol font `operators' on input line 75.
+LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
+(Font)              `operators' in the math version `normal' on input line 75.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  OT1/cmr/m/n --> TU/LiberationSans(0)/m/n on input line 7
+5.
+LaTeX Font Info:    Encoding `OT1' has changed to `TU' for symbol font
+(Font)              `operators' in the math version `bold' on input line 75.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  OT1/cmr/bx/n --> TU/LiberationSans(0)/m/n on input line 
+75.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
+(Font)                  TU/LiberationSans(0)/m/n --> TU/LiberationSans(0)/m/n on
+ input line 75.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
+(Font)                  OT1/cmr/m/it --> TU/LiberationSans(0)/m/it on input line
+ 75.
+LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
+(Font)                  OT1/cmr/bx/n --> TU/LiberationSans(0)/bx/n on input line
+ 75.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
+(Font)                  OT1/cmss/m/n --> TU/lmss/m/n on input line 75.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/m/n on input line 75.
+LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
+(Font)                  TU/LiberationSans(0)/m/n --> TU/LiberationSans(0)/bx/n o
+n input line 75.
+LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
+(Font)                  OT1/cmr/bx/it --> TU/LiberationSans(0)/bx/it on input li
+ne 75.
+LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
+(Font)                  OT1/cmss/bx/n --> TU/lmss/bx/n on input line 75.
+LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
+(Font)                  OT1/cmtt/m/n --> TU/lmtt/bx/n on input line 75.
+ [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./neo.aux))
+
+Here is how much of LuaTeX's memory you used:
+ 26111 strings out of 494527
+ 100000,662416 words of node,token memory allocated
+ 386 words of node memory still in use:
+   3 hlist, 1 vlist, 1 rule, 2 glue, 4 attribute, 49 glue_spec, 4 attribute_list
+, 1 write nodes
+   avail lists: 2:1159,3:716,4:29,5:36,6:167,7:435,8:1,9:192,11:20
+ 29246 multiletter control sequences out of 65536+600000
+ 28 fonts using 4793999 bytes
+ 62i,7n,69p,412b,730s stack positions out of 5000i,500n,10000p,200000b,100000s
+</usr/share/fonts/liberation-fonts/LiberationSans-Regular.ttf></usr/share/fonts/
+liberation-fonts/LiberationSans-Bold.ttf>
+Output written on neo.pdf (1 page, 22039 bytes).
+
+PDF statistics: 25 PDF objects out of 1000 (max. 8388607)
+ 15 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 131072)
+ 16 words of extra memory for PDF output out of 10000 (max. 100000000)
+

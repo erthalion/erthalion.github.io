@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  {% include head.html %}
+
+  <body>
+
+    <header class="masthead">
+      <div class="masthead-inner">
+        <a href="http://erthalion.info/blog"><h1>{{ site.title }}</h1></a>
+        <p class="lead">{{ site.description }}</p>
+
+        <div class="colophon">
+          <ul class="colophon-links">
+            <li>
+              <a href="http://erthalion.info/">About me</a>
+            </li>
+            <li>
+              <a href="http://erthalion.info/atom.xml">RSS</a>
+            </li>
+            <li>
+              <a href="http://andhyde.com/">Hyde Jekyll theme</a>
+            </li>
+          </ul>
+
+          <p>&copy; 2023. {{ site.author.name }} All rights reserved.</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="content container">
+      {{ content }}
+    </div>
+
+  </body>
+</html>

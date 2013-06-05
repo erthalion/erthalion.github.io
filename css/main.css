@@ -1,0 +1,128 @@
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    background: -webkit-gradient( radial, 500 50%, 20, 500 25%, 600, from(rgb(255, 255, 255)), to(rgb(218, 218, 218)) );
+    margin: 0!important;
+}
+
+.name {
+    width: 200px;
+    height: 40px;
+    margin-left: 15%;
+    padding-top: 20px;
+    background: black;
+    border-radius: 3px;
+    color: white;
+    text-align: center;
+    margin-top: -5px;
+    font-family: 'Denk One', sans-serif!important;
+    font-size: 17px!important;
+}
+
+.name-link {
+    text-decoration: none;
+}
+
+.name-link:hover {
+    text-decoration: none;
+}
+
+.header {
+}
+
+.main {
+    margin-top: 10%;
+    margin-left: 20%!important;
+    margin-right: 20%!important;
+}
+
+.photo {
+    text-align: center;
+}
+
+.black-top {
+    background-color: black;
+    width: 100%;
+    height: 10px;
+}
+
+.icons {
+    margin-top: 60px;
+    text-align: center;
+}
+
+.text {
+    font-family: 'Headland One', serif!important;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.8;
+    max-width: 500px;
+    min-width: 200px;
+}
+
+#row {
+    margin-top: 50px;
+}
+
+@-moz-document url-prefix() { 
+    #row {
+        max-width: 100%;
+    }
+}
+
+@media screen and (min-width: 60em) {
+    #row {
+        display: -box;
+        -box-pack: justify;
+
+        display: -webkit-box;
+        -webkit-box-pack: justify;
+
+        display: -moz-box;
+        -moz-box-pack: center;
+
+        display: -ms-flexbox;
+        -ms-flex-pack: justify;
+    }
+}
+
+@media screen and (min-width: 10em) {
+    #row {
+        -flex-direction: column;
+
+        -webkit-flex-direction: column;
+
+        -moz-flex-direction: column;
+
+        /*-ms-flex-direction: column;*/
+    }
+}
+
+.cv {
+    display: flex;
+    justify-content: space-around;
+
+    width: 50%;
+    margin: 6% 0 5% 25%;
+}
+
+.cv a {
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+}
+
+.talk > .title {
+    font-weight: bold;
+}
+
+.talk {
+    margin: 5% 0 5% 5%;
+}
+
+.talks {
+    max-width: 600px;
+}

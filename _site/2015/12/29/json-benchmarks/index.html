@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+
+  <title>
+    Compare incomparable: PostgreSQL vs Mysql vs Mongodb &middot; 
+    Erthalion's blog
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/touch-icon-144-precomposed.png">
+  <link href='/img/favicon.ico' rel='shortcut icon' type='image/png'>
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-24190660-5', 'erthalion.info');
+      ga('send', 'pageview');
+
+    </script>
+</head>
+
+
+  <body>
+
+    <header class="masthead">
+      <div class="masthead-inner">
+        <a href="http://erthalion.info/blog"><h1>Blog</h1></a>
+        <p class="lead">My thoughts and experiments.</p>
+
+        <div class="colophon">
+          <ul class="colophon-links">
+            <li>
+              <a href="http://erthalion.info/">About me</a>
+            </li>
+            <li>
+              <a href="http://andhyde.com/">Hyde Jekyll theme</a>
+            </li>
+          </ul>
+
+          <p>&copy; 2020. Dmitry Dolgov All rights reserved.</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="content container">
+      <div class="post">
+  <h1>Compare incomparable: PostgreSQL vs Mysql vs Mongodb</h1>
+  <span class="post-date">29 Dec 2015</span>
+  <blockquote>
+  <p>As such, there’s really no “standard” benchmark that will inform you about the best technology to use for your application. Only your requirements, your data, and your infrastructure can tell you what you need to know.</p>
+</blockquote>
+
+<p>NoSql is everywhere and we can’t escape from it (although I can’t say we want to escape). Let’s leave the question about reasons outside this text,
+and just note one thing - this trend isn’t related only to new or existing NoSql solutions. It has another side, namely the schema-less data support in
+traditional relational databases. It’s amazing how many possibilities hiding at the edge of the relational model and everything else. But of course there is
+a balance that you should find for your specific data. It can’t be easy, first of all because it’s required to compare incomparable things,
+e.g. performance of a NoSql solution and traditional database. Here in this post I’ll make such attempt and show the comparison of jsonb in PostgreSQL,
+json in Mysql and bson in Mongodb.</p>
+
+<!--break-->
+
+<h2 id="what-the-hell-is-going-on-here">What the hell is going on here?</h2>
+
+<p>Breaking news:</p>
+
+<ul>
+  <li><a href="http://www.postgresql.org/docs/9.4/static/datatype-json.html">PostgreSQL 9.4</a> - a new data type <code class="language-plaintext highlighter-rouge">jsonb</code> with slightly extended support in the upcoming release PostgreSQL 9.5</li>
+  <li><a href="https://dev.mysql.com/doc/refman/5.7/en/json.html">Mysql 5.7.7</a> - a new data type <code class="language-plaintext highlighter-rouge">json</code></li>
+</ul>
+
+<p>and several other examples (I’ll talk about them later). Of course these data types supposed to be binary, which means great performance.
+Base functionality is equal across the implementations because it’s just obvious CRUD. And what is the oldest and almost cave desire in this situation?
+Right, performance benchmarks! PostgreSQL and Mysql were choosen because they have quite similar implementation of json support, Mongodb - as a veteran of NoSql. An <a href="http://www.enterprisedb.com/postgres-plus-edb-blog/marc-linster/postgres-outperforms-mongodb-and-ushers-new-developer-reality">EnterpriseDB research</a> is slightly outdated, but we can use it as a first step for the road of a thousand li. A final goal is not to display the performance in artificial environment, but to give a neutral evaluation and to get a feedback.</p>
+
+<h2 id="some-details-and-configurations">Some details and configurations</h2>
+
+<p>The <code class="language-plaintext highlighter-rouge">pg_nosql_benchmark</code> from EnterpriseDB suggests an obvious approach - first of all the required amount of records must be generated using different kinds of
+data and some random fluctuations. This amount of data will be saved into the database, and we will perform several kinds of queries over it.
+<code class="language-plaintext highlighter-rouge">pg_nosql_benchmark</code> doesn’t have any functional to work with Mysql, so I had to implement it similar to PostgreSQL.
+There is only one tricky thing with Mysql - it doesn’t <a href="https://dev.mysql.com/doc/refman/5.7/en/create-table.html#create-table-secondary-indexes-virtual-columns">support json indexing</a> directly, it’s required to create virtual columns and create index on them.</p>
+
+<p>Speaking of details, there was one strange thing in <code class="language-plaintext highlighter-rouge">pg_nosql_benchmark</code>. I figured out that few types of generated records
+were beyond the 4096 bytes limit for <a href="http://stackoverflow.com/a/13189298/1423473">mongo shell</a>, which means these records were
+just dropped out. As a dirty hack for that we can perform the inserts from a <code class="language-plaintext highlighter-rouge">js</code> file (and btw, that file must be splitted into the series of chunks
+less than 2GB).
+Besides, there are some unnecessary time expenses, related to shell client, authentication and so on. To estimate and exclude them I have to perform corresponding amount of “no-op” queries for all databases (but they’re actually pretty small).</p>
+
+<p>After all modifications above I’ve performed measurements for the following cases:</p>
+
+<ul>
+  <li>PostgreSQL 9.5 beta1, gin</li>
+  <li>PostgreSQL 9.5 beta1, jsonb_path_ops</li>
+  <li>PostgreSQL 9.5 beta1, jsquery</li>
+  <li>Mysql 5.7.9</li>
+  <li>Mongodb 3.2.0 storage engine WiredTiger</li>
+  <li>Mongodb 3.2.0 storage engie MMAPv1</li>
+</ul>
+
+<p>Each of them was tested on a separate <code class="language-plaintext highlighter-rouge">m4.xlarge</code> amazon instance with the <code class="language-plaintext highlighter-rouge">ubuntu 14.04 x64</code> and default configurations,
+all tests were performed for 1000000 records. And you shouldn’t forget about the instructions for the <code class="language-plaintext highlighter-rouge">jsquery</code> -
+<code class="language-plaintext highlighter-rouge">bison</code>, <code class="language-plaintext highlighter-rouge">flex</code>, <code class="language-plaintext highlighter-rouge">libpq-dev</code> and <code class="language-plaintext highlighter-rouge">postgresql-server-dev-9.5</code> must be installed. All results were saved in json file,
+we can visualize them easily using matplotlib (see <a href="https://github.com/erthalion/pg_nosql_benchmark">here</a>).</p>
+
+<p>Besides that there was a concern about durability. To take this into account I made few specific configurations
+(imho some of them are real, but some of them are quite theoretical, because I don’t think someone will use them for production systems):</p>
+
+<ul>
+  <li>Mongodb 3.2.0 journaled (writeConcern j: true)</li>
+  <li>Mongodb 3.2.0 fsync (transaction_sync=(enabled=true,method=fsync))</li>
+  <li>PostgreSQL 9.5 beta 1, no fsync (fsync=off)</li>
+  <li>Mysql 5.7.9, no fsync (innodb_flush_method=nosync)</li>
+</ul>
+
+<h2 id="results">Results</h2>
+
+<p>All charts presented in seconds (if they related to the time of query execution) or mb (if they related to the size of relation/index).
+Thus, for all charts the smaller value is better.</p>
+
+<h3 id="select">Select</h3>
+
+<p><img src="/public/img/select2.png" border="0" width="80%" style="margin: auto" /></p>
+
+<h3 id="insert">Insert</h3>
+
+<p><img src="/public/img/insert2.png" border="0" width="80%" style="margin: auto" /></p>
+
+<h3 id="insert-with-configurations">Insert with configurations</h3>
+
+<p><img src="/public/img/insert_configured.png" border="0" width="80%" style="margin: auto" /></p>
+
+<h3 id="update">Update</h3>
+
+<p><img src="/public/img/update2.png" border="0" width="80%" style="margin: auto" /></p>
+
+<p>Update is another difference between my benchmarks and <code class="language-plaintext highlighter-rouge">pg_nosql_benchmark</code>. It can bee seen, that Mongodb is an obvious
+leader here - mostly because of PostgreSQL and Mysql restrictions, I guess, when to update one value you must override an entire field.</p>
+
+<h3 id="update-with-configurations">Update with configurations</h3>
+
+<p><img src="/public/img/update_configured.png" border="0" width="80%" style="margin: auto" /></p>
+
+<p>As you can guess from documentation and this <a href="http://stackoverflow.com/a/29220739/1423473">answer</a>,
+<code class="language-plaintext highlighter-rouge">writeConcern j:true</code> is the highest possible transaction durability level (on a single server),
+that should be equal to configuration with <code class="language-plaintext highlighter-rouge">fsync</code>.
+I’m not sure about durability, but <code class="language-plaintext highlighter-rouge">fsync</code> is definitely slower for update operations here.</p>
+
+<h3 id="tableindex-size">Table/index size</h3>
+
+<p><img src="/public/img/table_size2.png" border="0" width="80%" style="margin: auto" />
+<img src="/public/img/index_size2.png" border="0" width="80%" style="margin: auto" /></p>
+
+<h2 id="i-have-a-bad-feeling-about-this">I have a bad feeling about this</h2>
+
+<p>Performance measurement is a dangerous field especially in this case. Everything described above can’t be a completed benchmark, it’s just
+a first step to understand current situation. We’re working now on <a href="https://github.com/brianfrankcooper/YCSB">ycsb</a> tests to make more
+finished measurements, and if we’ll get lucky we’ll compare the performance of cluster configurations.</p>
+
+<h2 id="pgconfrussia-2016">PgConf.Russia 2016</h2>
+
+<p>It looks like I’ll <a href="https://pgconf.ru/en/2016/89957">participate</a> in the PgConf.Russia this year, so if you’re interested
+in this subject - welcome.</p>
+
+</div>
+
+<div class="related">
+  <h2>Other Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2021/03/03/subscripting/">
+            How many engineers does it take to make subscripting work?
+            <small>03 Mar 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2020/11/28/evolution-of-btree-index-am/">
+            Evolution of tree data structures for indexing: more exciting than it sounds
+            <small>28 Nov 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2020/08/07/chess-and-optimizer/">
+            Query optimizer and chess?
+            <small>07 Aug 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'erthalion'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </div>
+
+  </body>
+</html>

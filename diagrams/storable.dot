@@ -1,0 +1,24 @@
+digraph {
+    layout=neato;
+    esep=0.1;
+    overlap=false;
+
+    node [margin=0.5 fontcolor=black fontsize=32 width=0.5 shape=rectangle style="rounded,filled"]
+    "main_Main.wild8_swG" [fillcolor="#ffc2c2"]
+    "main_Main.sat_swGN" [fillcolor="#ffc2c2"]
+
+    "main_Main.wild8_swG" ->            "main_Main.sat_swGN" [color=red, xlabel="24875"]
+    "main_Main.sat_swUI" ->             "main_Main.$s$wfoldlM'_loop_swUp" [color=green, xlabel="24875"]
+    "main_Main.sat_swU5" ->             "main_Main.$s$wfoldlM'_loop_swTM" [color=green, xlabel="24875"]
+    "main_Main.sat_swGO" ->             "main_Main.$s$wfoldlM'_loop_swGh" [color=green, xlabel="24875"]
+    "main_Main.sat_swGB" ->             "main_Main.$s$wfoldlM'_loop1_swGi" [color=green, xlabel="24875"]
+    "main_Main.sat_swHM"                -> "main_Main.$s$wfoldlM'_loop_swHk" [color=green, xlabel="16835"]
+    "main_Main.sat_swOf"                -> "main_Main.$s$wfoldlM'_loop1_swM5" [color=green, xlabel="13585"]
+    "main_Main.$s$wfoldlM'_loop_swTM"	-> "main_Main.sat_swU5" [color=violet, xlabel="24875"]
+    "main_Main.$s$wfoldlM'_loop_swUp"	-> "main_Main.sat_swUI" [color=violet, xlabel="24875"]
+    "main_Main.$s$wfoldlM'_loop_swGh"	-> "main_Main.wild8_swGq" [color=violet, xlabel="24875"]
+    "main_Main.$s$wfoldlM'_loop_swGh"	-> "main_Main.sat_swGB" [color=violet, xlabel="24875"]
+    "main_Main.$s$wfoldlM'_loop1_swGi"	-> "main_Main.sat_swGO" [color=violet, xlabel="24875"]
+    "main_Main.$s$wfoldlM'_loop_swHk"	-> "main_Main.sat_swHM" [color=violet, xlabel="16835"]
+    "main_Main.$s$wfoldlM'_loop1_swM5"	-> "main_Main.sat_swOf" [color=violet, xlabel="13585"]
+}

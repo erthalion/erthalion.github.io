@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+
+  <title>
+    Query optimizer and chess? &middot; 
+    Erthalion's blog
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/touch-icon-144-precomposed.png">
+  <link href='/img/favicon.ico' rel='shortcut icon' type='image/png'>
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-24190660-5', 'erthalion.info');
+      ga('send', 'pageview');
+
+    </script>
+</head>
+
+
+  <body>
+
+    <header class="masthead">
+      <div class="masthead-inner">
+        <a href="http://erthalion.info/blog"><h1>Blog</h1></a>
+        <p class="lead">My thoughts and experiments.</p>
+
+        <div class="colophon">
+          <ul class="colophon-links">
+            <li>
+              <a href="http://erthalion.info/">About me</a>
+            </li>
+            <li>
+              <a href="http://andhyde.com/">Hyde Jekyll theme</a>
+            </li>
+          </ul>
+
+          <p>&copy; 2020. Dmitry Dolgov All rights reserved.</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="content container">
+      <div class="post">
+  <h1>Query optimizer and chess?</h1>
+  <span class="post-date">07 Aug 2020</span>
+  <p>Do not be afraid, this short blog post is about databases and does not contain
+any unreasonable metaphysical references. In fact, it’s a result of a journey
+through couple of whitepapers and books with an unexpected intersection of two
+rather different fields. I will try to describe everything step by step, so
+that we can see if chess has anything in common with database query optimizer.</p>
+
+<!--break-->
+
+<h2 id="database-query-optimizer">Database query optimizer</h2>
+
+<p>Let’s prepare some background and definitions. PostgreSQL
+<a href="https://www.postgresql.org/docs/current/planner-optimizer.html">documentation</a> says:</p>
+
+<blockquote>
+  <p>The task of the planner/optimizer is to create an optimal execution plan. A
+given SQL query (and hence, a query tree) can be actually executed in a wide
+variety of different ways, each of which will produce the same set of
+results.  If it is computationally feasible, the query optimizer will examine
+each of these possible execution plans, ultimately selecting the execution
+plan that is expected to run the fastest.</p>
+</blockquote>
+
+<p>And later in the optimizer <a href="https://git.postgresql.org/gitweb/?p=postgresql.git;a=blob;f=src/backend/optimizer/README;h=d174b8cb73a8a94529b71196db177d7a5fb2f047;hb=HEAD">readme</a>:</p>
+
+<blockquote>
+  <p>During the planning/optimizing process, we build “Path” trees representing
+the different ways of doing a query.  We select the cheapest Path that
+generates the desired relation and turn it into a Plan to pass to the
+executor.</p>
+</blockquote>
+
+<p>So, the optimizer prepares an optimal way to execute a query and represent it
+in the form of Path trees. Everything sounds clear and simple. Except that it
+isn’t, mostly thanks to <a href="https://wp.sigmod.org/?p=1075">cardinality estimation</a> despite
+years of progress. As an example one can find couple of
+<a href="https://db.in.tum.de/~leis/papers/lookingglass.pdf">works</a> from the past, when a common observation about
+PostgreSQL is that cardinality under-estimates sometimes make optimizer to
+select nested-loop joins even when other join methods could be more efficient
+(it would be interesting to check if it’s still a thing).</p>
+
+<h2 id="everyone-can-learn">Everyone can learn</h2>
+
+<p>Unless you’ve spent last several years in an underground bunker you probably
+have noticed raise of interest to machine learning as well as its applications.
+Databases are also not an exception, in the last couple of years we see a lot
+of whitepapers and projects devoted to leverage various machine learning
+techniques to improve databases performance, e.g. <a href="http://www.vldb.org/pvldb/vol12/p1705-marcus.pdf">Neo</a> (which is in fact
+the main source of inspiration for this blogpost) or
+<a href="https://github.com/postgrespro/aqo">Adaptive query optimization for PostgreSQL</a>. For me, as an amateur in
+machine learning, the idea sounds approximately like “lets make optimizer to
+learn from its own mistakes”. Surprisingly this idea is not exactly new,
+<a href="https://www.csd.uoc.gr/~hy460/pdf/leo-db2.pdf">LEO DB2’s learning optimizer</a> was suggested already in 2001, although of
+course a lot of progress has being done since then. Let’s see in more details
+how it works based on Neo example:</p>
+
+<p><img src="/public/img/neo.png" border="0" width="100%" style="margin: auto" /></p>
+
+<ul>
+  <li>
+    <p>First Neo collects expertise based on the sample workload and hints from a
+normal database query optimizer. It is important to provide an expert
+knowledge, since otherwise learning time will be too big for any practical
+usage.</p>
+  </li>
+  <li>
+    <p>Based on collected expertise a deep neural network (called “Value Model”) is
+trained. The purpose of this neural network is to predict the final execution
+time of any given query execution plan.</p>
+  </li>
+  <li>
+    <p>For any real incoming query it’s being transformed into a set of features
+that represent e.g. join order.</p>
+  </li>
+  <li>
+    <p>Having a set of features and “Value Model” at hands Neo performs best-first
+search of the plan space for the most efficient plan suitable for the query.</p>
+  </li>
+</ul>
+
+<p>Essentially the algorithm takes an existing expertise and learn to predict how
+good or bad an execution plan would be. Then for every query it performs a
+non-exhaustive search in the plan space guided by learned experience. Sounds
+interesting, but what does it have to do with chess again?</p>
+
+<h2 id="games">Games</h2>
+
+<p>The book “The art of doing science and engineering” mentions an interesting
+example of self-learning programms. It was a checker playing program developed
+by <a href="https://en.wikipedia.org/wiki/Arthur_Samuel">Arthur Samuel</a> with an interesting idea. In the core of the program
+was a scoring function for measuring the chances of winning. To improve this
+function Samuel made the program play thousands of games against itself to tune
+formula parameters.</p>
+
+<p>This book was originally published in 1996, and Richard Hamming mentioned that
+AI and self-learning algorithms is a topic one cannot afford to ignore. In 1997
+in the second match of six games a reigning world chess champion Garry Kasparov
+was defeated by a supercomputer Deep Blue under tournament conditions for the
+first time in the history.</p>
+
+<p>What seemed to be an end of chess as we know them was once again changed in
+2017, when DeepMind team released a preprint introducing another chess
+algorithm <a href="https://arxiv.org/pdf/1712.01815.pdf">AlphaZero</a>. Interestingly this work did not bring more
+misery for human chess players, but rather some signs of hope. The reason for
+that is the style of AlphaZero, much more human like and creative than anything
+before. For example the book “Game changer: AlphaZero’s Groundbreaking Chess
+Strategies and the Promise of AI” contains this beautiful game:</p>
+
+<iframe src="https://lichess.org/study/embed/JFSKkSol/PAVNVult#0" style="width: 600px; height: 600px;" allowtransparency="true" frameborder="0"></iframe>
+
+<p>What is interesting about this game is that the position after White’s 20th
+move repeats another brilliant game after White’s 21st move. But the latter one
+was played by human players, namely Gata Kamsky and Yasser Seirawan in 2012 in
+US Championship!</p>
+
+<p>Why was it so important and what is the difference between AlpaZero and any
+other chess engine?</p>
+
+<p>Well, usually engines like e.g. <a href="https://github.com/official-stockfish/Stockfish">Stockfish</a> evaluate positions on a
+chess board using features provided by human players and carefully tuned
+weights. They’re combined with a high-performance alpha-beta search that
+expands a search tree using numerous clever heuristics and domain-specific
+adaptations to provide the final result.</p>
+
+<p>AlphaZero uses another approach and utilizes a deep value network, which takes
+a board position and move probabilities to evaluate how good or bad this
+position is. All the values and probabilities are learned by AlphaZero from
+self play, as there is no provided heuristic or any human knowledge except the
+game rules. The resulting neural network is being used to guide the search for
+a next move using Monte-Carlo tree search (interesting enough, it could be also
+improved via <a href="https://proceedings.icml.cc/book/2020/file/310cc7ca5a76a446f85c1a0d641ba96d-Paper.pdf">model-free policy-optimization algorithm</a>). Does it sound
+familiar?</p>
+
+<h2 id="pulling-bits-together">Pulling bits together</h2>
+
+<p>Indeed, the similarity between what we have seen in Neo and AlphaZero is so
+striking that the authors of former mentioned “the architecture of Neo closely
+mirrors that of AlphaGo”, where AlphaZero could be considered as a more
+generalized variant of the AlphaGo. And it’s should not be surprising, since
+both query optimization and chess share the same idea of searching for the
+optimal solution based on the existing experience! Probably one could even
+speculate that the same approach could be used in other fields to solve similar
+problems.</p>
+
+<p>This sounds very exciting, but as always there are couple of concerns that need
+to be addressed:</p>
+
+<ul>
+  <li>
+    <p>Learning techniques can outperform other approaches in average case, but fail
+miserably in the worst cases (tail performance). This could be true even for
+AlphaZero, but in a different form. It had learned everything without an
+opening books, and  there is a chance of falling into a known opening traps.
+The book “Game changer” mentioned the game above as an example (note, that
+it’s one of not that many games lost by AlphaZero).</p>
+  </li>
+  <li>
+    <p>To make learning techniques practical training time should be reasonably
+small and an algorithm should allow some form of retraining to take into
+account new data. This question is tightly connected with whether provide an
+existing human knowledge for an algorithm or not. In case of Neo it’s an
+important way of speeding up training (otherwise it would be tremendously
+slow, since one has to execute not optimal queries over and over again), but
+AlphaZero avoids that, because prise of training is smaller and eliminating
+existing knowledge allows discovering new tactics.</p>
+  </li>
+  <li>
+    <p>The ability to debug and explain decisions made in self-learned way is itself
+a subject of research and not straightforward at all.</p>
+  </li>
+</ul>
+
+<h2 id="summary">Summary</h2>
+
+<p>To repeat Richard Hamming again, learning algorithms is a topic one cannot
+afford to ignore, including its application in databases. Obviously the
+approach of predicting an execution plan efficiency is not the only way of
+doing query optimization. Another interesting <a href="https://arxiv.org/pdf/2004.03814.pdf">example</a> is a learning
+algorithm that optimizes not a plan itself, but a set of plan hints that could
+steer query optimizer in one or another way. And I’m sure there are many others
+exist, taking into account general nature of the question, when the same ideas
+could be applied for completely different set of problems.</p>
+
+<p>Thanks to authors of all mentioned papers and books for sharing those
+fascinating insights!</p>
+
+
+</div>
+
+<div class="related">
+  <h2>Other Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2021/03/03/subscripting/">
+            How many engineers does it take to make subscripting work?
+            <small>03 Mar 2021</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2020/11/28/evolution-of-btree-index-am/">
+            Evolution of tree data structures for indexing: more exciting than it sounds
+            <small>28 Nov 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2019/12/06/postgresql-stay-curious/">
+            PostgreSQL at low level: stay curious!
+            <small>06 Dec 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'erthalion'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+    </div>
+
+  </body>
+</html>

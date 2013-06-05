@@ -1,0 +1,72 @@
+---
+layout: post
+title:  "A lot of Unix philosophy with the ii"
+date:   2014-02-16 20:41:00
+comments: true
+---
+
+> Write programs that do one thing and do it well. Write programs to work together. Write programs to handle text streams, because that is a universal interface.
+
+It seems like there is no good IRC plugin for vim - I found none of them at least. But there is a brilliant geeky alternative - [ii][ii_site]. Here is a quote from its site:
+
+> ii is a minimalist FIFO and filesystem-based IRC client. It creates an irc directory tree with server, channel and nick name directories. In every directory a FIFO in file and a normal out file is created.
+
+> The in file is used to communicate with the servers and the out files contain the server messages. For every channel and every nick name there are related in and out files created. This allows IRC communication from command line and adheres to the Unix philosophy.
+
+To configure the IRC workflow (join, identify, read/write) you can use [these][nion] [posts][userbound]. Here I want to help you avoid several caveats.
+
+First of all, there is the final result you'll get:
+<img src="/public/img/ii.png" border="0" width="100%">
+
+I'll use [tmux][tmux] + [multitail][multitail] + vim.
+
+First we need to connect to an IRC server (`freenode.net` in my case):
+{% highlight bash %}
+#!/bin/sh
+ii -s irc.freenode.net -n nick -f "UserName" &
+sleep 10
+echo "identify password"> ~/irc/irc.freenode.net/nickserv/in
+echo "/j #channel1"> ~/irc/irc.freenode.net/in
+echo "/j #channel2"> ~/irc/irc.freenode.net/in
+echo "/j #channel3"> ~/irc/irc.freenode.net/in
+{% endhighlight %}
+
+Next step is to create handy console-based environment to use it. A small bash script can be used for this purpose (I've split the implementation):
+{% highlight bash %}
+#!/bin/sh
+# tmux_open.sh
+tmux -2 new-session -s session_name "ii_open.sh $1"
+
+#!/bin/sh
+# tmux_open.sh
+tmux splitw -v -p 30 'vim'
+multitail -cS ii ~/irc/irc.freenode.net/#$1/out
+{% endhighlight %}
+
+We should use `-2` option for `tmux` to force 256 colors, and `-cS ii` option for `multitail` to ii syntax highlighting. After all this we can execute `./tmux_open.sh channel` command to open a two pane, that will contain IRC channel log and vim ifself.
+
+To type in IRC session we will use `vim` with the following mappings:
+{% highlight vim %}
+map <leader>ii :.w >> ~/irc/irc.freenode.net/in<cr>dd
+map <leader>i1 :.w >> ~/irc/irc.freenode.net/\#channel1/in<cr>dd
+map <leader>i2 :.w >> ~/irc/irc.freenode.net/\#channel2/in<cr>dd
+map <leader>i3 :.w >> ~/irc/irc.freenode.net/\#channel3/in<cr>dd
+{% endhighlight %}
+
+Also, we can hide tmux status line globally (I prefer a vim status line) to achieve an ideal:
+{% highlight bash %}
+# .tmux.conf
+set-option -g status off
+{% endhighlight %}
+
+or hide it only with the vim
+{% highlight vim %}
+; .vimrc
+autocmd VimEnter,VimLeave * silent !tmux set status
+{% endhighlight %}
+
+[ii_site]: http://tools.suckless.org/ii/
+[nion]: http://nion.modprobe.de/blog/archives/440-Using-the-ii-irc-client.html
+[userbound]: http://userbound.com/blog/ii-a-better-way-to-irc/
+[tmux]: http://tmux.sourceforge.net/
+[multitail]: http://www.vanheusden.com/multitail/

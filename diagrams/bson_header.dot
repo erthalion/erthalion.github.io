@@ -1,0 +1,23 @@
+graph BSON {
+    layout=fdp
+    overlap=scalexy
+    splines=ortho
+
+    node [
+        shape="rectangle",
+        style="rounded",
+        pin=true,
+        width=2,
+        penwidth=2,
+        fontsize=16
+    ];
+
+    Bson_header [label="Bson Header", pos="0,4"]
+    Value_type [label="Value type", pos="2,3"]
+    Key_name [label="Key name", pos="2,2"]
+    Value_size [label="Value size" pos="2,1"]
+
+    Bson_header -- Value_type
+    Bson_header -- Key_name
+    Bson_header -- Value_size
+}

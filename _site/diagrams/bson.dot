@@ -1,0 +1,14 @@
+digraph BSON {
+    node [shape="rectangle", style="rounded"];
+    document_size [label="Document size"]
+    node1 [label="Node"]
+    node2 [label="Node"]
+    node3 [label="..."]
+
+    Bson -> document_size
+    Bson -> node1
+    node1 -> node2
+    node1 -> node3
+    node2 -> Header
+    node2 -> Content
+}

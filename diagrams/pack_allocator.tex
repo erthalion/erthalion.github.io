@@ -1,0 +1,88 @@
+\documentclass[crop, tikz, border=1mm]{standalone}
+\RequirePackage{luatex85}
+
+\usepackage{fontawesome5}
+\usetikzlibrary{
+    shapes,
+    fit,
+    arrows,
+    positioning
+}
+
+\tikzset{page/.style={
+    draw,
+    fill=gray!30,
+    rounded corners=.1cm,
+}}
+
+\tikzset{prog/.style={
+    draw,
+    fill=yellow!30,
+    minimum height=1.0cm,
+    minimum width=1.8cm,
+    %rounded corners=.25cm,
+}}
+
+\tikzset{app/.style={
+    draw,
+    fill=blue!30,
+    minimum height=2cm,
+    minimum width=2cm,
+    rounded corners=.55cm,
+}}
+
+\tikzset{kernel/.style={
+    draw,
+    fill=green!30,
+    minimum height=2cm,
+    minimum width=2cm,
+    rounded corners=.55cm,
+}}
+
+\tikzset{bpf/.style={
+    draw,
+    fill=red!30,
+    minimum height=2cm,
+    minimum width=2cm,
+    rounded corners=.55cm,
+}}
+
+\tikzset{connection/.style={
+    draw=none
+}}
+
+\tikzset{arrow/.style={
+    ->,>=stealth,
+    line width=0.2mm,
+    color=red!50,
+}}
+
+\begin{document}
+    \begin{tikzpicture}[
+            align=center,
+            node distance=0.0cm
+    ]
+        \path
+          node[prog] (prog1) {\color{red}\faFire*}
+          node[prog, right=0.2cm of prog1] (prog2) {\color{red}\faFire*}
+          node[prog, right=0.2cm of prog2] (prog3) {\color{blue}\faSnowflake}
+
+          node[prog, right=0.8cm of prog3] (prog4) {\color{red}\faFire*}
+          node[prog, right=0.2cm of prog4] (prog5) {\color{blue}\faSnowflake}
+          node[prog, right=0.2cm of prog5] (prog6) {$\cdots$}
+
+          node[page,
+              inner sep=0.2cm,
+              behind path,
+              fit=(prog1)(prog2)(prog3)
+          ] (page) {}
+
+          node[page,
+              inner sep=0.2cm,
+              behind path,
+              fit=(prog4)(prog5)(prog6)
+          ] (page) {};
+
+
+    \end{tikzpicture}
+\end{document}

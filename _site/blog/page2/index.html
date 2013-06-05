@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+
+  <title>
+    
+    Erthalion's blog
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/hyde.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,400,600,700|Abril+Fatface">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/touch-icon-144-precomposed.png">
+  <link href='/img/favicon.ico' rel='shortcut icon' type='image/png'>
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-24190660-5', 'erthalion.info');
+      ga('send', 'pageview');
+
+    </script>
+</head>
+
+
+  <body>
+
+    <header class="masthead">
+      <div class="masthead-inner">
+        <a href="http://erthalion.info/blog"><h1>Blog</h1></a>
+        <p class="lead">My thoughts and experiments.</p>
+
+        <div class="colophon">
+          <ul class="colophon-links">
+            <li>
+              <a href="http://erthalion.info/">About me</a>
+            </li>
+            <li>
+              <a href="http://andhyde.com/">Hyde Jekyll theme</a>
+            </li>
+          </ul>
+
+          <p>&copy; 2020. Dmitry Dolgov All rights reserved.</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="content container">
+      <div class="posts">
+  
+  <div class="post">
+    <h1>
+      <a href="/2017/12/21/advanced-json-benchmarks/">
+        Jsonb: few more stories about the performance
+      </a>
+    </h1>
+
+    <span class="post-date">21 Dec 2017</span>
+
+    <blockquote>
+  <p>As such, there’s really no “standard” benchmark that will inform you about
+the best technology to use for your application. Only your requirements, your
+data, and your infrastructure can tell you what you need to know.</p>
+</blockquote>
+
+<p>For already some time I can’t stop doing interesting/useful/weird (one at the
+time) benchmarks to reveal some details on how to apply document-oriented
+approach in the world of relational databases. Finally, I decided that I have a
+critical mass of those details to share in the form of blog post. So welcome to
+The Benchmark Club, where we’re going to discuss what it takes to create a fair
+performance comparison of different databases. As you may guess, the first rule
+of The Benchmark Club is to never share a reproducible benchmarks. But we
+identify ourselves as a badass engineers, so we’re going to break this rule
+today.</p>
+
+<p><img src="/public/img/fight_club.jpg" border="0" width="100%" style="margin: auto" /></p>
+
+
+  </div>
+  
+  <div class="post">
+    <h1>
+      <a href="/2016/06/05/convert-into-jsonb/">
+        How to convert your data to jsonb?
+      </a>
+    </h1>
+
+    <span class="post-date">05 Jun 2016</span>
+
+    <p>“How to start” is always a difficult question, and <code class="language-plaintext highlighter-rouge">jsonb</code> isn’t an exception.
+Here are few notes about converting different types of data into <code class="language-plaintext highlighter-rouge">jsonb</code>, that
+someone can find useful.</p>
+
+<p>Basically there are three possible cases of data conversion:</p>
+
+<ul>
+  <li>Convert data from inside PostgreSQL</li>
+  <li>Convert data from other database</li>
+  <li>Convert plain data outside database</li>
+</ul>
+
+
+  </div>
+  
+  <div class="post">
+    <h1>
+      <a href="/2015/12/29/pandoc/">
+        The Knife
+      </a>
+    </h1>
+
+    <span class="post-date">29 Dec 2015</span>
+
+    <p>I really don’t know how I lived before without pandoc. It’s an amazing tool, that saved me from a terrible pain of
+latex -&gt; MS Word convertion. If you’re writing many scientific documents in <code class="language-plaintext highlighter-rouge">latex</code> format, and faced with
+the demand to convert it into MS Word, you can understand me. It’s like a tiresome point-and-click game, which can
+consume unbelievable amount of time.</p>
+
+<p>Pandoc can do it, and I’m not kidding. All you need is to create a source file in <code class="language-plaintext highlighter-rouge">markdown</code> format and
+copy all latex formulas. In this post you can find several details.</p>
+
+
+  </div>
+  
+  <div class="post">
+    <h1>
+      <a href="/2015/12/29/json-benchmarks/">
+        Compare incomparable: PostgreSQL vs Mysql vs Mongodb
+      </a>
+    </h1>
+
+    <span class="post-date">29 Dec 2015</span>
+
+    <blockquote>
+  <p>As such, there’s really no “standard” benchmark that will inform you about the best technology to use for your application. Only your requirements, your data, and your infrastructure can tell you what you need to know.</p>
+</blockquote>
+
+<p>NoSql is everywhere and we can’t escape from it (although I can’t say we want to escape). Let’s leave the question about reasons outside this text,
+and just note one thing - this trend isn’t related only to new or existing NoSql solutions. It has another side, namely the schema-less data support in
+traditional relational databases. It’s amazing how many possibilities hiding at the edge of the relational model and everything else. But of course there is
+a balance that you should find for your specific data. It can’t be easy, first of all because it’s required to compare incomparable things,
+e.g. performance of a NoSql solution and traditional database. Here in this post I’ll make such attempt and show the comparison of jsonb in PostgreSQL,
+json in Mysql and bson in Mongodb.</p>
+
+
+  </div>
+  
+</div>
+
+<!-- Pagination links -->
+<div class="pagination">
+  
+    <a href="/blog/page3" class="older">Older</a>
+  
+  
+    
+      <a href="/blog" class="newer">Newer</a>
+    
+  
+</div>
+
+    </div>
+
+  </body>
+</html>

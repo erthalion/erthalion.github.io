@@ -1,0 +1,28 @@
+graph JSONB_HEADER {
+    layout=fdp
+    overlap=scalexy
+    splines=ortho
+
+    node [
+        shape="rectangle",
+        style="rounded",
+        pin=true,
+        width=2,
+        penwidth=2,
+        fontsize=16
+    ];
+    Jsonb_header [label="Jsonb Header", pos="0,4"]
+    Type [pos="2,4"]
+    Number_of_items [label="Number of items", pos="2,3"]
+    JEntry [pos="2,2"]
+    Length_or_offset [label="Length or offset?", pos="4,2"]
+    Value_type [label="Value type", pos="4,1"]
+    Value_length_or_offset [label="Value length or offset", pos="4,0"]
+
+    Jsonb_header -- Type
+    Jsonb_header -- Number_of_items
+    Jsonb_header -- JEntry
+    JEntry -- Length_or_offset
+    JEntry -- Value_type
+    JEntry -- Value_length_or_offset
+}

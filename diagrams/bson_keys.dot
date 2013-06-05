@@ -1,0 +1,14 @@
+digraph JSONB {
+    node [shape="rectangle", style="rounded"];
+    document_size [label="Document size"]
+    node1 [label="Node"]
+    node2 [label="Node"]
+    node3 [label="..."]
+
+    Jsonb -> document_size
+    Jsonb -> node1
+    node1 -> node2
+    node1 -> node3
+    node2 -> JEntry
+    node2 -> Content
+}

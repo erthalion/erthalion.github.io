@@ -1,0 +1,61 @@
+\documentclass[crop, tikz]{standalone}
+\RequirePackage{luatex85}
+
+\usepackage{fontawesome}
+\usepackage{fontspec}
+\usetikzlibrary{
+    backgrounds,
+    patterns,
+    mindmap,
+    shapes,
+    shapes.misc,
+    fit,
+    trees,
+    tikzmark,
+    arrows,
+    arrows.meta,
+    positioning,
+    decorations.pathmorphing,
+    shapes.geometric,
+    decorations.pathreplacing
+}
+
+\newfontfamily{\ttfamily}{Fira Code}
+\usepackage{fontspec}
+\setmainfont{Liberation Sans}
+\newfontfamily\ExtraLight{Liberation Sans}
+\newfontfamily\Light{Liberation Sans}
+\newfontfamily\Book{Liberation Sans}
+\newfontfamily\Medium{Liberation Sans}
+
+\definecolor{greenGood}{HTML}{99FF99}
+\definecolor{redBad}{HTML}{FF9980}
+
+\makeatletter
+\tikzset{rum-node/.style={draw,circle,fill=white,minimum width=2cm}}
+\tikzset{>=latex}
+
+\makeatother
+
+\begin{document}
+    \begin{tikzpicture}[]
+        \node [rum-node, fill=redBad] (memory) at ( 3, 0) {Mem};
+        \node [rum-node, fill=redBad] (write) at (-3, 0) {Write};
+        \node [rum-node, fill=greenGood] (read) at ( 0, 3) {Read};
+        \draw (read) -- (write) -- (memory) -- (read);
+        \begin{scope}[on background layer]
+            \fill [gray, opacity=0.2]
+                (read.center) --
+                (write.center) --
+                (memory.center) -- cycle;
+        \end{scope}
+
+        \coordinate[below=0.5 of read] (btree-pointer);
+        \coordinate[right=2 of read] (btree-angle);
+        \node[above=0.5 of btree-angle, draw=none] (btree) {B-Tree};
+        \draw[->, line width=1pt] (btree)
+            .. controls ([yshift=-2cm] btree) and (btree-pointer) ..
+            (btree-pointer);
+
+    \end{tikzpicture}
+\end{document}

@@ -1,0 +1,138 @@
+\documentclass[crop, tikz]{standalone}
+\RequirePackage{luatex85}
+
+\usepackage{fontawesome}
+\usepackage{fontspec}
+\usepackage{ifthen}
+\usepackage{forloop}
+\usetikzlibrary{
+    backgrounds,
+    patterns,
+    mindmap,
+    shapes,
+    shapes.misc,
+    fit,
+    trees,
+    tikzmark,
+    arrows,
+    arrows.meta,
+    positioning,
+    decorations.pathmorphing,
+    shapes.geometric,
+    decorations.pathreplacing
+}
+
+\usepackage{minted}
+\usemintedstyle{tango}
+
+\newfontfamily{\ttfamily}{Fira Code}
+\usepackage{fontspec}
+\setmainfont{Liberation Sans}
+\newfontfamily\ExtraLight{Liberation Sans}
+\newfontfamily\Light{Liberation Sans}
+\newfontfamily\Book{Liberation Sans}
+\newfontfamily\Medium{Liberation Sans}
+
+\definecolor{greenGood}{HTML}{99FF99}
+\definecolor{redBad}{HTML}{FF9980}
+
+\makeatletter
+\tikzset{btree-key/.style={minimum height=1cm, pattern=north west lines, draw}}
+\tikzset{btree-high-key/.style={btree-key, pattern=north west lines, pattern color=red, draw=red}}
+\tikzset{btree-pointer/.style={minimum height=1cm, draw}}
+\tikzset{btree-empty/.style={btree-pointer, dashed}}
+\tikzset{btree-hide/.style={draw opacity=0, line width=0, pattern=none}}
+\tikzset{btree-leaf/.style={fill=greenGood}}
+\tikzset{btree-branch/.style={fill=gray!20}}
+\tikzset{btree-line/.style={line width=0.5pt}}
+\tikzset{btree-path/.style={btree-pointer, minimum width=0.5cm, fill=red, opacity=0.5}}
+\tikzset{>=latex}
+
+\newcommand{\btreenode}[5] {
+    \path
+      node[btree-pointer, #2, #3] (pointer1#1) {}
+      node[btree-key, right=0 of pointer1#1, #3] (sep1#1) {}
+      node[btree-key, left=0 of pointer1#1, #3] (sep2#1) {}
+      node[btree-pointer, right=0 of sep1#1, #3] (pointer2#1) {}
+      node[btree-pointer, left=0 of sep2#1, #3] (pointer3#1) {}
+      node[btree-key, right=0 of pointer2#1, #3] (sep3#1) {}
+      node[btree-key, left=0 of pointer3#1, #3] (sep4#1) {}
+      node[draw, inner sep=0, behind path, #4,
+          fit=(pointer1#1)(pointer2#1)(pointer3#1)
+              (sep1#1)(sep2#1)(sep3#1)(sep4#1)
+      ] (node#1) {};
+
+      \ifthenelse{ \equal{#5}{show-pointers} } {
+            \coordinate[below=0.5 of pointer1#1] (heap-pointer1#1);
+            \coordinate[below=0.5 of pointer2#1] (heap-pointer2#1);
+            \coordinate[below=0.5 of pointer3#1] (heap-pointer3#1);
+
+            \draw[->, btree-line] (pointer1#1.south) -- (heap-pointer1#1.north);
+            \draw[->, btree-line] (pointer2#1.south) -- (heap-pointer2#1.north);
+            \draw[->, btree-line] (pointer3#1.south) -- (heap-pointer3#1.north);
+      } {}
+}
+
+\newcounter{itemid}
+\newcounter{itemid-prev}
+\newcounter{itemid-next}
+
+\newcommand{\btreenodewithitems}[6] {
+    \node[btree-key, #4, #6] (key#11) {};
+    \forloop{itemid}{2}{\value{itemid} < #2} {
+      \setcounter{itemid-prev}{\value{itemid} - 1}
+      \ifthenelse{\number\value{itemid} < #3} {
+        \node[btree-key, #6, right=0.2cm of key#1\number\value{itemid-prev}]
+          (key#1\number\value{itemid}) {};
+      } {
+        \node[btree-empty, #6, right=0.2cm of key#1\number\value{itemid-prev}]
+          (key#1\number\value{itemid}) {};
+      }
+    }
+    \setcounter{itemid-prev}{\value{itemid} - 1}
+    \node[btree-empty, #6, right=0.2cm of key#1\number\value{itemid-prev}]
+        (high-key#1) {};
+    \node[draw, #6, inner sep=0.2cm, behind path, #5,
+        fit=(high-key#1)\directlua{
+          for index=1,#2-1 do
+              tex.print("(key#1"..index..")")
+          end}
+    ] (node#1) {};
+
+    %%% redraw after background
+    \node[btree-key, #4, #6] (key#11) {};
+    \forloop{itemid}{2}{\value{itemid} < #2} {
+      \setcounter{itemid-prev}{\value{itemid} - 1}
+      \ifthenelse{\number\value{itemid} < #3} {
+        \node[btree-key, #6, right=0.2cm of key#1\number\value{itemid-prev}]
+          (key#1\number\value{itemid}) {};
+      } {
+        \node[btree-empty, #6, right=0.2cm of key#1\number\value{itemid-prev}]
+          (key#1\number\value{itemid}) {};
+      }
+    }
+    \setcounter{itemid-prev}{\value{itemid} - 1}
+    \node[btree-empty, #6, right=0.2cm of key#1\number\value{itemid-prev}]
+        (high-key#1) {};
+}
+
+
+\makeatother
+
+\begin{document}
+    \begin{tikzpicture}[]
+        \btreenodewithitems{1}{5}{2}{}{btree-branch}{}
+        \btreenodewithitems{2}{5}{5}{below=1cm of key11, xshift=-2cm}{btree-leaf}{}
+        \btreenodewithitems{3}{5}{2}{below=1cm of key11, xshift=2cm}{btree-hide}{btree-hide}
+        \coordinate[left=0.5 of node1.south] (node1-left);
+        \coordinate[right=0.5 of node1.south] (node1-right);
+        \draw[->, btree-line] (node1-left)
+            .. controls ([yshift=-0.5cm] node1-left) and ([yshift=1.2cm] node2) ..
+            (node2.north);
+
+        \node[btree-key, below=1cm of key24] (new-key) {};
+        \draw[->, btree-line] (new-key.east)
+            .. controls ([xshift=1cm] new-key) and (high-key2) ..
+            (high-key2.center);
+    \end{tikzpicture}
+\end{document}

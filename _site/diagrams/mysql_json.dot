@@ -1,0 +1,13 @@
+digraph JSONB {
+    node [shape="rectangle", style="rounded"];
+    MySQL_json [label="MySQL Json"]
+    Node1 [label="Node"]
+    Node2 [label="Node"]
+    Node3 [label="..."]
+
+    MySQL_json -> Node1
+    Node1 -> Node2
+    Node1 -> Node3
+    Node2 -> Type
+    Node2 -> Value
+}

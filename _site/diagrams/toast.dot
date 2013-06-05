@@ -1,0 +1,18 @@
+digraph TOAST {
+    rankdir=LR;
+
+    node [
+        shape="rectangle",
+        style="rounded",
+        pin=true,
+        width=2,
+        penwidth=2,
+        fontsize=16
+    ];
+
+    Toast_table [label="Toast table"]
+
+    Jsonb -> Compression
+    Compression -> Chunks
+    Chunks -> Toast_table
+}
