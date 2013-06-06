@@ -1,0 +1,45 @@
+body {
+    background: -webkit-gradient( radial, 500 50%, 20, 500 25%, 600, from(rgb(255, 255, 255)), to(rgb(218, 218, 218)) );
+    margin: 0!important;
+    font-family: 'Denk One', sans-serif;
+}
+
+.name {
+    width: 200px;
+    height: 40px;
+    margin-left: 15%;
+    padding-top: 20px;
+    background: black;
+    border-radius: 3px;
+    color: white;
+    text-align: center;
+    margin-top: -5px;
+}
+
+.name-link {
+    text-decoration: none;
+}
+
+.header {
+}
+
+.main {
+    margin-top: 10%;
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.photo {
+    float: right;
+}
+
+.black-top {
+    background-color: black;
+    width: 100%;
+    height: 10px;
+}
+
+.icons {
+    margin-top: 60px;
+}
