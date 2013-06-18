@@ -1,7 +1,11 @@
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
 body {
     background: -webkit-gradient( radial, 500 50%, 20, 500 25%, 600, from(rgb(255, 255, 255)), to(rgb(218, 218, 218)) );
     margin: 0!important;
-    font-family: 'Denk One', sans-serif;
 }
 
 .name {
@@ -14,9 +18,15 @@ body {
     color: white;
     text-align: center;
     margin-top: -5px;
+    font-family: 'Denk One', sans-serif!important;
+    font-size: 17px!important;
 }
 
 .name-link {
+    text-decoration: none;
+}
+
+.name-link:hover {
     text-decoration: none;
 }
 
@@ -25,13 +35,11 @@ body {
 
 .main {
     margin-top: 10%;
-    width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 20%!important;
+    margin-right: 20%!important;
 }
 
 .photo {
-    float: right;
 }
 
 .black-top {
@@ -42,4 +50,10 @@ body {
 
 .icons {
     margin-top: 60px;
+    text-align: center;
+}
+
+.text {
+    font-family: 'Headland One', serif!important;
+    line-height: 1.8;
 }
