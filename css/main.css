@@ -61,6 +61,10 @@ body {
     min-width: 200px;
 }
 
+#row {
+    max-width: 80%;
+}
+
 @media screen and (min-width: 60em) {
     #row {
         display: -box;
@@ -70,7 +74,7 @@ body {
         -webkit-box-pack: justify;
 
         display: -moz-box;
-        -moz-box-pack: justify;
+        -moz-box-pack: center;
 
         display: -ms-box;
         -ms-box-pack: justify;
