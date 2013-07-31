@@ -61,8 +61,10 @@ body {
     min-width: 200px;
 }
 
-#row {
-    max-width: 80%;
+@-moz-document url-prefix() { 
+    #row {
+        max-width: 100%;
+    }
 }
 
 @media screen and (min-width: 60em) {
