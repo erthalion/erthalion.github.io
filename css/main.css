@@ -40,6 +40,7 @@ body {
 }
 
 .photo {
+    text-align: center;
 }
 
 .black-top {
@@ -56,4 +57,22 @@ body {
 .text {
     font-family: 'Headland One', serif!important;
     line-height: 1.8;
+    max-width: 500px;
+    min-width: 200px;
+}
+
+@media screen and (min-width: 60em) {
+    #row {
+        display: -webkit-box;
+        -webkit-box-pack: justify;
+
+        display: -ms-box;
+        -ms-box-pack: justify;
+    }
+}
+
+@media screen and (min-width: 10em) {
+    #row {
+        -webkit-flex-direction: column;
+    }
 }
