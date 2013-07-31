@@ -79,6 +79,12 @@ body {
 
 @media screen and (min-width: 10em) {
     #row {
+        -flex-direction: column;
+
         -webkit-flex-direction: column;
+
+        -moz-flex-direction: column;
+
+        -ms-flex-direction: column;
     }
 }
