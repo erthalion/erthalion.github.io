@@ -61,6 +61,10 @@ body {
     min-width: 200px;
 }
 
+#row {
+    margin-top: 50px;
+}
+
 @-moz-document url-prefix() { 
     #row {
         max-width: 100%;
@@ -78,8 +82,8 @@ body {
         display: -moz-box;
         -moz-box-pack: center;
 
-        display: -ms-box;
-        -ms-box-pack: justify;
+        display: -ms-flexbox;
+        -ms-flex-pack: justify;
     }
 }
 
@@ -91,6 +95,6 @@ body {
 
         -moz-flex-direction: column;
 
-        -ms-flex-direction: column;
+        /*-ms-flex-direction: column;*/
     }
 }
