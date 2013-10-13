@@ -100,3 +100,26 @@ body {
         /*-ms-flex-direction: column;*/
     }
 }
+
+.cv {
+    display: -box;
+    -box-pack: justify;
+
+    display: -webkit-box;
+    -webkit-box-pack: justify;
+
+    display: -moz-box;
+    -moz-box-pack: center;
+
+    display: -ms-flexbox;
+    -ms-flex-pack: justify;
+
+    width: 50%;
+    margin: 6% 0 5% 25%;
+}
+
+.cv a {
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+}
