@@ -1,0 +1,13 @@
+title:        Blog
+tagline:      "Erthalion\'s blog"
+description:  "My thoughts and experiments."
+url:          http://erthalion.github.io
+version:      0.0.1
+author:
+  name:       ''
+  email:      ''
+markdown:     rdiscount
+permalink:    pretty
+pygments:     true
+paginate:     5
+paginate_path: "blog/page:num"
