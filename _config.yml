@@ -9,5 +9,9 @@ author:
 markdown:     rdiscount
 permalink:    pretty
 pygments:     true
-paginate:     5
+paginate:     2
 paginate_path: "blog/page:num"
+comments:
+    provider: disqus
+    disqus:
+        short_name: erthalion

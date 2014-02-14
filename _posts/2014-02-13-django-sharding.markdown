@@ -2,7 +2,7 @@
 layout: post
 title:  "What about sharding in the Django?"
 date:   2014-02-13 21:14:42
-categories: jekyll update
+comments: true
 ---
 
 Some time ago I was faced with the need to implement the sharding in Django 1.6 . It was an attempt to make step beyond the standart features of this framework and I felt the resistance of Django =) I'll talk a bit about this challenge and its results.
