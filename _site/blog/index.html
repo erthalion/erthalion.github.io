@@ -62,20 +62,20 @@
 
     <blockquote><p>Write programs that do one thing and do it well. Write programs to work together. Write programs to handle text streams, because that is a universal interface.</p></blockquote>
 
-<p>It seems that there is no good IRC plugin for vim - I found none of them at least. But there is an brilliant alternative for the all geeks - <a href="http://tools.suckless.org/ii/">ii</a>. Here is a quote from site:</p>
+<p>It seems like there is no good IRC plugin for vim - I found none of them at least. But there is an brilliant geeky alternative - <a href="http://tools.suckless.org/ii/">ii</a>. Here is a quote from its site:</p>
 
 <blockquote><p>ii is a minimalist FIFO and filesystem-based IRC client. It creates an irc directory tree with server, channel and nick name directories. In every directory a FIFO in file and a normal out file is created.</p>
 
 <p>The in file is used to communicate with the servers and the out files contain the server messages. For every channel and every nick name there are related in and out files created. This allows IRC communication from command line and adheres to the Unix philosophy.</p></blockquote>
 
-<p>To configure the IRC workflow (join, identify, read/write) you can use <a href="http://nion.modprobe.de/blog/archives/440-Using-the-ii-irc-client.html">this</a> <a href="http://userbound.com/blog/ii-a-better-way-to-irc/">posts</a>. I will be saying only about some caveats in this process.</p>
+<p>To configure the IRC workflow (join, identify, read/write) you can use <a href="http://nion.modprobe.de/blog/archives/440-Using-the-ii-irc-client.html">these</a> <a href="http://userbound.com/blog/ii-a-better-way-to-irc/">posts</a>. Here I want to help you avoid several caveats.</p>
 
-<p>First of all I will show you the result:
+<p>First of all, there is the final result you'll get:
 <img src="/public/img/ii.png" border="0" width="100%"></p>
 
-<p>I'll be using <a href="http://tmux.sourceforge.net/">tmux</a> + <a href="http://www.vanheusden.com/multitail/">multitail</a> + vim.</p>
+<p>I'll use <a href="http://tmux.sourceforge.net/">tmux</a> + <a href="http://www.vanheusden.com/multitail/">multitail</a> + vim.</p>
 
-<p>At the start we need connect to an IRC server (<code>freenode.net</code> in my case):</p>
+<p>First we need to connect to an IRC server (<code>freenode.net</code> in my case):</p>
 
 <div class="highlight"><pre><code class="bash"><span class="c">#!/bin/sh</span>
 ii -s irc.freenode.net -n nick -f <span class="s2">&quot;UserName&quot;</span> <span class="p">&amp;</span>
@@ -87,7 +87,7 @@ sleep 10
 </code></pre></div>
 
 
-<p>Now we should compose a convenient environment for the reading/writing. A small bash script can be used for this purpose (I've split the implementation):</p>
+<p>Next step is to create handy console-based environment to use it. A small bash script can be used for this purpose (I've split the implementation):</p>
 
 <div class="highlight"><pre><code class="bash"><span class="c">#!/bin/sh</span>
 <span class="c"># tmux_open.sh</span>
@@ -100,9 +100,9 @@ multitail -cS ii ~/irc/irc.freenode.net/#<span class="nv">$1</span>/out
 </code></pre></div>
 
 
-<p>We should use <code>-2</code> option for <code>tmux</code> to force 256 colors, and <code>-cS ii</code> option for <code>multitail</code> to ii syntax highlighting. After all this we can execute <code>./tmux_open.sh channel</code> command to open a two pane, that will be contain a channel log and vim.</p>
+<p>We should use <code>-2</code> option for <code>tmux</code> to force 256 colors, and <code>-cS ii</code> option for <code>multitail</code> to ii syntax highlighting. After all this we can execute <code>./tmux_open.sh channel</code> command to open a two pane, that will contain IRC channel log and vim ifself.</p>
 
-<p>To type in IRC session we will be using <code>vim</code> with the following mappings:</p>
+<p>To type in IRC session we will use <code>vim</code> with the following mappings:</p>
 
 <div class="highlight"><pre><code class="vim">map <span class="p">&lt;</span>leader<span class="p">&gt;</span>ii :.<span class="k">w</span> <span class="p">&gt;&gt;</span> <span class="p">~</span><span class="sr">/irc/</span>irc.freenode.net/<span class="k">in</span><span class="p">&lt;</span><span class="k">cr</span><span class="p">&gt;</span>dd
 map <span class="p">&lt;</span>leader<span class="p">&gt;</span>i1 :.<span class="k">w</span> <span class="p">&gt;&gt;</span> <span class="p">~</span><span class="sr">/irc/</span>irc.freenode.net<span class="sr">/\#channel1/</span><span class="k">in</span><span class="p">&lt;</span><span class="k">cr</span><span class="p">&gt;</span>dd
@@ -111,7 +111,7 @@ map <span class="p">&lt;</span>leader<span class="p">&gt;</span>i3 :.<span class
 </code></pre></div>
 
 
-<p>Also we can hide tmux status line globally (I prefer a vim status line) to achive an ideal:</p>
+<p>Also we can hide tmux status line globally (I prefer a vim status line) to achieve an ideal:</p>
 
 <div class="highlight"><pre><code class="bash"><span class="c"># .tmux.conf</span>
 <span class="nb">set</span>-option -g status off

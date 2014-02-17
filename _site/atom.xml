@@ -4,7 +4,7 @@
  <title>Blog</title>
  <link href="http://erthalion.github.io/atom.xml" rel="self"/>
  <link href="http://erthalion.github.io/"/>
- <updated>2014-02-16T21:44:53+07:00</updated>
+ <updated>2014-02-17T20:40:21+07:00</updated>
  <id>http://erthalion.github.io</id>
  <author>
    <name></name>
@@ -19,20 +19,20 @@
    <id>http://erthalion.github.io/2014/02/16/ii</id>
    <content type="html">&lt;blockquote&gt;&lt;p&gt;Write programs that do one thing and do it well. Write programs to work together. Write programs to handle text streams, because that is a universal interface.&lt;/p&gt;&lt;/blockquote&gt;
 
-&lt;p&gt;It seems that there is no good IRC plugin for vim - I found none of them at least. But there is an brilliant alternative for the all geeks - &lt;a href=&quot;http://tools.suckless.org/ii/&quot;&gt;ii&lt;/a&gt;. Here is a quote from site:&lt;/p&gt;
+&lt;p&gt;It seems like there is no good IRC plugin for vim - I found none of them at least. But there is an brilliant geeky alternative - &lt;a href=&quot;http://tools.suckless.org/ii/&quot;&gt;ii&lt;/a&gt;. Here is a quote from its site:&lt;/p&gt;
 
 &lt;blockquote&gt;&lt;p&gt;ii is a minimalist FIFO and filesystem-based IRC client. It creates an irc directory tree with server, channel and nick name directories. In every directory a FIFO in file and a normal out file is created.&lt;/p&gt;
 
 &lt;p&gt;The in file is used to communicate with the servers and the out files contain the server messages. For every channel and every nick name there are related in and out files created. This allows IRC communication from command line and adheres to the Unix philosophy.&lt;/p&gt;&lt;/blockquote&gt;
 
-&lt;p&gt;To configure the IRC workflow (join, identify, read/write) you can use &lt;a href=&quot;http://nion.modprobe.de/blog/archives/440-Using-the-ii-irc-client.html&quot;&gt;this&lt;/a&gt; &lt;a href=&quot;http://userbound.com/blog/ii-a-better-way-to-irc/&quot;&gt;posts&lt;/a&gt;. I will be saying only about some caveats in this process.&lt;/p&gt;
+&lt;p&gt;To configure the IRC workflow (join, identify, read/write) you can use &lt;a href=&quot;http://nion.modprobe.de/blog/archives/440-Using-the-ii-irc-client.html&quot;&gt;these&lt;/a&gt; &lt;a href=&quot;http://userbound.com/blog/ii-a-better-way-to-irc/&quot;&gt;posts&lt;/a&gt;. Here I want to help you avoid several caveats.&lt;/p&gt;
 
-&lt;p&gt;First of all I will show you the result:
+&lt;p&gt;First of all, there is the final result you'll get:
 &lt;img src=&quot;/public/img/ii.png&quot; border=&quot;0&quot; width=&quot;100%&quot;&gt;&lt;/p&gt;
 
-&lt;p&gt;I'll be using &lt;a href=&quot;http://tmux.sourceforge.net/&quot;&gt;tmux&lt;/a&gt; + &lt;a href=&quot;http://www.vanheusden.com/multitail/&quot;&gt;multitail&lt;/a&gt; + vim.&lt;/p&gt;
+&lt;p&gt;I'll use &lt;a href=&quot;http://tmux.sourceforge.net/&quot;&gt;tmux&lt;/a&gt; + &lt;a href=&quot;http://www.vanheusden.com/multitail/&quot;&gt;multitail&lt;/a&gt; + vim.&lt;/p&gt;
 
-&lt;p&gt;At the start we need connect to an IRC server (&lt;code&gt;freenode.net&lt;/code&gt; in my case):&lt;/p&gt;
+&lt;p&gt;First we need to connect to an IRC server (&lt;code&gt;freenode.net&lt;/code&gt; in my case):&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
 ii -s irc.freenode.net -n nick -f &lt;span class=&quot;s2&quot;&gt;&amp;quot;UserName&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;amp;&lt;/span&gt;
@@ -44,7 +44,7 @@ sleep 10
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Now we should compose a convenient environment for the reading/writing. A small bash script can be used for this purpose (I've split the implementation):&lt;/p&gt;
+&lt;p&gt;Next step is to create handy console-based environment to use it. A small bash script can be used for this purpose (I've split the implementation):&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# tmux_open.sh&lt;/span&gt;
@@ -57,9 +57,9 @@ multitail -cS ii ~/irc/irc.freenode.net/#&lt;span class=&quot;nv&quot;&gt;$1&lt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;We should use &lt;code&gt;-2&lt;/code&gt; option for &lt;code&gt;tmux&lt;/code&gt; to force 256 colors, and &lt;code&gt;-cS ii&lt;/code&gt; option for &lt;code&gt;multitail&lt;/code&gt; to ii syntax highlighting. After all this we can execute &lt;code&gt;./tmux_open.sh channel&lt;/code&gt; command to open a two pane, that will be contain a channel log and vim.&lt;/p&gt;
+&lt;p&gt;We should use &lt;code&gt;-2&lt;/code&gt; option for &lt;code&gt;tmux&lt;/code&gt; to force 256 colors, and &lt;code&gt;-cS ii&lt;/code&gt; option for &lt;code&gt;multitail&lt;/code&gt; to ii syntax highlighting. After all this we can execute &lt;code&gt;./tmux_open.sh channel&lt;/code&gt; command to open a two pane, that will contain IRC channel log and vim ifself.&lt;/p&gt;
 
-&lt;p&gt;To type in IRC session we will be using &lt;code&gt;vim&lt;/code&gt; with the following mappings:&lt;/p&gt;
+&lt;p&gt;To type in IRC session we will use &lt;code&gt;vim&lt;/code&gt; with the following mappings:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;vim&quot;&gt;map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;ii :.&lt;span class=&quot;k&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/irc/&lt;/span&gt;irc.freenode.net/&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;cr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;dd
 map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;i1 :.&lt;span class=&quot;k&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/irc/&lt;/span&gt;irc.freenode.net&lt;span class=&quot;sr&quot;&gt;/\#channel1/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;cr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;dd
@@ -68,7 +68,7 @@ map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&q
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Also we can hide tmux status line globally (I prefer a vim status line) to achive an ideal:&lt;/p&gt;
+&lt;p&gt;Also we can hide tmux status line globally (I prefer a vim status line) to achieve an ideal:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# .tmux.conf&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;-option -g status off
