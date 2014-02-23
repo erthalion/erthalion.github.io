@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
  <title>Blog</title>
- <link href="http://erthalion.github.io/atom.xml" rel="self"/>
- <link href="http://erthalion.github.io/"/>
- <updated>2014-02-18T09:54:34+07:00</updated>
- <id>http://erthalion.github.io</id>
+ <link href="http://erthalion.info/atom.xml" rel="self"/>
+ <link href="http://erthalion.info/"/>
+ <updated>2014-02-23T18:37:53+07:00</updated>
+ <id>http://erthalion.info</id>
  <author>
    <name></name>
    <email></email>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>A lot of Unix philosophy with the ii</title>
-   <link href="http://erthalion.github.io/2014/02/16/ii/"/>
+   <link href="http://erthalion.info/2014/02/16/ii/"/>
    <updated>2014-02-16T20:41:00Z</updated>
-   <id>http://erthalion.github.io/2014/02/16/ii</id>
+   <id>http://erthalion.info/2014/02/16/ii</id>
    <content type="html">&lt;blockquote&gt;&lt;p&gt;Write programs that do one thing and do it well. Write programs to work together. Write programs to handle text streams, because that is a universal interface.&lt;/p&gt;&lt;/blockquote&gt;
 
 &lt;p&gt;It seems like there is no good IRC plugin for vim - I found none of them at least. But there is an brilliant geeky alternative - &lt;a href=&quot;http://tools.suckless.org/ii/&quot;&gt;ii&lt;/a&gt;. Here is a quote from its site:&lt;/p&gt;
@@ -88,9 +88,9 @@ autocmd &lt;span class=&quot;nb&quot;&gt;VimEnter&lt;/span&gt;&lt;span class=&qu
  
  <entry>
    <title>What about sharding in the Django?</title>
-   <link href="http://erthalion.github.io/2014/02/13/django-sharding/"/>
+   <link href="http://erthalion.info/2014/02/13/django-sharding/"/>
    <updated>2014-02-13T21:14:42Z</updated>
-   <id>http://erthalion.github.io/2014/02/13/django-sharding</id>
+   <id>http://erthalion.info/2014/02/13/django-sharding</id>
    <content type="html">&lt;p&gt;Some time ago I was faced with the need to implement the sharding in Django 1.6 . It was an attempt to make step beyond the standart features of this framework and I felt the resistance of Django =) I'll talk a bit about this challenge and its results.&lt;/p&gt;
 
 &lt;p&gt;Let's start with definitions. Wikipedia says that:&lt;/p&gt;
