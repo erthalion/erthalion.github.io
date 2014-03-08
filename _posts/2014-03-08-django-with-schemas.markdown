@@ -57,7 +57,7 @@ class SomeTests(TransactionTestCase):
     available_apps = ('one_app', 'another_app')
 {% endhighlight %}
 
-So we are finished. I hope I have described the all possibe issues =)
+So we finished. I hope I have described the all possibe issues =)
 
 [schema_ticket1]: https://code.djangoproject.com/ticket/1051
 [schema_ticket2]: https://code.djangoproject.com/ticket/6148
