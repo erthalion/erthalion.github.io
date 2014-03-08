@@ -4,13 +4,79 @@
  <title>Blog</title>
  <link href="http://erthalion.info/atom.xml" rel="self"/>
  <link href="http://erthalion.info/"/>
- <updated>2014-02-24T20:43:58+07:00</updated>
+ <updated>2014-03-08T12:20:07+07:00</updated>
  <id>http://erthalion.info</id>
  <author>
    <name></name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>Django and PostgreSQL schemas</title>
+   <link href="http://erthalion.info/2014/03/08/django-with-schemas/"/>
+   <updated>2014-03-08T12:10:05Z</updated>
+   <id>http://erthalion.info/2014/03/08/django-with-schemas</id>
+   <content type="html">&lt;p&gt;There are a some cases, when we prefer to use a PostgreSQL schemas for our purposes. The reasons for this can be different, but how it can be done?&lt;/p&gt;
+
+&lt;p&gt;There are a lot of discussion about the implementation of PostgreSQL schemas in Django (for example &lt;a href=&quot;https://code.djangoproject.com/ticket/1051&quot;&gt;one&lt;/a&gt;, &lt;a href=&quot;https://code.djangoproject.com/ticket/6148&quot;&gt;two&lt;/a&gt;). And I want to describe several caveats.&lt;/p&gt;
+
+&lt;p&gt;First of all - you shouldn't use the &lt;code&gt;options&lt;/code&gt; key to choice a schema like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;python&quot;&gt;    &lt;span class=&quot;n&quot;&gt;DATABASES&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;default&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;OPTIONS&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&amp;#39;options&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;-c search_path=schema&amp;#39;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;It can be working, until you &lt;a href=&quot;http://lists.pgfoundry.org/pipermail/pgbouncer-general/2011-August/000842.html&quot;&gt;don't use pgbouncer&lt;/a&gt;. This option hasn't supported because of the connection pool - when you close a connection with &lt;code&gt;search_path&lt;/code&gt;, it will be returned into the pool, and can be reused with out of date &lt;code&gt;search_path&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;So what we gonna do? The only choice is to use &lt;code&gt;connection_create&lt;/code&gt; signal:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# schema.py&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;set_search_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.conf&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;settings&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;connection&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;SET search_path={}&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;settings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SEARCH_PATH&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# ?.py&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.db.backends.signals&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;connection_created&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;schema&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;set_search_path&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;connection_created&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;connect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_search_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;But where should we place this code? In general case if we want to handle the migrations, the only place is a settings file (a &lt;code&gt;model.py&lt;/code&gt; isn't suitable for this, when we want to distribute an application models and third-party models over a different schemas). And to avoid a circular dependencies, we should use three (OMG!) configuration files - &lt;code&gt;default.py&lt;/code&gt; (main configuration), &lt;code&gt;local.py/staging.py/production.py&lt;/code&gt; (depends on the server), &lt;code&gt;migration.py&lt;/code&gt; (used to set a search path). The last configuration is used only for the migration purposes:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;python manage.py migrate app --settings&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;project.migration
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;For the normal usage we can connect &lt;code&gt;set_search_path&lt;/code&gt; function to the &lt;code&gt;connection_create&lt;/code&gt; signal in the root &lt;code&gt;urls.py&lt;/code&gt; and avoid the &lt;code&gt;migration.py&lt;/code&gt; configuration of course.&lt;/p&gt;
+
+&lt;p&gt;But that's not all - there is one more trouble with the different schemas, if you using &lt;code&gt;TransactionTestCase&lt;/code&gt; for testing. Sometimes you can see an error at the tests &lt;code&gt;tear_down&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;Error: Database test_store couldn&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;t be flushed. 
+DETAIL:  Table &lt;span class=&quot;s2&quot;&gt;&amp;quot;some_table&amp;quot;&lt;/span&gt; references &lt;span class=&quot;s2&quot;&gt;&amp;quot;some_other_table&amp;quot;&lt;/span&gt;.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To avoid this error you can define &lt;code&gt;available_apps&lt;/code&gt; field, which must contain the minimum of apps required for testing:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;class SomeTests&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;TransactionTestCase&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;:
+    &lt;span class=&quot;nv&quot;&gt;available_apps&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;one_app&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;another_app&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;So we are finished. I hope I have described the all possibe issues =)&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>A lot of Unix philosophy with the ii</title>

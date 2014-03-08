@@ -2,6 +2,15 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
     <url>
+      <loc>http://erthalion.info/2014/03/08/django-with-schemas/</loc>
+      
+        <lastmod>2014-03-08T12:10:05Z</lastmod>
+      
+      <changefreq>weekly</changefreq>
+      <priority>1.0</priority>
+    </url>
+  
+    <url>
       <loc>http://erthalion.info/2014/02/16/ii/</loc>
       
         <lastmod>2014-02-16T20:41:00Z</lastmod>
@@ -19,6 +28,8 @@
       <priority>1.0</priority>
     </url>
   
+  
+    
   
     
   
