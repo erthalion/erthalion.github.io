@@ -4,13 +4,93 @@
  <title>Blog</title>
  <link href="http://erthalion.info/atom.xml" rel="self"/>
  <link href="http://erthalion.info/"/>
- <updated>2014-03-08T16:17:40+07:00</updated>
+ <updated>2014-03-26T14:14:20+07:00</updated>
  <id>http://erthalion.info</id>
  <author>
    <name></name>
    <email></email>
  </author>
 
+ 
+ <entry>
+   <title>xi or the fast and furious Haskell</title>
+   <link href="http://erthalion.info/2014/03/25/xi/"/>
+   <updated>2014-03-25T22:11:42Z</updated>
+   <id>http://erthalion.info/2014/03/25/xi</id>
+   <content type="html">&lt;p&gt;Don't be confused by the title of this post - I will tell you about my experience in the development of xmpp client &lt;a href=&quot;https://github.com/erthalion/xi&quot;&gt;xi&lt;/a&gt;. The first version of this client was written in Haskell in shortest time (for me, of cource), and this fact provides the second emotional part of title =)&lt;/p&gt;
+
+&lt;p&gt;First of all - &lt;code&gt;xi&lt;/code&gt; was inspired by &lt;a href=&quot;http://tools.suckless.org/ii/]&quot;&gt;ii&lt;/a&gt; irc client. It explains the all of its features, design and main idea. In short - after &lt;a href=&quot;http://erthalion.info/2014/02/16/ii/&quot;&gt;this&lt;/a&gt; post I'm a huge fan of this tool and philosophy.&lt;/p&gt;
+
+&lt;p&gt;Second - &lt;code&gt;xi&lt;/code&gt; was written in Haskell. I will not explain &lt;a href=&quot;http://stackoverflow.com/a/775759/1423473&quot;&gt;why&lt;/a&gt; =)&lt;/p&gt;
+
+&lt;p&gt;Now let's take a look inside. We can see a lot of dependencies of course - &lt;code&gt;xi&lt;/code&gt; uses &lt;a href=&quot;https://github.com/pontarius/pontarius-xmpp/&quot;&gt;pontarius xmpp&lt;/a&gt; for the XMPP interaction. But there is an interesting hidden trick - we must use this library from the github directly yet, because of an unpleasant &lt;a href=&quot;https://github.com/pontarius/pontarius-xmpp/issues/46&quot;&gt;bug&lt;/a&gt;. This can be done by the &lt;code&gt;cabal sandbox add-source&lt;/code&gt; command:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;git clone http://github.com/pontarius/pontarius-xmpp .deps/pontarius-xmpp
+cabal sandbox init
+cabal sandbox add-source .deps/pontarius-xmpp
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Also if we want to support &lt;code&gt;gmail.com&lt;/code&gt;, we must use some extra &lt;code&gt;TLS&lt;/code&gt; options:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;haskell&quot;&gt;&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Network.TLS&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;pConnectVersion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;pAllowedVersions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;pCiphers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; 
+                                            &lt;span class=&quot;kt&quot;&gt;Version&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;TLS10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;TLS11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;TLS12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;defaultParamsClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Network.TLS.Extra&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;ciphersuite_medium&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;nf&quot;&gt;sess&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;
+             &lt;span class=&quot;n&quot;&gt;server&lt;/span&gt;
+              &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Just&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plain&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Nothing&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+                           &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Nothing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sessionStreamConfiguration&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;def&lt;/span&gt;
+                    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tlsParams&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultParamsClient&lt;/span&gt;
+                        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pConnectVersion&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;TLS10&lt;/span&gt;
+                        &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pAllowedVersions&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;TLS10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;TLS11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;TLS12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+                        &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pCiphers&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ciphersuite_medium&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Other important feature is the listening of the file, which will contain a user input. We will use a &lt;code&gt;fsnotify&lt;/code&gt; library for this purposes. Michael Snoyman &lt;a href=&quot;http://stackoverflow.com/a/22128940/1423473&quot;&gt;shared the implementation&lt;/a&gt; of this feature (he always flying to help, when SO question contains the &lt;code&gt;haskell&lt;/code&gt; and &lt;code&gt;conduit&lt;/code&gt; keywords =). The main idea is the monitoring file changes by &lt;code&gt;fsnotify&lt;/code&gt;, and save the current position in file. There are several disadvanteges with this approach - e.g. we can't handle a file truncation. But for our purposes we can use a files, that will never be truncated.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;haskell&quot;&gt;&lt;span class=&quot;nf&quot;&gt;sourceFileForever&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;MonadResource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;FilePath&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Source&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ByteString&lt;/span&gt;
+&lt;span class=&quot;nf&quot;&gt;sourceFileForever&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fp&amp;#39;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bracketP&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;startManager&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stopManager&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;manager&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;fp&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;canonicalizePath&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;decodeString&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fp&amp;#39;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;baton&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newEmptyMVar&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;watchDir&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;manager&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;directory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tryIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;fpE&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;canonicalizePath&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;
+            &lt;span class=&quot;kr&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;of&lt;/span&gt;
+                &lt;span class=&quot;kt&quot;&gt;Added&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;
+                &lt;span class=&quot;kt&quot;&gt;Modified&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;
+                &lt;span class=&quot;kt&quot;&gt;Removed&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;when&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fpE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;putMVar&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;baton&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;consumedRef&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newIORef&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;baton&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumedRef&lt;/span&gt;
+  &lt;span class=&quot;kr&quot;&gt;where&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;MonadResource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;MVar&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;IORef&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Integer&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Source&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ByteString&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;baton&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumedRef&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;forever&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;consumed&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;readIORef&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumedRef&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sourceFileRange&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fp&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Just&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Nothing&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;CL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;iterM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;takeMVar&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;baton&lt;/span&gt;
+      &lt;span class=&quot;kr&quot;&gt;where&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;modifyIORef&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumedRef&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fromIntegral&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;xi&lt;/code&gt; uses the  following algorithm:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;establish connection&lt;/li&gt;
+&lt;li&gt;get an user roster and convert it to the internal representation (the &lt;code&gt;ContactList&lt;/code&gt; type)&lt;/li&gt;
+&lt;li&gt;create an appropriate directory structure (a separate directory for each contact with &lt;code&gt;in&lt;/code&gt;/&lt;code&gt;out&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;for the each input file start a separate thread to monitoring the user input&lt;/li&gt;
+&lt;li&gt;start a thread for monitoring the incoming messages&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;Little bit about client details. A &lt;code&gt;Session&lt;/code&gt; and &lt;code&gt;ContactList&lt;/code&gt; objects have been shared through the &lt;code&gt;Reader&lt;/code&gt; monad. For the parsing of configuration file &lt;code&gt;yaml-config&lt;/code&gt; library has been used. Also there is an ability to see an entire xmpp data flow - this requires only the debug mode in configuration.&lt;/p&gt;
+
+&lt;p&gt;Client source code hosted on the &lt;a href=&quot;https://github.com/erthalion/xi&quot;&gt;github&lt;/a&gt;, but you should keep in mind, that it's more prototype, than a completed project. So if you want to improve something - welcome =)&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Django and PostgreSQL schemas</title>

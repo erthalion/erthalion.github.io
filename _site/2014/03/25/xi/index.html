@@ -7,7 +7,7 @@
   <link href="http://gmpg.org/xfn/11" rel="profile">
 
   <title>
-    
+    xi or the fast and furious Haskell &middot; 
     Erthalion's blog
   </title>
 
@@ -59,18 +59,10 @@
     </header>
 
     <div class="content container">
-      <div class="posts">
-  
-  <div class="post">
-    <h1>
-      <a href="/2014/03/25/xi/">
-        xi or the fast and furious Haskell
-      </a>
-    </h1>
-
-    <span class="post-date">25 Mar 2014</span>
-
-    <p>Don't be confused by the title of this post - I will tell you about my experience in the development of xmpp client <a href="https://github.com/erthalion/xi">xi</a>. The first version of this client was written in Haskell in shortest time (for me, of cource), and this fact provides the second emotional part of title =)</p>
+      <div class="post">
+  <h1>xi or the fast and furious Haskell</h1>
+  <span class="post-date">25 Mar 2014</span>
+  <p>Don't be confused by the title of this post - I will tell you about my experience in the development of xmpp client <a href="https://github.com/erthalion/xi">xi</a>. The first version of this client was written in Haskell in shortest time (for me, of cource), and this fact provides the second emotional part of title =)</p>
 
 <p>First of all - <code>xi</code> was inspired by <a href="http://tools.suckless.org/ii/]">ii</a> irc client. It explains the all of its features, design and main idea. In short - after <a href="http://erthalion.info/2014/02/16/ii/">this</a> post I'm a huge fan of this tool and philosophy.</p>
 
@@ -143,89 +135,56 @@ cabal sandbox add-source .deps/pontarius-xmpp
 
 <p>Client source code hosted on the <a href="https://github.com/erthalion/xi">github</a>, but you should keep in mind, that it's more prototype, than a completed project. So if you want to improve something - welcome =)</p>
 
-  </div>
-  
-  <div class="post">
-    <h1>
-      <a href="/2014/03/08/django-with-schemas/">
-        Django and PostgreSQL schemas
-      </a>
-    </h1>
-
-    <span class="post-date">08 Mar 2014</span>
-
-    <p>There are a some cases, when we prefer to use a PostgreSQL schemas for our purposes. The reasons for this can be different, but how it can be done?</p>
-
-<p>There are a lot of discussion about the implementation of PostgreSQL schemas in Django (for example <a href="https://code.djangoproject.com/ticket/1051">one</a>, <a href="https://code.djangoproject.com/ticket/6148">two</a>). And I want to describe several caveats.</p>
-
-<p>First of all - you shouldn't use the <code>options</code> key to choice a schema like this:</p>
-
-<div class="highlight"><pre><code class="python">    <span class="n">DATABASES</span><span class="p">[</span><span class="s">&#39;default&#39;</span><span class="p">][</span><span class="s">&#39;OPTIONS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&#39;options&#39;</span><span class="p">:</span> <span class="s">&#39;-c search_path=schema&#39;</span>
-    <span class="p">}</span>
-</code></pre></div>
-
-
-<p>It can be working, until you <a href="http://lists.pgfoundry.org/pipermail/pgbouncer-general/2011-August/000842.html">don't use pgbouncer</a>. This option hasn't supported because of the connection pool - when you close a connection with <code>search_path</code>, it will be returned into the pool, and can be reused with out of date <code>search_path</code>.</p>
-
-<p>So what we gonna do? The only choice is to use <code>connection_create</code> signal:</p>
-
-<div class="highlight"><pre><code class="python"><span class="c"># schema.py</span>
-<span class="k">def</span> <span class="nf">set_search_path</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
-
-    <span class="n">conn</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;connection&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SET search_path={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">settings</span><span class="o">.</span><span class="n">SEARCH_PATH</span><span class="p">,</span>
-        <span class="p">))</span>
-
-<span class="c"># ?.py</span>
-<span class="kn">from</span> <span class="nn">django.db.backends.signals</span> <span class="kn">import</span> <span class="n">connection_created</span>
-<span class="kn">from</span> <span class="nn">schema</span> <span class="kn">import</span> <span class="n">set_search_path</span>
-
-<span class="n">connection_created</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">set_search_path</span><span class="p">)</span>
-</code></pre></div>
-
-
-<p>But where should we place this code? In general case if we want to handle the migrations, the only place is a settings file (a <code>model.py</code> isn't suitable for this, when we want to distribute an application models and third-party models over a different schemas). And to avoid a circular dependencies, we should use three (OMG!) configuration files - <code>default.py</code> (main configuration), <code>local.py/staging.py/production.py</code> (depends on the server), <code>migration.py</code> (used to set a search path). The last configuration is used only for the migration purposes:</p>
-
-<div class="highlight"><pre><code class="bash">python manage.py migrate app --settings<span class="o">=</span>project.migration
-</code></pre></div>
-
-
-<p>For the normal usage we can connect <code>set_search_path</code> function to the <code>connection_create</code> signal in the root <code>urls.py</code> and avoid the <code>migration.py</code> configuration of course.</p>
-
-<p>But that's not all - there is one more trouble with the different schemas, if you using <code>TransactionTestCase</code> for testing. Sometimes you can see an error at the tests <code>tear_down</code>:</p>
-
-<div class="highlight"><pre><code class="bash">Error: Database test_store couldn<span class="err">&#39;</span>t be flushed. 
-DETAIL:  Table <span class="s2">&quot;some_table&quot;</span> references <span class="s2">&quot;some_other_table&quot;</span>.
-</code></pre></div>
-
-
-<p>To avoid this error you can define <code>available_apps</code> field, which must contain the minimum of apps required for testing:</p>
-
-<div class="highlight"><pre><code class="bash">class SomeTests<span class="o">(</span>TransactionTestCase<span class="o">)</span>:
-    <span class="nv">available_apps</span> <span class="o">=</span> <span class="o">(</span><span class="s1">&#39;one_app&#39;</span>, <span class="s1">&#39;another_app&#39;</span><span class="o">)</span>
-</code></pre></div>
-
-
-<p>So we finished. I hope I have described the all possibe issues =)</p>
-
-  </div>
-  
 </div>
 
-<!-- Pagination links -->
-<div class="pagination">
-  
-    <a href="/blog/page2" class="older">Older</a>
-  
-  
-    <span class="previous">Newer</span>
-  
+<div class="related">
+  <h2>Other Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2014/03/08/django-with-schemas/">
+            Django and PostgreSQL schemas
+            <small>08 Mar 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2014/02/16/ii/">
+            A lot of Unix philosophy with the ii
+            <small>16 Feb 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2014/02/13/django-sharding/">
+            What about sharding in the Django?
+            <small>13 Feb 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'erthalion'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
     </div>
 
