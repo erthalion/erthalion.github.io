@@ -78,19 +78,17 @@ cabal sandbox add-source .deps/pontarius-xmpp
 
 <p>Also if we want to support <code>gmail.com</code>, we must use some extra <code>TLS</code> options:</p>
 
-<div class="highlight"><pre><code class="haskell"><span class="kr">import</span> <span class="nn">Network.TLS</span> <span class="p">(</span><span class="kt">Params</span><span class="p">(</span><span class="nf">pConnectVersion</span><span class="p">,</span> <span class="nf">pAllowedVersions</span><span class="p">,</span> <span class="nf">pCiphers</span><span class="p">),</span> 
-                                            <span class="kt">Version</span><span class="p">(</span><span class="kt">TLS10</span><span class="p">,</span> <span class="kt">TLS11</span><span class="p">,</span> <span class="kt">TLS12</span><span class="p">),</span> <span class="nf">defaultParamsClient</span><span class="p">)</span>
-<span class="kr">import</span> <span class="nn">Network.TLS.Extra</span> <span class="p">(</span><span class="nf">ciphersuite_medium</span><span class="p">)</span>
+<div class="highlight"><pre><code class="haskell"><span class="kr">import</span> <span class="nn">Network.TLS</span>
+<span class="kr">import</span> <span class="nn">Network.TLS.Extra</span>
 
 <span class="nf">sess</span> <span class="ow">&lt;-</span> <span class="n">session</span>
-             <span class="n">server</span>
-              <span class="p">(</span><span class="kt">Just</span> <span class="p">(</span><span class="nf">\</span><span class="kr">_</span> <span class="ow">-&gt;</span> <span class="p">(</span> <span class="p">[</span><span class="n">plain</span> <span class="n">user</span> <span class="kt">Nothing</span> <span class="n">password</span><span class="p">])</span>
-                           <span class="p">,</span> <span class="kt">Nothing</span><span class="p">))</span>
-            <span class="n">def</span> <span class="p">{</span> <span class="n">sessionStreamConfiguration</span> <span class="ow">=</span> <span class="n">def</span>
-                    <span class="p">{</span> <span class="n">tlsParams</span> <span class="ow">=</span> <span class="n">defaultParamsClient</span>
-                        <span class="p">{</span> <span class="n">pConnectVersion</span> <span class="ow">=</span> <span class="kt">TLS10</span>
-                        <span class="p">,</span> <span class="n">pAllowedVersions</span> <span class="ow">=</span> <span class="p">[</span><span class="kt">TLS10</span><span class="p">,</span> <span class="kt">TLS11</span><span class="p">,</span> <span class="kt">TLS12</span><span class="p">]</span>
-                        <span class="p">,</span> <span class="n">pCiphers</span> <span class="ow">=</span> <span class="n">ciphersuite_medium</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
+    <span class="n">server</span>
+      <span class="p">(</span><span class="kt">Just</span> <span class="p">(</span><span class="nf">\</span><span class="kr">_</span> <span class="ow">-&gt;</span> <span class="p">(</span> <span class="p">[</span><span class="n">plain</span> <span class="n">user</span> <span class="kt">Nothing</span> <span class="n">password</span><span class="p">]),</span> <span class="kt">Nothing</span><span class="p">))</span>
+    <span class="n">def</span> <span class="p">{</span> <span class="n">sessionStreamConfiguration</span> <span class="ow">=</span> <span class="n">def</span>
+            <span class="p">{</span> <span class="n">tlsParams</span> <span class="ow">=</span> <span class="n">defaultParamsClient</span>
+                <span class="p">{</span> <span class="n">pConnectVersion</span> <span class="ow">=</span> <span class="kt">TLS10</span>
+                <span class="p">,</span> <span class="n">pAllowedVersions</span> <span class="ow">=</span> <span class="p">[</span><span class="kt">TLS10</span><span class="p">,</span> <span class="kt">TLS11</span><span class="p">,</span> <span class="kt">TLS12</span><span class="p">]</span>
+                <span class="p">,</span> <span class="n">pCiphers</span> <span class="ow">=</span> <span class="n">ciphersuite_medium</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
 </code></pre></div>
 
 

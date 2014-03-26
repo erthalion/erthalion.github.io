@@ -22,23 +22,21 @@ cabal sandbox add-source .deps/pontarius-xmpp
 Also if we want to support `gmail.com`, we must use some extra `TLS` options:
 
 {% highlight haskell %}
-import Network.TLS (Params(pConnectVersion, pAllowedVersions, pCiphers), 
-                                            Version(TLS10, TLS11, TLS12), defaultParamsClient)
-import Network.TLS.Extra (ciphersuite_medium)
+import Network.TLS
+import Network.TLS.Extra
 
 sess <- session
-             server
-              (Just (\_ -> ( [plain user Nothing password])
-                           , Nothing))
-            def { sessionStreamConfiguration = def
-                    { tlsParams = defaultParamsClient
-                        { pConnectVersion = TLS10
-                        , pAllowedVersions = [TLS10, TLS11, TLS12]
-                        , pCiphers = ciphersuite_medium } } }
+    server
+      (Just (\_ -> ( [plain user Nothing password]), Nothing))
+    def { sessionStreamConfiguration = def
+            { tlsParams = defaultParamsClient
+                { pConnectVersion = TLS10
+                , pAllowedVersions = [TLS10, TLS11, TLS12]
+                , pCiphers = ciphersuite_medium } } }
 
 {% endhighlight %}
 
-Other important feature is the listening of the file, which will contain a user input. We will use a `fsnotify` library for this purposes. Michael Snoyman [shared the implementation][snoyman] of this feature (he always flying to help, when SO question contains the `haskell` and `conduit` keywords =). The main idea is the monitoring file changes by `fsnotify`, and save the current position in file. There are several disadvanteges with this approach - e.g. we can't handle a file truncation. But for our purposes we can use a files, that will never be truncated.
+Other important feature is the listening of the file, which will contain a user input. We will use a `fsnotify` library for this purposes. Michael Snoyman [shared the implementation][snoyman] of this feature (he always flying to help, when SO question contains the `haskell` and `conduit` keywords =). The main idea is the monitoring file changes by `fsnotify`, and save the current position in file. There are several disadvanteges with this approach - e.g. we can't handle a file truncation. But for the our purposes we can use a files, that will never be truncated.
 
 {% highlight haskell %}
 sourceFileForever :: MonadResource m => FilePath -> Source m ByteString
