@@ -92,7 +92,7 @@ cabal sandbox add-source .deps/pontarius-xmpp
 </code></pre></div>
 
 
-<p>Other important feature is the listening of the file, which will contain a user input. We will use a <code>fsnotify</code> library for this purposes. Michael Snoyman <a href="http://stackoverflow.com/a/22128940/1423473">shared the implementation</a> of this feature (he always flying to help, when SO question contains the <code>haskell</code> and <code>conduit</code> keywords =). The main idea is the monitoring file changes by <code>fsnotify</code>, and save the current position in file. There are several disadvanteges with this approach - e.g. we can't handle a file truncation. But for our purposes we can use a files, that will never be truncated.</p>
+<p>Other important feature is the listening of the file, which will contain a user input. We will use a <code>fsnotify</code> library for this purposes. Michael Snoyman <a href="http://stackoverflow.com/a/22128940/1423473">shared the implementation</a> of this feature (he always flying to help, when SO question contains the <code>haskell</code> and <code>conduit</code> keywords =). The main idea is the monitoring file changes by <code>fsnotify</code>, and save the current position in file. There are several disadvanteges with this approach - e.g. we can't handle a file truncation. But for the our purposes we can use a files, that will never be truncated.</p>
 
 <div class="highlight"><pre><code class="haskell"><span class="nf">sourceFileForever</span> <span class="ow">::</span> <span class="kt">MonadResource</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="kt">FilePath</span> <span class="ow">-&gt;</span> <span class="kt">Source</span> <span class="n">m</span> <span class="kt">ByteString</span>
 <span class="nf">sourceFileForever</span> <span class="n">fp&#39;</span> <span class="ow">=</span> <span class="n">bracketP</span> <span class="n">startManager</span> <span class="n">stopManager</span> <span class="o">$</span> <span class="nf">\</span><span class="n">manager</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
@@ -141,6 +141,15 @@ cabal sandbox add-source .deps/pontarius-xmpp
     
       <li>
         <h3>
+          <a href="/2014/04/21/endless-paginator/">
+            Another strange thing - an endless paginator
+            <small>21 Apr 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/2014/03/08/django-with-schemas/">
             Django and PostgreSQL schemas
             <small>08 Mar 2014</small>
@@ -153,15 +162,6 @@ cabal sandbox add-source .deps/pontarius-xmpp
           <a href="/2014/02/16/ii/">
             A lot of Unix philosophy with the ii
             <small>16 Feb 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2014/02/13/django-sharding/">
-            What about sharding in the Django?
-            <small>13 Feb 2014</small>
           </a>
         </h3>
       </li>
