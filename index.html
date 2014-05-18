@@ -25,17 +25,17 @@
       ga('send', 'pageview');
     </script>
   </head>
-  <body>
+  <body itemscope itemtype='http://schema.org/Person'>
     <section class='header'>
       <div class='black-top'>
         <a class='name-link' href='http://erthalion.info'>
-          <div class='name'>Dmitry Dolgov</div>
+          <div class='name' itemprop='name'>Dmitry Dolgov</div>
         </a>
       </div>
     </section>
     <section class='main'>
       <div id='row'>
-        <div class='text'>
+        <div class='text' itemprop='description'>
           A talented software engineer and young scientist with a strong technical background - hacker and geek =)
           Postgraduate of the numerical mathematics department one of the siberian universities.
           Field of my interest is software development, hacking and numerical mathematics.<br/>
@@ -54,10 +54,13 @@
           </div>
         </div>
         <div class='photo'>
-          <img src='img/erthalion.png'>
+          <img itemprop='image' src='img/erthalion.png'>
         </div>
       </div>
       <div class='icons row hi-icon-effect-8'>
+        <a class='hi-icon' href='mailto:9erthalion6@gmail.com'>
+          <img src='img/mail.png'>
+        </a>
         <a class='hi-icon' href='https://github.com/erthalion' target='_blank'>
           <img src='img/github.png'>
         </a>

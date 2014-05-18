@@ -27,16 +27,16 @@
       ga('create', 'UA-24190660-5', 'erthalion.info');
       ga('send', 'pageview');
 
-  %body
+  %body{:itemscope => true, :itemtype => "http://schema.org/Person"} 
     %section.header
       %div.black-top
 
         %a.name-link(href="http://erthalion.info")
-          %div.name Dmitry Dolgov
+          %div.name{:itemprop => "name"} Dmitry Dolgov
 
     %section.main
       %div#row
-        %div.text
+        %div.text{:itemprop => "description"}
           A talented software engineer and young scientist with a strong technical background - hacker and geek =)
           Postgraduate of the numerical mathematics department one of the siberian universities.
           Field of my interest is software development, hacking and numerical mathematics.<br/>
@@ -52,9 +52,12 @@
 
         
         %div.photo
-          %img(src="img/erthalion.png")
+          %img(src="img/erthalion.png" itemprop="image")
 
       %div.icons.row.hi-icon-effect-8
+        %a.hi-icon(href="mailto:9erthalion6@gmail.com")
+          %img(src="img/mail.png")
+
         %a.hi-icon(href="https://github.com/erthalion" target="_blank")
           %img(src="img/github.png")
 
