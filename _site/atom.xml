@@ -4,7 +4,7 @@
  <title>Blog</title>
  <link href="http://erthalion.info/atom.xml" rel="self"/>
  <link href="http://erthalion.info/"/>
- <updated>2014-05-24T23:35:02+07:00</updated>
+ <updated>2014-05-25T16:07:07+07:00</updated>
  <id>http://erthalion.info</id>
  <author>
    <name></name>
@@ -17,7 +17,7 @@
    <link href="http://erthalion.info/2014/05/24/gnuchess/"/>
    <updated>2014-05-24T22:20:42Z</updated>
    <id>http://erthalion.info/2014/05/24/gnuchess</id>
-   <content type="html">&lt;p&gt;I'm at the beginning of my journey in the world of gnuchess. Its interface is a slightly tricky, than I've expected, but nevertheless I was interested. So I've decided to make some notes about this.&lt;/p&gt;
+   <content type="html">&lt;p&gt;I'm at the beginning of my journey into the world of gnuchess. Its interface is a slightly tricky, than I've expected, but nevertheless I was interested. So I've decided to make some notes about this.&lt;/p&gt;
 
 &lt;blockquote&gt;&lt;p&gt;GNU Chess performs at the senior master/weak international master strength of 2500+ on the Elo rating system&lt;/p&gt;&lt;/blockquote&gt;
 
@@ -74,7 +74,7 @@ e1g1
 
 &lt;p&gt;Ok. But what is it? Gnuchess uses the most of the CPU all time, event at the player's move. It's super, but it would be more convenient to limit the thinking time for gnuchess engine. In the documentation we can see, that the &lt;code&gt;--easy&lt;/code&gt; options is responsible for this.&lt;/p&gt;
 
-&lt;blockquote&gt;&lt;p&gt;--easy, -e:  Disable thinking.  in opponent's time.  By default, the program runs in hard mode, i.e.  it thinks opponent's time to think too.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;&lt;p&gt;--easy, -e:  Disable thinking in opponent's time.  By default, the program runs in hard mode, i.e.  it thinks opponent's time to think too.&lt;/p&gt;&lt;/blockquote&gt;
 
 &lt;p&gt;Now better. But how we can pause the game and continue later? There are an obvious commands for this: &lt;code&gt;save&lt;/code&gt; and &lt;code&gt;load&lt;/code&gt;, which save the game position into &lt;code&gt;EPD&lt;/code&gt; format&lt;/p&gt;
 
@@ -155,7 +155,7 @@ White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-
+&lt;p&gt;Have a nice game!&lt;/p&gt;
 </content>
  </entry>
  
