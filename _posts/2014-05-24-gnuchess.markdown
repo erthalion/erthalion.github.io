@@ -61,7 +61,7 @@ O-O
 e1g1
 {% endhighlight %}
 
-Ok. But what is it? Gnuchess uses the most of the CPU all time, event at the player's move. It's super, but it would be more convenient to limit the thinking time for gnuchess engine. In the documentation we can see, that the `--easy` options is responsible for this.
+Ok. But what is it? Gnuchess uses the most of the CPU all time, even at the player's move. It's super, but it would be more convenient to limit the thinking time for gnuchess engine. In the documentation we can see, that the `--easy` options is responsible for this.
 
 > --easy, -e:  Disable thinking in opponent's time.  By default, the program runs in hard mode, i.e.  it thinks opponent's time to think too.
 

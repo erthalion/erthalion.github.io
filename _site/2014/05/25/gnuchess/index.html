@@ -61,7 +61,7 @@
     <div class="content container">
       <div class="post">
   <h1>Little guide about the gnuchess</h1>
-  <span class="post-date">24 May 2014</span>
+  <span class="post-date">25 May 2014</span>
   <p>I'm at the beginning of my journey into the world of gnuchess. Its interface is a slightly tricky, than I've expected, but nevertheless I was interested. So I've decided to make some notes about this.</p>
 
 <blockquote><p>GNU Chess performs at the senior master/weak international master strength of 2500+ on the Elo rating system</p></blockquote>
@@ -72,11 +72,11 @@
 
 <p>No, it's not our way. Let's try to use original teminal-based client (more terminal for the terminal god, mwuahahahaha =).</p>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gnuchess
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>gnuchess
 
 GNU Chess 6.1.1
-Copyright <span class="o">(</span>C<span class="o">)</span> 2013 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
+Copyright <span class="o">(</span>C<span class="o">)</span> <span class="m">2013</span> Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version <span class="m">3</span> or later &lt;http://gnu.org/licenses/gpl.html&gt;
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 White <span class="o">(</span>1<span class="o">)</span> : e2e4
@@ -104,26 +104,24 @@ p p p p p p p p
 . . . . P . . . 
 . . . . . . . . 
 P P P P . P P P 
-R N B Q K B N R
-</code></pre></div>
+R N B Q K B N R</code></pre></div>
 
 
 <p>Gnuchess uses the standard algebraic notation (SAN) required by FIDE, so we can type something like this to play:</p>
 
-<div class="highlight"><pre><code class="bash">Nf3
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">Nf3
 g1f3
 O-O
-e1g1
-</code></pre></div>
+e1g1</code></pre></div>
 
 
-<p>Ok. But what is it? Gnuchess uses the most of the CPU all time, event at the player's move. It's super, but it would be more convenient to limit the thinking time for gnuchess engine. In the documentation we can see, that the <code>--easy</code> options is responsible for this.</p>
+<p>Ok. But what is it? Gnuchess uses the most of the CPU all time, even at the player's move. It's super, but it would be more convenient to limit the thinking time for gnuchess engine. In the documentation we can see, that the <code>--easy</code> options is responsible for this.</p>
 
 <blockquote><p>--easy, -e:  Disable thinking in opponent's time.  By default, the program runs in hard mode, i.e.  it thinks opponent's time to think too.</p></blockquote>
 
 <p>Now better. But how we can pause the game and continue later? There are an obvious commands for this: <code>save</code> and <code>load</code>, which save the game position into <code>EPD</code> format</p>
 
-<div class="highlight"><pre><code class="bash">White <span class="o">(</span>2<span class="o">)</span> : save game_file
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">White <span class="o">(</span>2<span class="o">)</span> : save game_file
 TimeLimit<span class="o">[</span>0<span class="o">]</span> <span class="o">=</span> 0
 TimeLimit<span class="o">[</span>1<span class="o">]</span> <span class="o">=</span> 0
 White <span class="o">(</span>2<span class="o">)</span> : load game_file
@@ -142,8 +140,7 @@ p p p p p p p p
 P P P P . P P P 
 R N B Q K B N R 
  
-White <span class="o">(</span>1<span class="o">)</span> : 
-</code></pre></div>
+White <span class="o">(</span>1<span class="o">)</span> :</code></pre></div>
 
 
 <p>And little bit about usability - we can use the pseudo graphical mode (a unicode symbols will be used for output), but ... it looks ugly. Classical mode provides convenient enouth game, except the board's coordinates. To avoid this inconvenience, we can use the patch below:</p>
@@ -155,10 +152,10 @@ White <span class="o">(</span>1<span class="o">)</span> :
 
 
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gnuchess -e
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>gnuchess -e
 GNU Chess 6.1.1
-Copyright <span class="o">(</span>C<span class="o">)</span> 2013 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
+Copyright <span class="o">(</span>C<span class="o">)</span> <span class="m">2013</span> Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version <span class="m">3</span> or later &lt;http://gnu.org/licenses/gpl.html&gt;
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 White <span class="o">(</span>1<span class="o">)</span> : e2e4
@@ -168,14 +165,14 @@ TimeLimit<span class="o">[</span>1<span class="o">]</span> <span class="o">=</sp
 
 black  KQkq  e3
 
-8  r n b q k b n r 
-7  p p p p p p p p 
-6  . . . . . . . . 
-5  . . . . . . . . 
-4  . . . . P . . . 
-3  . . . . . . . . 
-2  P P P P . P P P 
-1  R N B Q K B N R 
+<span class="m">8</span>  r n b q k b n r 
+<span class="m">7</span>  p p p p p p p p 
+<span class="m">6</span>  . . . . . . . . 
+<span class="m">5</span>  . . . . . . . . 
+<span class="m">4</span>  . . . . P . . . 
+<span class="m">3</span>  . . . . . . . . 
+<span class="m">2</span>  P P P P . P P P 
+<span class="m">1</span>  R N B Q K B N R 
   
    a b c d e f g h 
 
@@ -183,21 +180,20 @@ Thinking...
 
 white  KQkq
 
-8  r n b q k b . r 
-7  p p p p p p p p 
-6  . . . . . n . . 
-5  . . . . . . . . 
-4  . . . . P . . . 
-3  . . . . . . . . 
-2  P P P P . P P P 
-1  R N B Q K B N R 
+<span class="m">8</span>  r n b q k b . r 
+<span class="m">7</span>  p p p p p p p p 
+<span class="m">6</span>  . . . . . n . . 
+<span class="m">5</span>  . . . . . . . . 
+<span class="m">4</span>  . . . . P . . . 
+<span class="m">3</span>  . . . . . . . . 
+<span class="m">2</span>  P P P P . P P P 
+<span class="m">1</span>  R N B Q K B N R 
   
    a b c d e f g h 
 
 
 My move is : Nf6
-White <span class="o">(</span>2<span class="o">)</span> : 
-</code></pre></div>
+White <span class="o">(</span>2<span class="o">)</span> :</code></pre></div>
 
 
 <p>Have a nice game!</p>
@@ -210,27 +206,27 @@ White <span class="o">(</span>2<span class="o">)</span> :
     
       <li>
         <h3>
-          <a href="/2014/04/21/endless-paginator/">
+          <a href="/2014/08/09/from-bash-to-fish/">
+            From bash to fish
+            <small>09 Aug 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2014/04/22/endless-paginator/">
             Another strange thing - an endless paginator
-            <small>21 Apr 2014</small>
+            <small>22 Apr 2014</small>
           </a>
         </h3>
       </li>
     
       <li>
         <h3>
-          <a href="/2014/03/25/xi/">
+          <a href="/2014/03/26/xi/">
             xi or the fast and furious Haskell
-            <small>25 Mar 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2014/03/08/django-with-schemas/">
-            Django and PostgreSQL schemas
-            <small>08 Mar 2014</small>
+            <small>26 Mar 2014</small>
           </a>
         </h3>
       </li>

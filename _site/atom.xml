@@ -4,7 +4,7 @@
  <title>Blog</title>
  <link href="http://erthalion.info/atom.xml" rel="self"/>
  <link href="http://erthalion.info/"/>
- <updated>2014-05-25T16:07:07+07:00</updated>
+ <updated>2014-08-09T00:35:52+07:00</updated>
  <id>http://erthalion.info</id>
  <author>
    <name></name>
@@ -13,25 +13,83 @@
 
  
  <entry>
+   <title>From bash to fish</title>
+   <link href="http://erthalion.info/2014/08/09/from-bash-to-fish/"/>
+   <updated>2014-08-09T05:20:42+07:00</updated>
+   <id>http://erthalion.info/2014/08/09/from-bash-to-fish</id>
+   <content type="html">&lt;p&gt;I&#39;m doing a small revolution in the my environment from time to time. I think &quot;hey, a cool stuff&quot;, take a deep breath and doing something new. And this is story about my migration from the bash to the fish shell.&lt;/p&gt;
+
+&lt;p&gt;Let&#39;s see, what says the official tutorial:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;fish is a fully-equipped command line shell (like bash or zsh) that is smart and user-friendly. fish supports powerful features like syntax highlighting, autosuggestions, and tab completions that just work, with nothing to learn or configure.
+If you want to make your command line more productive, more useful, and more fun, without learning a bunch of arcane syntax and configuration options, then fish might be just what you&#39;re looking for!&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;And this is almost true =) But there is another concrete reason, why I like fish shell:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Search by history out of box (as an autocomplete by tab)&lt;/li&gt;
+&lt;li&gt;More intuitive and clean configuration files&lt;/li&gt;
+&lt;li&gt;Vim mode &lt;a href=&quot;https://github.com/fish-shell/fish-shell/issues/65&quot;&gt;support&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+
+&lt;p&gt;I would to avoid an unnecessary lyrics, and pay more attention to the configuration and gotchas (from the bash point of view).&lt;/p&gt;
+
+&lt;p&gt;First of all - use &lt;code&gt;.&lt;/code&gt; command instead &lt;code&gt;source&lt;/code&gt; for the inclusion of the script.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;. /some-install-path/fish-shell/share/fish/functions/fish_vi_mode.fish
+. /some-install-path/.config/fish/themes/fish_right_prompt.fish
+. /some-install-path/.config/fish/themes/fish_prompt.fish
+. /etc/profile.d/autojump.fish
+fish_vi_key_bindings&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;I&#39;ve used &lt;code&gt;some-install-path&lt;/code&gt; because I&#39;m a vim hacker (&lt;del&gt;an extra pathos&lt;/del&gt;), and I want a fresh version for the vim support, so the manual compilation from github is the my way. Then I&#39;ve turned on vim mode (&lt;code&gt;fish_vi_mode.fish&lt;/code&gt; is necessary for this). &lt;code&gt;fish_prompt.fish&lt;/code&gt; and &lt;code&gt;fish_right_prompt.fish&lt;/code&gt; contain a description for the shell prompt and will be discussed later. If you use &lt;code&gt;autojump&lt;/code&gt;, you should also include &lt;code&gt;autojump.fish&lt;/code&gt; (if this file doesn&#39;t exist, download it from repo).&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;fish_greeting &lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This greeting is very distracting, so disable it. No comments =)&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; -x EDITOR vim
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;PATH /home/erthalion/.local/bin /usr/local/bin /opt/bin &lt;span class=&quot;nv&quot;&gt;$PATH&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;We should set environment variables in this format. Pay attention to the &lt;code&gt;PATH&lt;/code&gt; variable - don&#39;t forget about &lt;code&gt;/usr/local/bin&lt;/code&gt; and &lt;code&gt;/opt/bin&lt;/code&gt; (looks like fish shell doesn&#39;t include them by default).&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;goutshow&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;git fetch; git show origin/master..&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;One more observation - we should replace &lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt; by the &lt;code&gt;;&lt;/code&gt; or &lt;code&gt;and&lt;/code&gt; commands.&lt;/p&gt;
+
+&lt;p&gt;Now get closer to the prompt. It described by the two functions - &lt;code&gt;fish_prompt&lt;/code&gt; and &lt;code&gt;fish_right_prompt&lt;/code&gt; (your C.O.). I have no advices for this section. Really. You can use your imagination and do what you want =) There are my examples - &lt;a href=&quot;https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_prompt.fish&quot;&gt;left&lt;/a&gt; and &lt;a href=&quot;https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_right_prompt.fish&quot;&gt;right&lt;/a&gt;. Only one comment - you may want to show &lt;code&gt;virtualenv&lt;/code&gt; name in the prompt. In that case you should disable original by the variable &lt;code&gt;set -x VIRTUAL_ENV_DISABLE_PROMPT 1&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;But unfortunatelly, vim support isn&#39;t very well in the fish shell. For example, there is no &lt;code&gt;replace (r)&lt;/code&gt; command, or &lt;code&gt;undo (u)&lt;/code&gt;. Actually it&#39;s a horrible problem for me, especially the first one =) And here is my &lt;a href=&quot;https://github.com/fish-shell/fish-shell/pull/1595&quot;&gt;solution&lt;/a&gt; of this problem.&lt;/p&gt;
+
+&lt;p&gt;I think, fish shell is available for a lot of improvements. All, that described above, is only a base for a convenient environment, and I hope, it will be useful.&lt;/p&gt;
+</content>
+ </entry>
+ 
+ <entry>
    <title>Little guide about the gnuchess</title>
-   <link href="http://erthalion.info/2014/05/24/gnuchess/"/>
-   <updated>2014-05-24T22:20:42Z</updated>
-   <id>http://erthalion.info/2014/05/24/gnuchess</id>
-   <content type="html">&lt;p&gt;I'm at the beginning of my journey into the world of gnuchess. Its interface is a slightly tricky, than I've expected, but nevertheless I was interested. So I've decided to make some notes about this.&lt;/p&gt;
+   <link href="http://erthalion.info/2014/05/25/gnuchess/"/>
+   <updated>2014-05-25T05:20:42+07:00</updated>
+   <id>http://erthalion.info/2014/05/25/gnuchess</id>
+   <content type="html">&lt;p&gt;I&#39;m at the beginning of my journey into the world of gnuchess. Its interface is a slightly tricky, than I&#39;ve expected, but nevertheless I was interested. So I&#39;ve decided to make some notes about this.&lt;/p&gt;
 
 &lt;blockquote&gt;&lt;p&gt;GNU Chess performs at the senior master/weak international master strength of 2500+ on the Elo rating system&lt;/p&gt;&lt;/blockquote&gt;
 
-&lt;p&gt;I've don't know, what does this mean really, but sounds cool =)&lt;/p&gt;
+&lt;p&gt;I&#39;ve don&#39;t know, what does this mean really, but sounds cool =)&lt;/p&gt;
 
 &lt;blockquote&gt;&lt;p&gt;It is often used in conjunction with a GUI program such as XBoard or glChess&lt;/p&gt;&lt;/blockquote&gt;
 
-&lt;p&gt;No, it's not our way. Let's try to use original teminal-based client (more terminal for the terminal god, mwuahahahaha =).&lt;/p&gt;
+&lt;p&gt;No, it&#39;s not our way. Let&#39;s try to use original teminal-based client (more terminal for the terminal god, mwuahahahaha =).&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gnuchess
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gnuchess
 
 GNU Chess 6.1.1
-Copyright &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;C&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 2013 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later &amp;lt;http://gnu.org/licenses/gpl.html&amp;gt;
+Copyright &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;C&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2013&lt;/span&gt; Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt; or later &amp;lt;http://gnu.org/licenses/gpl.html&amp;gt;
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : e2e4
@@ -59,26 +117,24 @@ p p p p p p p p
 . . . . P . . . 
 . . . . . . . . 
 P P P P . P P P 
-R N B Q K B N R
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+R N B Q K B N R&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Gnuchess uses the standard algebraic notation (SAN) required by FIDE, so we can type something like this to play:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;Nf3
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;Nf3
 g1f3
 O-O
-e1g1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+e1g1&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Ok. But what is it? Gnuchess uses the most of the CPU all time, event at the player's move. It's super, but it would be more convenient to limit the thinking time for gnuchess engine. In the documentation we can see, that the &lt;code&gt;--easy&lt;/code&gt; options is responsible for this.&lt;/p&gt;
+&lt;p&gt;Ok. But what is it? Gnuchess uses the most of the CPU all time, even at the player&#39;s move. It&#39;s super, but it would be more convenient to limit the thinking time for gnuchess engine. In the documentation we can see, that the &lt;code&gt;--easy&lt;/code&gt; options is responsible for this.&lt;/p&gt;
 
-&lt;blockquote&gt;&lt;p&gt;--easy, -e:  Disable thinking in opponent's time.  By default, the program runs in hard mode, i.e.  it thinks opponent's time to think too.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;&lt;p&gt;--easy, -e:  Disable thinking in opponent&#39;s time.  By default, the program runs in hard mode, i.e.  it thinks opponent&#39;s time to think too.&lt;/p&gt;&lt;/blockquote&gt;
 
 &lt;p&gt;Now better. But how we can pause the game and continue later? There are an obvious commands for this: &lt;code&gt;save&lt;/code&gt; and &lt;code&gt;load&lt;/code&gt;, which save the game position into &lt;code&gt;EPD&lt;/code&gt; format&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : save game_file
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : save game_file
 TimeLimit&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;0&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0
 TimeLimit&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0
 White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : load game_file
@@ -97,11 +153,10 @@ p p p p p p p p
 P P P P . P P P 
 R N B Q K B N R 
  
-White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; :&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;And little bit about usability - we can use the pseudo graphical mode (a unicode symbols will be used for output), but ... it looks ugly. Classical mode provides convenient enouth game, except the board's coordinates. To avoid this inconvenience, we can use the patch below:&lt;/p&gt;
+&lt;p&gt;And little bit about usability - we can use the pseudo graphical mode (a unicode symbols will be used for output), but ... it looks ugly. Classical mode provides convenient enouth game, except the board&#39;s coordinates. To avoid this inconvenience, we can use the patch below:&lt;/p&gt;
 
 &lt;div style=&quot;font-size:14px&quot;&gt;
 &lt;script src=&quot;https://gist.github.com/erthalion/370a82f17ba95c23e4f5.js&quot;&gt;&lt;/script&gt;
@@ -110,10 +165,10 @@ White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1&lt;span class=&quot;o&quot
 
 
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gnuchess -e
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gnuchess -e
 GNU Chess 6.1.1
-Copyright &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;C&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 2013 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later &amp;lt;http://gnu.org/licenses/gpl.html&amp;gt;
+Copyright &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;C&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2013&lt;/span&gt; Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt; or later &amp;lt;http://gnu.org/licenses/gpl.html&amp;gt;
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : e2e4
@@ -123,14 +178,14 @@ TimeLimit&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1&lt;span class=&quot;o&q
 
 black  KQkq  e3
 
-8  r n b q k b n r 
-7  p p p p p p p p 
-6  . . . . . . . . 
-5  . . . . . . . . 
-4  . . . . P . . . 
-3  . . . . . . . . 
-2  P P P P . P P P 
-1  R N B Q K B N R 
+&lt;span class=&quot;m&quot;&gt;8&lt;/span&gt;  r n b q k b n r 
+&lt;span class=&quot;m&quot;&gt;7&lt;/span&gt;  p p p p p p p p 
+&lt;span class=&quot;m&quot;&gt;6&lt;/span&gt;  . . . . . . . . 
+&lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;  . . . . . . . . 
+&lt;span class=&quot;m&quot;&gt;4&lt;/span&gt;  . . . . P . . . 
+&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;  . . . . . . . . 
+&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;  P P P P . P P P 
+&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;  R N B Q K B N R 
   
    a b c d e f g h 
 
@@ -138,21 +193,20 @@ Thinking...
 
 white  KQkq
 
-8  r n b q k b . r 
-7  p p p p p p p p 
-6  . . . . . n . . 
-5  . . . . . . . . 
-4  . . . . P . . . 
-3  . . . . . . . . 
-2  P P P P . P P P 
-1  R N B Q K B N R 
+&lt;span class=&quot;m&quot;&gt;8&lt;/span&gt;  r n b q k b . r 
+&lt;span class=&quot;m&quot;&gt;7&lt;/span&gt;  p p p p p p p p 
+&lt;span class=&quot;m&quot;&gt;6&lt;/span&gt;  . . . . . n . . 
+&lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;  . . . . . . . . 
+&lt;span class=&quot;m&quot;&gt;4&lt;/span&gt;  . . . . P . . . 
+&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;  . . . . . . . . 
+&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;  P P P P . P P P 
+&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;  R N B Q K B N R 
   
    a b c d e f g h 
 
 
 My move is : Nf6
-White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; :&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Have a nice game!&lt;/p&gt;
@@ -161,18 +215,18 @@ White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot
  
  <entry>
    <title>Another strange thing - an endless paginator</title>
-   <link href="http://erthalion.info/2014/04/21/endless-paginator/"/>
-   <updated>2014-04-21T18:14:42Z</updated>
-   <id>http://erthalion.info/2014/04/21/endless-paginator</id>
-   <content type="html">&lt;p&gt;A little bit about my new program-frankenstein. Now it is a endless &lt;code&gt;Paginator&lt;/code&gt; for Django. It sounds crazy, isn't?&lt;/p&gt;
+   <link href="http://erthalion.info/2014/04/22/endless-paginator/"/>
+   <updated>2014-04-22T01:14:42+07:00</updated>
+   <id>http://erthalion.info/2014/04/22/endless-paginator</id>
+   <content type="html">&lt;p&gt;A little bit about my new program-frankenstein. Now it is a endless &lt;code&gt;Paginator&lt;/code&gt; for Django. It sounds crazy, isn&#39;t?&lt;/p&gt;
 
-&lt;p&gt;Standart Django &lt;code&gt;Paginator&lt;/code&gt; uses the &lt;code&gt;count()&lt;/code&gt; function for the verification of page number. It is converted to the &lt;code&gt;SELECT COUNT(*) ...&lt;/code&gt; query, of course. But as I was explained (I really don't know, maybe it's just an exaggeration - you can post your opinion in the commentaries), this is not a such lightweight query, as we want for the paginated rest api, because of the &lt;a href=&quot;http://wiki.postgresql.org/wiki/MVCC&quot;&gt;MVCC&lt;/a&gt; in PostgreSQL.&lt;/p&gt;
+&lt;p&gt;Standart Django &lt;code&gt;Paginator&lt;/code&gt; uses the &lt;code&gt;count()&lt;/code&gt; function for the verification of page number. It is converted to the &lt;code&gt;SELECT COUNT(*) ...&lt;/code&gt; query, of course. But as I was explained (I really don&#39;t know, maybe it&#39;s just an exaggeration - you can post your opinion in the commentaries), this is not a such lightweight query, as we want for the paginated rest api, because of the &lt;a href=&quot;http://wiki.postgresql.org/wiki/MVCC&quot;&gt;MVCC&lt;/a&gt; in PostgreSQL.&lt;/p&gt;
 
-&lt;p&gt;How we can avoid the extra &lt;code&gt;COUNT(*)&lt;/code&gt; query? Don't panic, we can trick the Django.&lt;/p&gt;
+&lt;p&gt;How we can avoid the extra &lt;code&gt;COUNT(*)&lt;/code&gt; query? Don&#39;t panic, we can trick the Django.&lt;/p&gt;
 
 &lt;p&gt;First of all we need to disable &lt;code&gt;count&lt;/code&gt; parameter from the api response. We can introduce a custom pagination serializer:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# serializers.py&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# serializers.py&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CustomPaginationSerializer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BasePaginationSerializer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;nb&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NextPageField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;source&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;*&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;previous&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PreviousPageField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;source&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;*&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
@@ -181,13 +235,12 @@ White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot
 &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SomeListView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;generics&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ListAPIView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SomeModel&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;serializer_class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SomeSerializerClass&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;pagination_serializer_class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomPaginationSerializer&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+    &lt;span class=&quot;n&quot;&gt;pagination_serializer_class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomPaginationSerializer&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;The next our move - disable the page number verification. This can be done by the custom paginator class:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CustomPaginator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Paginator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CustomPaginator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Paginator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;sd&quot;&gt;&amp;quot;&amp;quot;&amp;quot; HACK: To avoid unneseccary `SELECT COUNT(*) ...`&lt;/span&gt;
 &lt;span class=&quot;sd&quot;&gt;        paginator has an infinity page number and a count of elements.&lt;/span&gt;
 &lt;span class=&quot;sd&quot;&gt;    &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
@@ -215,13 +268,12 @@ White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot
     &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SomeModel&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;serializer_class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SomeSerializerClass&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;pagination_serializer_class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomPaginationSerializer&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;paginator_class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomPaginator&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+    &lt;span class=&quot;n&quot;&gt;paginator_class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomPaginator&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Oh, goodness - we introduced the infinity number of the pages and the infinity number of elements... But we want also the correct next/prev links, so one more detail:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CustomPage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Page&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CustomPage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Page&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;has_next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
         &lt;span class=&quot;sd&quot;&gt;&amp;quot;&amp;quot;&amp;quot; HACK: Select object_list + 1 element&lt;/span&gt;
 &lt;span class=&quot;sd&quot;&gt;            to verify next page existense.&lt;/span&gt;
@@ -239,8 +291,7 @@ White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot
             &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;finally&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
             &lt;span class=&quot;c&quot;&gt;# restore initial object_list count&lt;/span&gt;
-            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;high&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;low&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;high&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;low&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;This solution looks very questionable, but exciting for me. If you have something to say about this - welcome! =)&lt;/p&gt;
@@ -249,26 +300,25 @@ White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot
  
  <entry>
    <title>xi or the fast and furious Haskell</title>
-   <link href="http://erthalion.info/2014/03/25/xi/"/>
-   <updated>2014-03-25T22:11:42Z</updated>
-   <id>http://erthalion.info/2014/03/25/xi</id>
-   <content type="html">&lt;p&gt;Don't be confused by the title of this post - I will tell you about my experience in the development of xmpp client &lt;a href=&quot;https://github.com/erthalion/xi&quot;&gt;xi&lt;/a&gt;. The first version of this client was written in Haskell in shortest time (for me, of cource), and this fact provides the second emotional part of title =)&lt;/p&gt;
+   <link href="http://erthalion.info/2014/03/26/xi/"/>
+   <updated>2014-03-26T05:11:42+07:00</updated>
+   <id>http://erthalion.info/2014/03/26/xi</id>
+   <content type="html">&lt;p&gt;Don&#39;t be confused by the title of this post - I will tell you about my experience in the development of xmpp client &lt;a href=&quot;https://github.com/erthalion/xi&quot;&gt;xi&lt;/a&gt;. The first version of this client was written in Haskell in shortest time (for me, of cource), and this fact provides the second emotional part of title =)&lt;/p&gt;
 
-&lt;p&gt;First of all - &lt;code&gt;xi&lt;/code&gt; was inspired by &lt;a href=&quot;http://tools.suckless.org/ii/]&quot;&gt;ii&lt;/a&gt; irc client. It explains the all of its features, design and main idea. In short - after &lt;a href=&quot;http://erthalion.info/2014/02/16/ii/&quot;&gt;this&lt;/a&gt; post I'm a huge fan of this tool and philosophy.&lt;/p&gt;
+&lt;p&gt;First of all - &lt;code&gt;xi&lt;/code&gt; was inspired by &lt;a href=&quot;http://tools.suckless.org/ii/]&quot;&gt;ii&lt;/a&gt; irc client. It explains the all of its features, design and main idea. In short - after &lt;a href=&quot;http://erthalion.info/2014/02/16/ii/&quot;&gt;this&lt;/a&gt; post I&#39;m a huge fan of this tool and philosophy.&lt;/p&gt;
 
 &lt;p&gt;Second - &lt;code&gt;xi&lt;/code&gt; was written in Haskell. I will not explain &lt;a href=&quot;http://stackoverflow.com/a/775759/1423473&quot;&gt;why&lt;/a&gt; =)&lt;/p&gt;
 
-&lt;p&gt;Now let's take a look inside. We can see a lot of dependencies of course - &lt;code&gt;xi&lt;/code&gt; uses &lt;a href=&quot;https://github.com/pontarius/pontarius-xmpp/&quot;&gt;pontarius xmpp&lt;/a&gt; for the XMPP interaction. But there is an interesting hidden trick - we must use this library from the github directly yet, because of an unpleasant &lt;a href=&quot;https://github.com/pontarius/pontarius-xmpp/issues/46&quot;&gt;bug&lt;/a&gt;. This can be done by the &lt;code&gt;cabal sandbox add-source&lt;/code&gt; command:&lt;/p&gt;
+&lt;p&gt;Now let&#39;s take a look inside. We can see a lot of dependencies of course - &lt;code&gt;xi&lt;/code&gt; uses &lt;a href=&quot;https://github.com/pontarius/pontarius-xmpp/&quot;&gt;pontarius xmpp&lt;/a&gt; for the XMPP interaction. But there is an interesting hidden trick - we must use this library from the github directly yet, because of an unpleasant &lt;a href=&quot;https://github.com/pontarius/pontarius-xmpp/issues/46&quot;&gt;bug&lt;/a&gt;. This can be done by the &lt;code&gt;cabal sandbox add-source&lt;/code&gt; command:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;git clone http://github.com/pontarius/pontarius-xmpp .deps/pontarius-xmpp
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git clone http://github.com/pontarius/pontarius-xmpp .deps/pontarius-xmpp
 cabal sandbox init
-cabal sandbox add-source .deps/pontarius-xmpp
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+cabal sandbox add-source .deps/pontarius-xmpp&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Also if we want to support &lt;code&gt;gmail.com&lt;/code&gt;, we must use some extra &lt;code&gt;TLS&lt;/code&gt; options:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;haskell&quot;&gt;&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Network.TLS&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-haskell&quot; data-lang=&quot;haskell&quot;&gt;&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Network.TLS&lt;/span&gt;
 &lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Network.TLS.Extra&lt;/span&gt;
 
 &lt;span class=&quot;nf&quot;&gt;sess&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;
@@ -278,13 +328,12 @@ cabal sandbox add-source .deps/pontarius-xmpp
             &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tlsParams&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultParamsClient&lt;/span&gt;
                 &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pConnectVersion&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;TLS10&lt;/span&gt;
                 &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pAllowedVersions&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;TLS10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;TLS11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;TLS12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pCiphers&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ciphersuite_medium&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+                &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pCiphers&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ciphersuite_medium&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Other important feature is the listening of the file, which will contain a user input. We will use a &lt;code&gt;fsnotify&lt;/code&gt; library for this purposes. Michael Snoyman &lt;a href=&quot;http://stackoverflow.com/a/22128940/1423473&quot;&gt;shared the implementation&lt;/a&gt; of this feature (he always flying to help, when SO question contains the &lt;code&gt;haskell&lt;/code&gt; and &lt;code&gt;conduit&lt;/code&gt; keywords =). The main idea is the monitoring file changes by &lt;code&gt;fsnotify&lt;/code&gt;, and save the current position in file. There are several disadvanteges with this approach - e.g. we can't handle a file truncation. But for the our purposes we can use a files, that will never be truncated.&lt;/p&gt;
+&lt;p&gt;Other important feature is the listening of the file, which will contain a user input. We will use a &lt;code&gt;fsnotify&lt;/code&gt; library for this purposes. Michael Snoyman &lt;a href=&quot;http://stackoverflow.com/a/22128940/1423473&quot;&gt;shared the implementation&lt;/a&gt; of this feature (he always flying to help, when SO question contains the &lt;code&gt;haskell&lt;/code&gt; and &lt;code&gt;conduit&lt;/code&gt; keywords =). The main idea is the monitoring file changes by &lt;code&gt;fsnotify&lt;/code&gt;, and save the current position in file. There are several disadvanteges with this approach - e.g. we can&#39;t handle a file truncation. But for the our purposes we can use a files, that will never be truncated.&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;haskell&quot;&gt;&lt;span class=&quot;nf&quot;&gt;sourceFileForever&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;MonadResource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;FilePath&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Source&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ByteString&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-haskell&quot; data-lang=&quot;haskell&quot;&gt;&lt;span class=&quot;nf&quot;&gt;sourceFileForever&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;MonadResource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;FilePath&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Source&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ByteString&lt;/span&gt;
 &lt;span class=&quot;nf&quot;&gt;sourceFileForever&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fp&amp;#39;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bracketP&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;startManager&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stopManager&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;manager&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;fp&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;canonicalizePath&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;decodeString&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fp&amp;#39;&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;baton&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newEmptyMVar&lt;/span&gt;
@@ -304,8 +353,7 @@ cabal sandbox add-source .deps/pontarius-xmpp
         &lt;span class=&quot;n&quot;&gt;sourceFileRange&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fp&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Just&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Nothing&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;CL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;iterM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;takeMVar&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;baton&lt;/span&gt;
       &lt;span class=&quot;kr&quot;&gt;where&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;modifyIORef&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumedRef&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fromIntegral&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+        &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;modifyIORef&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumedRef&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fromIntegral&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;&lt;code&gt;xi&lt;/code&gt; uses the  following algorithm:&lt;/p&gt;
@@ -321,32 +369,31 @@ cabal sandbox add-source .deps/pontarius-xmpp
 
 &lt;p&gt;Little bit about client details. A &lt;code&gt;Session&lt;/code&gt; and &lt;code&gt;ContactList&lt;/code&gt; objects have been shared through the &lt;code&gt;Reader&lt;/code&gt; monad. For the parsing of configuration file &lt;code&gt;yaml-config&lt;/code&gt; library has been used. Also there is an ability to see an entire xmpp data flow - this requires only the debug mode in configuration.&lt;/p&gt;
 
-&lt;p&gt;Client source code hosted on the &lt;a href=&quot;https://github.com/erthalion/xi&quot;&gt;github&lt;/a&gt;, but you should keep in mind, that it's more prototype, than a completed project. So if you want to improve something - welcome =)&lt;/p&gt;
+&lt;p&gt;Client source code hosted on the &lt;a href=&quot;https://github.com/erthalion/xi&quot;&gt;github&lt;/a&gt;, but you should keep in mind, that it&#39;s more prototype, than a completed project. So if you want to improve something - welcome =)&lt;/p&gt;
 </content>
  </entry>
  
  <entry>
    <title>Django and PostgreSQL schemas</title>
    <link href="http://erthalion.info/2014/03/08/django-with-schemas/"/>
-   <updated>2014-03-08T12:10:05Z</updated>
+   <updated>2014-03-08T19:10:05+07:00</updated>
    <id>http://erthalion.info/2014/03/08/django-with-schemas</id>
    <content type="html">&lt;p&gt;There are a some cases, when we prefer to use a PostgreSQL schemas for our purposes. The reasons for this can be different, but how it can be done?&lt;/p&gt;
 
 &lt;p&gt;There are a lot of discussion about the implementation of PostgreSQL schemas in Django (for example &lt;a href=&quot;https://code.djangoproject.com/ticket/1051&quot;&gt;one&lt;/a&gt;, &lt;a href=&quot;https://code.djangoproject.com/ticket/6148&quot;&gt;two&lt;/a&gt;). And I want to describe several caveats.&lt;/p&gt;
 
-&lt;p&gt;First of all - you shouldn't use the &lt;code&gt;options&lt;/code&gt; key to choice a schema like this:&lt;/p&gt;
+&lt;p&gt;First of all - you shouldn&#39;t use the &lt;code&gt;options&lt;/code&gt; key to choice a schema like this:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;python&quot;&gt;    &lt;span class=&quot;n&quot;&gt;DATABASES&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;default&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;OPTIONS&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;DATABASES&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;default&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;OPTIONS&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;s&quot;&gt;&amp;#39;options&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;-c search_path=schema&amp;#39;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;It can be working, until you &lt;a href=&quot;http://lists.pgfoundry.org/pipermail/pgbouncer-general/2011-August/000842.html&quot;&gt;don't use pgbouncer&lt;/a&gt;. This option hasn't supported because of the connection pool - when you close a connection with &lt;code&gt;search_path&lt;/code&gt;, it will be returned into the pool, and can be reused with out of date &lt;code&gt;search_path&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;It can be working, until you &lt;a href=&quot;http://lists.pgfoundry.org/pipermail/pgbouncer-general/2011-August/000842.html&quot;&gt;don&#39;t use pgbouncer&lt;/a&gt;. This option hasn&#39;t supported because of the connection pool - when you close a connection with &lt;code&gt;search_path&lt;/code&gt;, it will be returned into the pool, and can be reused with out of date &lt;code&gt;search_path&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;So what we gonna do? The only choice is to use &lt;code&gt;connection_create&lt;/code&gt; signal:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# schema.py&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# schema.py&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;set_search_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.conf&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;settings&lt;/span&gt;
 
@@ -361,30 +408,26 @@ cabal sandbox add-source .deps/pontarius-xmpp
 &lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.db.backends.signals&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;connection_created&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;schema&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;set_search_path&lt;/span&gt;
 
-&lt;span class=&quot;n&quot;&gt;connection_created&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;connect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_search_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;n&quot;&gt;connection_created&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;connect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_search_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;But where should we place this code? In general case if we want to handle the migrations, the only place is a settings file (a &lt;code&gt;model.py&lt;/code&gt; isn't suitable for this, when we want to distribute an application models and third-party models over a different schemas). And to avoid a circular dependencies, we should use three (OMG!) configuration files - &lt;code&gt;default.py&lt;/code&gt; (main configuration), &lt;code&gt;local.py/staging.py/production.py&lt;/code&gt; (depends on the server), &lt;code&gt;migration.py&lt;/code&gt; (used to set a search path). The last configuration is used only for the migration purposes:&lt;/p&gt;
+&lt;p&gt;But where should we place this code? In general case if we want to handle the migrations, the only place is a settings file (a &lt;code&gt;model.py&lt;/code&gt; isn&#39;t suitable for this, when we want to distribute an application models and third-party models over a different schemas). And to avoid a circular dependencies, we should use three (OMG!) configuration files - &lt;code&gt;default.py&lt;/code&gt; (main configuration), &lt;code&gt;local.py/staging.py/production.py&lt;/code&gt; (depends on the server), &lt;code&gt;migration.py&lt;/code&gt; (used to set a search path). The last configuration is used only for the migration purposes:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;python manage.py migrate app --settings&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;project.migration
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;python manage.py migrate app --settings&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;project.migration&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;For the normal usage we can connect &lt;code&gt;set_search_path&lt;/code&gt; function to the &lt;code&gt;connection_create&lt;/code&gt; signal in the root &lt;code&gt;urls.py&lt;/code&gt; and avoid the &lt;code&gt;migration.py&lt;/code&gt; configuration of course.&lt;/p&gt;
 
-&lt;p&gt;But that's not all - there is one more trouble with the different schemas, if you using &lt;code&gt;TransactionTestCase&lt;/code&gt; for testing. Sometimes you can see an error at the tests &lt;code&gt;tear_down&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;But that&#39;s not all - there is one more trouble with the different schemas, if you using &lt;code&gt;TransactionTestCase&lt;/code&gt; for testing. Sometimes you can see an error at the tests &lt;code&gt;tear_down&lt;/code&gt;:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;Error: Database test_store couldn&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;t be flushed. 
-DETAIL:  Table &lt;span class=&quot;s2&quot;&gt;&amp;quot;some_table&amp;quot;&lt;/span&gt; references &lt;span class=&quot;s2&quot;&gt;&amp;quot;some_other_table&amp;quot;&lt;/span&gt;.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;Error: Database test_store couldn&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;t be flushed. 
+DETAIL:  Table &lt;span class=&quot;s2&quot;&gt;&amp;quot;some_table&amp;quot;&lt;/span&gt; references &lt;span class=&quot;s2&quot;&gt;&amp;quot;some_other_table&amp;quot;&lt;/span&gt;.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;To avoid this error you can define &lt;code&gt;available_apps&lt;/code&gt; field, which must contain the minimum of apps required for testing:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;class SomeTests&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;TransactionTestCase&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;:
-    &lt;span class=&quot;nv&quot;&gt;available_apps&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;one_app&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;another_app&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;class SomeTests&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;TransactionTestCase&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;:
+    &lt;span class=&quot;nv&quot;&gt;available_apps&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;one_app&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;another_app&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;So we finished. I hope I have described the all possibe issues =)&lt;/p&gt;
@@ -393,9 +436,9 @@ DETAIL:  Table &lt;span class=&quot;s2&quot;&gt;&amp;quot;some_table&amp;quot;&l
  
  <entry>
    <title>A lot of Unix philosophy with the ii</title>
-   <link href="http://erthalion.info/2014/02/16/ii/"/>
-   <updated>2014-02-16T20:41:00Z</updated>
-   <id>http://erthalion.info/2014/02/16/ii</id>
+   <link href="http://erthalion.info/2014/02/17/ii/"/>
+   <updated>2014-02-17T03:41:00+07:00</updated>
+   <id>http://erthalion.info/2014/02/17/ii</id>
    <content type="html">&lt;blockquote&gt;&lt;p&gt;Write programs that do one thing and do it well. Write programs to work together. Write programs to handle text streams, because that is a universal interface.&lt;/p&gt;&lt;/blockquote&gt;
 
 &lt;p&gt;It seems like there is no good IRC plugin for vim - I found none of them at least. But there is an brilliant geeky alternative - &lt;a href=&quot;http://tools.suckless.org/ii/&quot;&gt;ii&lt;/a&gt;. Here is a quote from its site:&lt;/p&gt;
@@ -406,59 +449,54 @@ DETAIL:  Table &lt;span class=&quot;s2&quot;&gt;&amp;quot;some_table&amp;quot;&l
 
 &lt;p&gt;To configure the IRC workflow (join, identify, read/write) you can use &lt;a href=&quot;http://nion.modprobe.de/blog/archives/440-Using-the-ii-irc-client.html&quot;&gt;these&lt;/a&gt; &lt;a href=&quot;http://userbound.com/blog/ii-a-better-way-to-irc/&quot;&gt;posts&lt;/a&gt;. Here I want to help you avoid several caveats.&lt;/p&gt;
 
-&lt;p&gt;First of all, there is the final result you'll get:
+&lt;p&gt;First of all, there is the final result you&#39;ll get:
 &lt;img src=&quot;/public/img/ii.png&quot; border=&quot;0&quot; width=&quot;100%&quot;&gt;&lt;/p&gt;
 
-&lt;p&gt;I'll use &lt;a href=&quot;http://tmux.sourceforge.net/&quot;&gt;tmux&lt;/a&gt; + &lt;a href=&quot;http://www.vanheusden.com/multitail/&quot;&gt;multitail&lt;/a&gt; + vim.&lt;/p&gt;
+&lt;p&gt;I&#39;ll use &lt;a href=&quot;http://tmux.sourceforge.net/&quot;&gt;tmux&lt;/a&gt; + &lt;a href=&quot;http://www.vanheusden.com/multitail/&quot;&gt;multitail&lt;/a&gt; + vim.&lt;/p&gt;
 
 &lt;p&gt;First we need to connect to an IRC server (&lt;code&gt;freenode.net&lt;/code&gt; in my case):&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
 ii -s irc.freenode.net -n nick -f &lt;span class=&quot;s2&quot;&gt;&amp;quot;UserName&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;amp;&lt;/span&gt;
 sleep 10
 &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;identify password&amp;quot;&lt;/span&gt;&amp;gt; ~/irc/irc.freenode.net/nickserv/in
 &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;/j #channel1&amp;quot;&lt;/span&gt;&amp;gt; ~/irc/irc.freenode.net/in
 &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;/j #channel2&amp;quot;&lt;/span&gt;&amp;gt; ~/irc/irc.freenode.net/in
-&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;/j #channel3&amp;quot;&lt;/span&gt;&amp;gt; ~/irc/irc.freenode.net/in
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;/j #channel3&amp;quot;&lt;/span&gt;&amp;gt; ~/irc/irc.freenode.net/in&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Next step is to create handy console-based environment to use it. A small bash script can be used for this purpose (I've split the implementation):&lt;/p&gt;
+&lt;p&gt;Next step is to create handy console-based environment to use it. A small bash script can be used for this purpose (I&#39;ve split the implementation):&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# tmux_open.sh&lt;/span&gt;
 tmux -2 new-session -s session_name &lt;span class=&quot;s2&quot;&gt;&amp;quot;ii_open.sh $1&amp;quot;&lt;/span&gt;
 
 &lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# tmux_open.sh&lt;/span&gt;
-tmux splitw -v -p 30 &lt;span class=&quot;s1&quot;&gt;&amp;#39;vim&amp;#39;&lt;/span&gt;
-multitail -cS ii ~/irc/irc.freenode.net/#&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;/out
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+tmux splitw -v -p &lt;span class=&quot;m&quot;&gt;30&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;vim&amp;#39;&lt;/span&gt;
+multitail -cS ii ~/irc/irc.freenode.net/#&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;/out&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;We should use &lt;code&gt;-2&lt;/code&gt; option for &lt;code&gt;tmux&lt;/code&gt; to force 256 colors, and &lt;code&gt;-cS ii&lt;/code&gt; option for &lt;code&gt;multitail&lt;/code&gt; to ii syntax highlighting. After all this we can execute &lt;code&gt;./tmux_open.sh channel&lt;/code&gt; command to open a two pane, that will contain IRC channel log and vim ifself.&lt;/p&gt;
 
 &lt;p&gt;To type in IRC session we will use &lt;code&gt;vim&lt;/code&gt; with the following mappings:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;vim&quot;&gt;map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;ii :.&lt;span class=&quot;k&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/irc/&lt;/span&gt;irc.freenode.net/&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;cr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;dd
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-vim&quot; data-lang=&quot;vim&quot;&gt;map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;ii :.&lt;span class=&quot;k&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/irc/&lt;/span&gt;irc.freenode.net/&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;cr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;dd
 map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;i1 :.&lt;span class=&quot;k&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/irc/&lt;/span&gt;irc.freenode.net&lt;span class=&quot;sr&quot;&gt;/\#channel1/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;cr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;dd
 map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;i2 :.&lt;span class=&quot;k&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/irc/&lt;/span&gt;irc.freenode.net&lt;span class=&quot;sr&quot;&gt;/\#channel2/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;cr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;dd
-map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;i3 :.&lt;span class=&quot;k&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/irc/&lt;/span&gt;irc.freenode.net&lt;span class=&quot;sr&quot;&gt;/\#channel3/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;cr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;dd
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;i3 :.&lt;span class=&quot;k&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/irc/&lt;/span&gt;irc.freenode.net&lt;span class=&quot;sr&quot;&gt;/\#channel3/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;cr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;dd&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Also we can hide tmux status line globally (I prefer a vim status line) to achieve an ideal:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# .tmux.conf&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;-option -g status off
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# .tmux.conf&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;-option -g status off&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;or hide it only with the vim&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;vim&quot;&gt;; .vimrc
-autocmd &lt;span class=&quot;nb&quot;&gt;VimEnter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;VimLeave&lt;/span&gt; * &lt;span class=&quot;k&quot;&gt;silent&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;!&lt;/span&gt;tmux &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt; status
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-vim&quot; data-lang=&quot;vim&quot;&gt;; .vimrc
+&lt;span class=&quot;k&quot;&gt;autocmd&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;VimEnter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;VimLeave&lt;/span&gt; * &lt;span class=&quot;k&quot;&gt;silent&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;!&lt;/span&gt;tmux &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt; status&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 
@@ -467,23 +505,23 @@ autocmd &lt;span class=&quot;nb&quot;&gt;VimEnter&lt;/span&gt;&lt;span class=&qu
  
  <entry>
    <title>What about sharding in the Django?</title>
-   <link href="http://erthalion.info/2014/02/13/django-sharding/"/>
-   <updated>2014-02-13T21:14:42Z</updated>
-   <id>http://erthalion.info/2014/02/13/django-sharding</id>
-   <content type="html">&lt;p&gt;Some time ago I was faced with the need to implement the sharding in Django 1.6 . It was an attempt to make step beyond the standart features of this framework and I felt the resistance of Django =) I'll talk a bit about this challenge and its results.&lt;/p&gt;
+   <link href="http://erthalion.info/2014/02/14/django-sharding/"/>
+   <updated>2014-02-14T04:14:42+07:00</updated>
+   <id>http://erthalion.info/2014/02/14/django-sharding</id>
+   <content type="html">&lt;p&gt;Some time ago I was faced with the need to implement the sharding in Django 1.6 . It was an attempt to make step beyond the standart features of this framework and I felt the resistance of Django =) I&#39;ll talk a bit about this challenge and its results.&lt;/p&gt;
 
-&lt;p&gt;Let's start with definitions. Wikipedia says that:&lt;/p&gt;
+&lt;p&gt;Let&#39;s start with definitions. Wikipedia says that:&lt;/p&gt;
 
 &lt;blockquote&gt;&lt;p&gt;A database shard is a horizontal partition in a database.
 Horizontal partitioning is a database design principle whereby rows of a database table are held separately, rather than being split into columns (which is what normalization and vertical partitioning do, to differing extents). Each partition forms part of a shard, which may in turn be located on a separate database server or physical location.&lt;/p&gt;&lt;/blockquote&gt;
 
 &lt;p&gt;We wanted split the our database entities by the different PostgreSQL schemas and used something like &lt;a href=&quot;http://instagram-engineering.tumblr.com/post/10853187575/sharding-ids-at-instagram&quot;&gt;this&lt;/a&gt; for the &lt;code&gt;id&lt;/code&gt; generation. The sharding model was clear, but how to implement it in the Django application?&lt;/p&gt;
 
-&lt;p&gt;My solution of this problem was a custom database backend, that contains a custom sql compilers. Maybe it was a dirty hack, but I hope it wasn't =)&lt;/p&gt;
+&lt;p&gt;My solution of this problem was a custom database backend, that contains a custom sql compilers. Maybe it was a dirty hack, but I hope it wasn&#39;t =)&lt;/p&gt;
 
 &lt;p&gt;To create your own custom database backend, you can copy structure from one of the existing backends from &lt;code&gt;django.db.backends&lt;/code&gt; (&lt;code&gt;postgresql_psycopg2&lt;/code&gt; for the our case) and override &lt;code&gt;DatabaseOperations&lt;/code&gt;:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# operations.py&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# operations.py&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.db.backends.postgresql_psycopg2.operations&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CustomDatabaseOperations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DatabaseOperations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
@@ -499,13 +537,12 @@ Horizontal partitioning is a database design principle whereby rows of a databas
 
         &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ops&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomDatabaseOperations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
-&lt;span class=&quot;n&quot;&gt;DatabaseWrapper&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomDatabaseWrapper&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;n&quot;&gt;DatabaseWrapper&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomDatabaseWrapper&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;A custom sql compilers will be adding a corresponding schema name into the sql request based on the entity id:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# compilers.py&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# compilers.py&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CustomSQLCompiler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SQLCompiler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;as_sql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
@@ -526,15 +563,14 @@ Horizontal partitioning is a database design principle whereby rows of a databas
         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;
 
 
-&lt;span class=&quot;n&quot;&gt;SQLCompiler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomSQLCompiler&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;n&quot;&gt;SQLCompiler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomSQLCompiler&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;That's all! Oh, okay, that's not all =) Now you must create a custom &lt;code&gt;QuerySet&lt;/code&gt; (with the two overrided methods - &lt;code&gt;get&lt;/code&gt; &amp;amp; &lt;code&gt;create&lt;/code&gt;) to provide a correct sharded id for an all entities.&lt;/p&gt;
+&lt;p&gt;That&#39;s all! Oh, okay, that&#39;s not all =) Now you must create a custom &lt;code&gt;QuerySet&lt;/code&gt; (with the two overrided methods - &lt;code&gt;get&lt;/code&gt; &amp;amp; &lt;code&gt;create&lt;/code&gt;) to provide a correct sharded id for an all entities.&lt;/p&gt;
 
-&lt;p&gt;But there is one problem - a migrations. You can't migrate correctly a your sharded models and it's sad. To avoid this we inctoruced the some more complex database configuration dictionary. We used the special method, that converted this complex config into the standard with a lot of database connections - a one for each shard. All connections have the &lt;code&gt;search_path&lt;/code&gt; option. In the &lt;code&gt;settings.py&lt;/code&gt; we must take in account a type of action:&lt;/p&gt;
+&lt;p&gt;But there is one problem - a migrations. You can&#39;t migrate correctly a your sharded models and it&#39;s sad. To avoid this we inctoruced the some more complex database configuration dictionary. We used the special method, that converted this complex config into the standard with a lot of database connections - a one for each shard. All connections have the &lt;code&gt;search_path&lt;/code&gt; option. In the &lt;code&gt;settings.py&lt;/code&gt; we must take in account a type of action:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# settings.py&lt;/span&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# settings.py&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get_shard_settings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shard_migrate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shard_sync&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;sd&quot;&gt;&amp;quot;&amp;quot;&amp;quot; Not an all apps must be sharded.&lt;/span&gt;
@@ -557,13 +593,12 @@ Horizontal partitioning is a database design principle whereby rows of a databas
     &lt;span class=&quot;n&quot;&gt;INSTALLED_APPS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DATABASES&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get_shard_settings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shard_sync&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;DATABASES&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DB_CONFIGURATOR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DB_CONFIG&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+    &lt;span class=&quot;n&quot;&gt;DATABASES&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DB_CONFIGURATOR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DB_CONFIG&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Now we can manage sharded migrations by &lt;code&gt;--database&lt;/code&gt; options. For convenience you can write a fab script of course.&lt;/p&gt;
 
-&lt;p&gt;And one more and last caveat - you must create &lt;code&gt;SOUTH_DATABASE_ADAPTERS&lt;/code&gt; variable, that will be pointing to original postgres adapter &lt;code&gt;south.db.postgresql_psycopg2&lt;/code&gt; - south can't create a correct migration otherwise.&lt;/p&gt;
+&lt;p&gt;And one more and last caveat - you must create &lt;code&gt;SOUTH_DATABASE_ADAPTERS&lt;/code&gt; variable, that will be pointing to original postgres adapter &lt;code&gt;south.db.postgresql_psycopg2&lt;/code&gt; - south can&#39;t create a correct migration otherwise.&lt;/p&gt;
 </content>
  </entry>
  

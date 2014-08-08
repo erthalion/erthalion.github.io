@@ -63,12 +63,74 @@
   
   <div class="post">
     <h1>
-      <a href="/2014/05/24/gnuchess/">
+      <a href="/2014/08/09/from-bash-to-fish/">
+        From bash to fish
+      </a>
+    </h1>
+
+    <span class="post-date">09 Aug 2014</span>
+
+    <p>I'm doing a small revolution in the my environment from time to time. I think "hey, a cool stuff", take a deep breath and doing something new. And this is story about my migration from the bash to the fish shell.</p>
+
+<p>Let's see, what says the official tutorial:</p>
+
+<blockquote><p>fish is a fully-equipped command line shell (like bash or zsh) that is smart and user-friendly. fish supports powerful features like syntax highlighting, autosuggestions, and tab completions that just work, with nothing to learn or configure.
+If you want to make your command line more productive, more useful, and more fun, without learning a bunch of arcane syntax and configuration options, then fish might be just what you're looking for!</p></blockquote>
+
+<p>And this is almost true =) But there is another concrete reason, why I like fish shell:</p>
+
+<ul>
+<li>Search by history out of box (as an autocomplete by tab)</li>
+<li>More intuitive and clean configuration files</li>
+<li>Vim mode <a href="https://github.com/fish-shell/fish-shell/issues/65">support</a></li>
+</ul>
+
+
+<p>I would to avoid an unnecessary lyrics, and pay more attention to the configuration and gotchas (from the bash point of view).</p>
+
+<p>First of all - use <code>.</code> command instead <code>source</code> for the inclusion of the script.</p>
+
+<div class="highlight"><pre><code class="language-sh" data-lang="sh">. /some-install-path/fish-shell/share/fish/functions/fish_vi_mode.fish
+. /some-install-path/.config/fish/themes/fish_right_prompt.fish
+. /some-install-path/.config/fish/themes/fish_prompt.fish
+. /etc/profile.d/autojump.fish
+fish_vi_key_bindings</code></pre></div>
+
+
+<p>I've used <code>some-install-path</code> because I'm a vim hacker (<del>an extra pathos</del>), and I want a fresh version for the vim support, so the manual compilation from github is the my way. Then I've turned on vim mode (<code>fish_vi_mode.fish</code> is necessary for this). <code>fish_prompt.fish</code> and <code>fish_right_prompt.fish</code> contain a description for the shell prompt and will be discussed later. If you use <code>autojump</code>, you should also include <code>autojump.fish</code> (if this file doesn't exist, download it from repo).</p>
+
+<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">set </span>fish_greeting <span class="s2">&quot;&quot;</span></code></pre></div>
+
+
+<p>This greeting is very distracting, so disable it. No comments =)</p>
+
+<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">set</span> -x EDITOR vim
+<span class="nb">set </span>PATH /home/erthalion/.local/bin /usr/local/bin /opt/bin <span class="nv">$PATH</span></code></pre></div>
+
+
+<p>We should set environment variables in this format. Pay attention to the <code>PATH</code> variable - don't forget about <code>/usr/local/bin</code> and <code>/opt/bin</code> (looks like fish shell doesn't include them by default).</p>
+
+<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">alias </span><span class="nv">goutshow</span><span class="o">=</span><span class="s1">&#39;git fetch; git show origin/master..&#39;</span></code></pre></div>
+
+
+<p>One more observation - we should replace <code>&amp;&amp;</code> by the <code>;</code> or <code>and</code> commands.</p>
+
+<p>Now get closer to the prompt. It described by the two functions - <code>fish_prompt</code> and <code>fish_right_prompt</code> (your C.O.). I have no advices for this section. Really. You can use your imagination and do what you want =) There are my examples - <a href="https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_prompt.fish">left</a> and <a href="https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_right_prompt.fish">right</a>. Only one comment - you may want to show <code>virtualenv</code> name in the prompt. In that case you should disable original by the variable <code>set -x VIRTUAL_ENV_DISABLE_PROMPT 1</code>.</p>
+
+<p>But unfortunatelly, vim support isn't very well in the fish shell. For example, there is no <code>replace (r)</code> command, or <code>undo (u)</code>. Actually it's a horrible problem for me, especially the first one =) And here is my <a href="https://github.com/fish-shell/fish-shell/pull/1595">solution</a> of this problem.</p>
+
+<p>I think, fish shell is available for a lot of improvements. All, that described above, is only a base for a convenient environment, and I hope, it will be useful.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1>
+      <a href="/2014/05/25/gnuchess/">
         Little guide about the gnuchess
       </a>
     </h1>
 
-    <span class="post-date">24 May 2014</span>
+    <span class="post-date">25 May 2014</span>
 
     <p>I'm at the beginning of my journey into the world of gnuchess. Its interface is a slightly tricky, than I've expected, but nevertheless I was interested. So I've decided to make some notes about this.</p>
 
@@ -80,11 +142,11 @@
 
 <p>No, it's not our way. Let's try to use original teminal-based client (more terminal for the terminal god, mwuahahahaha =).</p>
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gnuchess
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>gnuchess
 
 GNU Chess 6.1.1
-Copyright <span class="o">(</span>C<span class="o">)</span> 2013 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
+Copyright <span class="o">(</span>C<span class="o">)</span> <span class="m">2013</span> Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version <span class="m">3</span> or later &lt;http://gnu.org/licenses/gpl.html&gt;
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 White <span class="o">(</span>1<span class="o">)</span> : e2e4
@@ -112,26 +174,24 @@ p p p p p p p p
 . . . . P . . . 
 . . . . . . . . 
 P P P P . P P P 
-R N B Q K B N R
-</code></pre></div>
+R N B Q K B N R</code></pre></div>
 
 
 <p>Gnuchess uses the standard algebraic notation (SAN) required by FIDE, so we can type something like this to play:</p>
 
-<div class="highlight"><pre><code class="bash">Nf3
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">Nf3
 g1f3
 O-O
-e1g1
-</code></pre></div>
+e1g1</code></pre></div>
 
 
-<p>Ok. But what is it? Gnuchess uses the most of the CPU all time, event at the player's move. It's super, but it would be more convenient to limit the thinking time for gnuchess engine. In the documentation we can see, that the <code>--easy</code> options is responsible for this.</p>
+<p>Ok. But what is it? Gnuchess uses the most of the CPU all time, even at the player's move. It's super, but it would be more convenient to limit the thinking time for gnuchess engine. In the documentation we can see, that the <code>--easy</code> options is responsible for this.</p>
 
 <blockquote><p>--easy, -e:  Disable thinking in opponent's time.  By default, the program runs in hard mode, i.e.  it thinks opponent's time to think too.</p></blockquote>
 
 <p>Now better. But how we can pause the game and continue later? There are an obvious commands for this: <code>save</code> and <code>load</code>, which save the game position into <code>EPD</code> format</p>
 
-<div class="highlight"><pre><code class="bash">White <span class="o">(</span>2<span class="o">)</span> : save game_file
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">White <span class="o">(</span>2<span class="o">)</span> : save game_file
 TimeLimit<span class="o">[</span>0<span class="o">]</span> <span class="o">=</span> 0
 TimeLimit<span class="o">[</span>1<span class="o">]</span> <span class="o">=</span> 0
 White <span class="o">(</span>2<span class="o">)</span> : load game_file
@@ -150,8 +210,7 @@ p p p p p p p p
 P P P P . P P P 
 R N B Q K B N R 
  
-White <span class="o">(</span>1<span class="o">)</span> : 
-</code></pre></div>
+White <span class="o">(</span>1<span class="o">)</span> :</code></pre></div>
 
 
 <p>And little bit about usability - we can use the pseudo graphical mode (a unicode symbols will be used for output), but ... it looks ugly. Classical mode provides convenient enouth game, except the board's coordinates. To avoid this inconvenience, we can use the patch below:</p>
@@ -163,10 +222,10 @@ White <span class="o">(</span>1<span class="o">)</span> :
 
 
 
-<div class="highlight"><pre><code class="bash"><span class="nv">$ </span>gnuchess -e
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>gnuchess -e
 GNU Chess 6.1.1
-Copyright <span class="o">(</span>C<span class="o">)</span> 2013 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
+Copyright <span class="o">(</span>C<span class="o">)</span> <span class="m">2013</span> Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version <span class="m">3</span> or later &lt;http://gnu.org/licenses/gpl.html&gt;
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 White <span class="o">(</span>1<span class="o">)</span> : e2e4
@@ -176,14 +235,14 @@ TimeLimit<span class="o">[</span>1<span class="o">]</span> <span class="o">=</sp
 
 black  KQkq  e3
 
-8  r n b q k b n r 
-7  p p p p p p p p 
-6  . . . . . . . . 
-5  . . . . . . . . 
-4  . . . . P . . . 
-3  . . . . . . . . 
-2  P P P P . P P P 
-1  R N B Q K B N R 
+<span class="m">8</span>  r n b q k b n r 
+<span class="m">7</span>  p p p p p p p p 
+<span class="m">6</span>  . . . . . . . . 
+<span class="m">5</span>  . . . . . . . . 
+<span class="m">4</span>  . . . . P . . . 
+<span class="m">3</span>  . . . . . . . . 
+<span class="m">2</span>  P P P P . P P P 
+<span class="m">1</span>  R N B Q K B N R 
   
    a b c d e f g h 
 
@@ -191,21 +250,20 @@ Thinking...
 
 white  KQkq
 
-8  r n b q k b . r 
-7  p p p p p p p p 
-6  . . . . . n . . 
-5  . . . . . . . . 
-4  . . . . P . . . 
-3  . . . . . . . . 
-2  P P P P . P P P 
-1  R N B Q K B N R 
+<span class="m">8</span>  r n b q k b . r 
+<span class="m">7</span>  p p p p p p p p 
+<span class="m">6</span>  . . . . . n . . 
+<span class="m">5</span>  . . . . . . . . 
+<span class="m">4</span>  . . . . P . . . 
+<span class="m">3</span>  . . . . . . . . 
+<span class="m">2</span>  P P P P . P P P 
+<span class="m">1</span>  R N B Q K B N R 
   
    a b c d e f g h 
 
 
 My move is : Nf6
-White <span class="o">(</span>2<span class="o">)</span> : 
-</code></pre></div>
+White <span class="o">(</span>2<span class="o">)</span> :</code></pre></div>
 
 
 <p>Have a nice game!</p>
@@ -214,12 +272,12 @@ White <span class="o">(</span>2<span class="o">)</span> :
   
   <div class="post">
     <h1>
-      <a href="/2014/04/21/endless-paginator/">
+      <a href="/2014/04/22/endless-paginator/">
         Another strange thing - an endless paginator
       </a>
     </h1>
 
-    <span class="post-date">21 Apr 2014</span>
+    <span class="post-date">22 Apr 2014</span>
 
     <p>A little bit about my new program-frankenstein. Now it is a endless <code>Paginator</code> for Django. It sounds crazy, isn't?</p>
 
@@ -229,7 +287,7 @@ White <span class="o">(</span>2<span class="o">)</span> :
 
 <p>First of all we need to disable <code>count</code> parameter from the api response. We can introduce a custom pagination serializer:</p>
 
-<div class="highlight"><pre><code class="python"><span class="c"># serializers.py</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># serializers.py</span>
 <span class="k">class</span> <span class="nc">CustomPaginationSerializer</span><span class="p">(</span><span class="n">BasePaginationSerializer</span><span class="p">):</span>
     <span class="nb">next</span> <span class="o">=</span> <span class="n">NextPageField</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s">&#39;*&#39;</span><span class="p">)</span>
     <span class="n">previous</span> <span class="o">=</span> <span class="n">PreviousPageField</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s">&#39;*&#39;</span><span class="p">)</span>
@@ -238,13 +296,12 @@ White <span class="o">(</span>2<span class="o">)</span> :
 <span class="k">class</span> <span class="nc">SomeListView</span><span class="p">(</span><span class="n">generics</span><span class="o">.</span><span class="n">ListAPIView</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">SomeModel</span>
     <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">SomeSerializerClass</span>
-    <span class="n">pagination_serializer_class</span> <span class="o">=</span> <span class="n">CustomPaginationSerializer</span>
-</code></pre></div>
+    <span class="n">pagination_serializer_class</span> <span class="o">=</span> <span class="n">CustomPaginationSerializer</span></code></pre></div>
 
 
 <p>The next our move - disable the page number verification. This can be done by the custom paginator class:</p>
 
-<div class="highlight"><pre><code class="python"><span class="k">class</span> <span class="nc">CustomPaginator</span><span class="p">(</span><span class="n">Paginator</span><span class="p">):</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">CustomPaginator</span><span class="p">(</span><span class="n">Paginator</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; HACK: To avoid unneseccary `SELECT COUNT(*) ...`</span>
 <span class="sd">        paginator has an infinity page number and a count of elements.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -272,13 +329,12 @@ White <span class="o">(</span>2<span class="o">)</span> :
     <span class="n">model</span> <span class="o">=</span> <span class="n">SomeModel</span>
     <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">SomeSerializerClass</span>
     <span class="n">pagination_serializer_class</span> <span class="o">=</span> <span class="n">CustomPaginationSerializer</span>
-    <span class="n">paginator_class</span> <span class="o">=</span> <span class="n">CustomPaginator</span>
-</code></pre></div>
+    <span class="n">paginator_class</span> <span class="o">=</span> <span class="n">CustomPaginator</span></code></pre></div>
 
 
 <p>Oh, goodness - we introduced the infinity number of the pages and the infinity number of elements... But we want also the correct next/prev links, so one more detail:</p>
 
-<div class="highlight"><pre><code class="python"><span class="k">class</span> <span class="nc">CustomPage</span><span class="p">(</span><span class="n">Page</span><span class="p">):</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">CustomPage</span><span class="p">(</span><span class="n">Page</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">has_next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; HACK: Select object_list + 1 element</span>
 <span class="sd">            to verify next page existense.</span>
@@ -296,8 +352,7 @@ White <span class="o">(</span>2<span class="o">)</span> :
             <span class="k">return</span> <span class="bp">True</span>
         <span class="k">finally</span><span class="p">:</span>
             <span class="c"># restore initial object_list count</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="p">[:(</span><span class="n">high</span><span class="o">-</span><span class="n">low</span><span class="p">)]</span>
-</code></pre></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="p">[:(</span><span class="n">high</span><span class="o">-</span><span class="n">low</span><span class="p">)]</span></code></pre></div>
 
 
 <p>This solution looks very questionable, but exciting for me. If you have something to say about this - welcome! =)</p>
@@ -306,12 +361,12 @@ White <span class="o">(</span>2<span class="o">)</span> :
   
   <div class="post">
     <h1>
-      <a href="/2014/03/25/xi/">
+      <a href="/2014/03/26/xi/">
         xi or the fast and furious Haskell
       </a>
     </h1>
 
-    <span class="post-date">25 Mar 2014</span>
+    <span class="post-date">26 Mar 2014</span>
 
     <p>Don't be confused by the title of this post - I will tell you about my experience in the development of xmpp client <a href="https://github.com/erthalion/xi">xi</a>. The first version of this client was written in Haskell in shortest time (for me, of cource), and this fact provides the second emotional part of title =)</p>
 
@@ -321,15 +376,14 @@ White <span class="o">(</span>2<span class="o">)</span> :
 
 <p>Now let's take a look inside. We can see a lot of dependencies of course - <code>xi</code> uses <a href="https://github.com/pontarius/pontarius-xmpp/">pontarius xmpp</a> for the XMPP interaction. But there is an interesting hidden trick - we must use this library from the github directly yet, because of an unpleasant <a href="https://github.com/pontarius/pontarius-xmpp/issues/46">bug</a>. This can be done by the <code>cabal sandbox add-source</code> command:</p>
 
-<div class="highlight"><pre><code class="bash">git clone http://github.com/pontarius/pontarius-xmpp .deps/pontarius-xmpp
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">git clone http://github.com/pontarius/pontarius-xmpp .deps/pontarius-xmpp
 cabal sandbox init
-cabal sandbox add-source .deps/pontarius-xmpp
-</code></pre></div>
+cabal sandbox add-source .deps/pontarius-xmpp</code></pre></div>
 
 
 <p>Also if we want to support <code>gmail.com</code>, we must use some extra <code>TLS</code> options:</p>
 
-<div class="highlight"><pre><code class="haskell"><span class="kr">import</span> <span class="nn">Network.TLS</span>
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kr">import</span> <span class="nn">Network.TLS</span>
 <span class="kr">import</span> <span class="nn">Network.TLS.Extra</span>
 
 <span class="nf">sess</span> <span class="ow">&lt;-</span> <span class="n">session</span>
@@ -339,13 +393,12 @@ cabal sandbox add-source .deps/pontarius-xmpp
             <span class="p">{</span> <span class="n">tlsParams</span> <span class="ow">=</span> <span class="n">defaultParamsClient</span>
                 <span class="p">{</span> <span class="n">pConnectVersion</span> <span class="ow">=</span> <span class="kt">TLS10</span>
                 <span class="p">,</span> <span class="n">pAllowedVersions</span> <span class="ow">=</span> <span class="p">[</span><span class="kt">TLS10</span><span class="p">,</span> <span class="kt">TLS11</span><span class="p">,</span> <span class="kt">TLS12</span><span class="p">]</span>
-                <span class="p">,</span> <span class="n">pCiphers</span> <span class="ow">=</span> <span class="n">ciphersuite_medium</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span>
-</code></pre></div>
+                <span class="p">,</span> <span class="n">pCiphers</span> <span class="ow">=</span> <span class="n">ciphersuite_medium</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span></code></pre></div>
 
 
 <p>Other important feature is the listening of the file, which will contain a user input. We will use a <code>fsnotify</code> library for this purposes. Michael Snoyman <a href="http://stackoverflow.com/a/22128940/1423473">shared the implementation</a> of this feature (he always flying to help, when SO question contains the <code>haskell</code> and <code>conduit</code> keywords =). The main idea is the monitoring file changes by <code>fsnotify</code>, and save the current position in file. There are several disadvanteges with this approach - e.g. we can't handle a file truncation. But for the our purposes we can use a files, that will never be truncated.</p>
 
-<div class="highlight"><pre><code class="haskell"><span class="nf">sourceFileForever</span> <span class="ow">::</span> <span class="kt">MonadResource</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="kt">FilePath</span> <span class="ow">-&gt;</span> <span class="kt">Source</span> <span class="n">m</span> <span class="kt">ByteString</span>
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="nf">sourceFileForever</span> <span class="ow">::</span> <span class="kt">MonadResource</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="kt">FilePath</span> <span class="ow">-&gt;</span> <span class="kt">Source</span> <span class="n">m</span> <span class="kt">ByteString</span>
 <span class="nf">sourceFileForever</span> <span class="n">fp&#39;</span> <span class="ow">=</span> <span class="n">bracketP</span> <span class="n">startManager</span> <span class="n">stopManager</span> <span class="o">$</span> <span class="nf">\</span><span class="n">manager</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
     <span class="n">fp</span> <span class="ow">&lt;-</span> <span class="n">liftIO</span> <span class="o">$</span> <span class="n">canonicalizePath</span> <span class="o">$</span> <span class="n">decodeString</span> <span class="n">fp&#39;</span>
     <span class="n">baton</span> <span class="ow">&lt;-</span> <span class="n">liftIO</span> <span class="n">newEmptyMVar</span>
@@ -365,8 +418,7 @@ cabal sandbox add-source .deps/pontarius-xmpp
         <span class="n">sourceFileRange</span> <span class="n">fp&#39;</span> <span class="p">(</span><span class="kt">Just</span> <span class="n">consumed</span><span class="p">)</span> <span class="kt">Nothing</span> <span class="o">$=</span> <span class="kt">CL</span><span class="o">.</span><span class="n">iterM</span> <span class="n">counter</span>
         <span class="n">liftIO</span> <span class="o">$</span> <span class="n">takeMVar</span> <span class="n">baton</span>
       <span class="kr">where</span>
-        <span class="n">counter</span> <span class="n">bs</span> <span class="ow">=</span> <span class="n">liftIO</span> <span class="o">$</span> <span class="n">modifyIORef</span> <span class="n">consumedRef</span> <span class="p">(</span><span class="o">+</span> <span class="n">fromIntegral</span> <span class="p">(</span><span class="kt">S</span><span class="o">.</span><span class="n">length</span> <span class="n">bs</span><span class="p">))</span>
-</code></pre></div>
+        <span class="n">counter</span> <span class="n">bs</span> <span class="ow">=</span> <span class="n">liftIO</span> <span class="o">$</span> <span class="n">modifyIORef</span> <span class="n">consumedRef</span> <span class="p">(</span><span class="o">+</span> <span class="n">fromIntegral</span> <span class="p">(</span><span class="kt">S</span><span class="o">.</span><span class="n">length</span> <span class="n">bs</span><span class="p">))</span></code></pre></div>
 
 
 <p><code>xi</code> uses the  following algorithm:</p>
@@ -383,76 +435,6 @@ cabal sandbox add-source .deps/pontarius-xmpp
 <p>Little bit about client details. A <code>Session</code> and <code>ContactList</code> objects have been shared through the <code>Reader</code> monad. For the parsing of configuration file <code>yaml-config</code> library has been used. Also there is an ability to see an entire xmpp data flow - this requires only the debug mode in configuration.</p>
 
 <p>Client source code hosted on the <a href="https://github.com/erthalion/xi">github</a>, but you should keep in mind, that it's more prototype, than a completed project. So if you want to improve something - welcome =)</p>
-
-  </div>
-  
-  <div class="post">
-    <h1>
-      <a href="/2014/03/08/django-with-schemas/">
-        Django and PostgreSQL schemas
-      </a>
-    </h1>
-
-    <span class="post-date">08 Mar 2014</span>
-
-    <p>There are a some cases, when we prefer to use a PostgreSQL schemas for our purposes. The reasons for this can be different, but how it can be done?</p>
-
-<p>There are a lot of discussion about the implementation of PostgreSQL schemas in Django (for example <a href="https://code.djangoproject.com/ticket/1051">one</a>, <a href="https://code.djangoproject.com/ticket/6148">two</a>). And I want to describe several caveats.</p>
-
-<p>First of all - you shouldn't use the <code>options</code> key to choice a schema like this:</p>
-
-<div class="highlight"><pre><code class="python">    <span class="n">DATABASES</span><span class="p">[</span><span class="s">&#39;default&#39;</span><span class="p">][</span><span class="s">&#39;OPTIONS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&#39;options&#39;</span><span class="p">:</span> <span class="s">&#39;-c search_path=schema&#39;</span>
-    <span class="p">}</span>
-</code></pre></div>
-
-
-<p>It can be working, until you <a href="http://lists.pgfoundry.org/pipermail/pgbouncer-general/2011-August/000842.html">don't use pgbouncer</a>. This option hasn't supported because of the connection pool - when you close a connection with <code>search_path</code>, it will be returned into the pool, and can be reused with out of date <code>search_path</code>.</p>
-
-<p>So what we gonna do? The only choice is to use <code>connection_create</code> signal:</p>
-
-<div class="highlight"><pre><code class="python"><span class="c"># schema.py</span>
-<span class="k">def</span> <span class="nf">set_search_path</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
-
-    <span class="n">conn</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;connection&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SET search_path={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">settings</span><span class="o">.</span><span class="n">SEARCH_PATH</span><span class="p">,</span>
-        <span class="p">))</span>
-
-<span class="c"># ?.py</span>
-<span class="kn">from</span> <span class="nn">django.db.backends.signals</span> <span class="kn">import</span> <span class="n">connection_created</span>
-<span class="kn">from</span> <span class="nn">schema</span> <span class="kn">import</span> <span class="n">set_search_path</span>
-
-<span class="n">connection_created</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">set_search_path</span><span class="p">)</span>
-</code></pre></div>
-
-
-<p>But where should we place this code? In general case if we want to handle the migrations, the only place is a settings file (a <code>model.py</code> isn't suitable for this, when we want to distribute an application models and third-party models over a different schemas). And to avoid a circular dependencies, we should use three (OMG!) configuration files - <code>default.py</code> (main configuration), <code>local.py/staging.py/production.py</code> (depends on the server), <code>migration.py</code> (used to set a search path). The last configuration is used only for the migration purposes:</p>
-
-<div class="highlight"><pre><code class="bash">python manage.py migrate app --settings<span class="o">=</span>project.migration
-</code></pre></div>
-
-
-<p>For the normal usage we can connect <code>set_search_path</code> function to the <code>connection_create</code> signal in the root <code>urls.py</code> and avoid the <code>migration.py</code> configuration of course.</p>
-
-<p>But that's not all - there is one more trouble with the different schemas, if you using <code>TransactionTestCase</code> for testing. Sometimes you can see an error at the tests <code>tear_down</code>:</p>
-
-<div class="highlight"><pre><code class="bash">Error: Database test_store couldn<span class="err">&#39;</span>t be flushed. 
-DETAIL:  Table <span class="s2">&quot;some_table&quot;</span> references <span class="s2">&quot;some_other_table&quot;</span>.
-</code></pre></div>
-
-
-<p>To avoid this error you can define <code>available_apps</code> field, which must contain the minimum of apps required for testing:</p>
-
-<div class="highlight"><pre><code class="bash">class SomeTests<span class="o">(</span>TransactionTestCase<span class="o">)</span>:
-    <span class="nv">available_apps</span> <span class="o">=</span> <span class="o">(</span><span class="s1">&#39;one_app&#39;</span>, <span class="s1">&#39;another_app&#39;</span><span class="o">)</span>
-</code></pre></div>
-
-
-<p>So we finished. I hope I have described the all possibe issues =)</p>
 
   </div>
   

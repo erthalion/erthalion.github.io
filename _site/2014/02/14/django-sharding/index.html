@@ -61,7 +61,7 @@
     <div class="content container">
       <div class="post">
   <h1>What about sharding in the Django?</h1>
-  <span class="post-date">13 Feb 2014</span>
+  <span class="post-date">14 Feb 2014</span>
   <p>Some time ago I was faced with the need to implement the sharding in Django 1.6 . It was an attempt to make step beyond the standart features of this framework and I felt the resistance of Django =) I'll talk a bit about this challenge and its results.</p>
 
 <p>Let's start with definitions. Wikipedia says that:</p>
@@ -75,7 +75,7 @@ Horizontal partitioning is a database design principle whereby rows of a databas
 
 <p>To create your own custom database backend, you can copy structure from one of the existing backends from <code>django.db.backends</code> (<code>postgresql_psycopg2</code> for the our case) and override <code>DatabaseOperations</code>:</p>
 
-<div class="highlight"><pre><code class="python"><span class="c"># operations.py</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># operations.py</span>
 <span class="kn">from</span> <span class="nn">django.db.backends.postgresql_psycopg2.operations</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="k">class</span> <span class="nc">CustomDatabaseOperations</span><span class="p">(</span><span class="n">DatabaseOperations</span><span class="p">):</span>
@@ -91,13 +91,12 @@ Horizontal partitioning is a database design principle whereby rows of a databas
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ops</span> <span class="o">=</span> <span class="n">CustomDatabaseOperations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-<span class="n">DatabaseWrapper</span> <span class="o">=</span> <span class="n">CustomDatabaseWrapper</span>
-</code></pre></div>
+<span class="n">DatabaseWrapper</span> <span class="o">=</span> <span class="n">CustomDatabaseWrapper</span></code></pre></div>
 
 
 <p>A custom sql compilers will be adding a corresponding schema name into the sql request based on the entity id:</p>
 
-<div class="highlight"><pre><code class="python"><span class="c"># compilers.py</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># compilers.py</span>
 
 <span class="k">class</span> <span class="nc">CustomSQLCompiler</span><span class="p">(</span><span class="n">SQLCompiler</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">as_sql</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -118,15 +117,14 @@ Horizontal partitioning is a database design principle whereby rows of a databas
         <span class="k">return</span> <span class="n">sql</span><span class="p">,</span> <span class="n">params</span>
 
 
-<span class="n">SQLCompiler</span> <span class="o">=</span> <span class="n">CustomSQLCompiler</span>
-</code></pre></div>
+<span class="n">SQLCompiler</span> <span class="o">=</span> <span class="n">CustomSQLCompiler</span></code></pre></div>
 
 
 <p>That's all! Oh, okay, that's not all =) Now you must create a custom <code>QuerySet</code> (with the two overrided methods - <code>get</code> &amp; <code>create</code>) to provide a correct sharded id for an all entities.</p>
 
 <p>But there is one problem - a migrations. You can't migrate correctly a your sharded models and it's sad. To avoid this we inctoruced the some more complex database configuration dictionary. We used the special method, that converted this complex config into the standard with a lot of database connections - a one for each shard. All connections have the <code>search_path</code> option. In the <code>settings.py</code> we must take in account a type of action:</p>
 
-<div class="highlight"><pre><code class="python"><span class="c"># settings.py</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># settings.py</span>
 
 <span class="k">def</span> <span class="nf">get_shard_settings</span><span class="p">(</span><span class="n">shard_migrate</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">shard_sync</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Not an all apps must be sharded.</span>
@@ -149,8 +147,7 @@ Horizontal partitioning is a database design principle whereby rows of a databas
     <span class="n">INSTALLED_APPS</span><span class="p">,</span> <span class="n">DATABASES</span> <span class="o">=</span> <span class="n">get_shard_settings</span><span class="p">(</span><span class="n">shard_sync</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">DATABASES</span> <span class="o">=</span> <span class="n">DB_CONFIGURATOR</span><span class="p">(</span><span class="n">DB_CONFIG</span><span class="p">)</span>
-</code></pre></div>
+    <span class="n">DATABASES</span> <span class="o">=</span> <span class="n">DB_CONFIGURATOR</span><span class="p">(</span><span class="n">DB_CONFIG</span><span class="p">)</span></code></pre></div>
 
 
 <p>Now we can manage sharded migrations by <code>--database</code> options. For convenience you can write a fab script of course.</p>
@@ -165,27 +162,27 @@ Horizontal partitioning is a database design principle whereby rows of a databas
     
       <li>
         <h3>
-          <a href="/2014/05/24/gnuchess/">
+          <a href="/2014/08/09/from-bash-to-fish/">
+            From bash to fish
+            <small>09 Aug 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2014/05/25/gnuchess/">
             Little guide about the gnuchess
-            <small>24 May 2014</small>
+            <small>25 May 2014</small>
           </a>
         </h3>
       </li>
     
       <li>
         <h3>
-          <a href="/2014/04/21/endless-paginator/">
+          <a href="/2014/04/22/endless-paginator/">
             Another strange thing - an endless paginator
-            <small>21 Apr 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2014/03/25/xi/">
-            xi or the fast and furious Haskell
-            <small>25 Mar 2014</small>
+            <small>22 Apr 2014</small>
           </a>
         </h3>
       </li>

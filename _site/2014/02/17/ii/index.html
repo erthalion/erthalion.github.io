@@ -61,7 +61,7 @@
     <div class="content container">
       <div class="post">
   <h1>A lot of Unix philosophy with the ii</h1>
-  <span class="post-date">16 Feb 2014</span>
+  <span class="post-date">17 Feb 2014</span>
   <blockquote><p>Write programs that do one thing and do it well. Write programs to work together. Write programs to handle text streams, because that is a universal interface.</p></blockquote>
 
 <p>It seems like there is no good IRC plugin for vim - I found none of them at least. But there is an brilliant geeky alternative - <a href="http://tools.suckless.org/ii/">ii</a>. Here is a quote from its site:</p>
@@ -79,52 +79,47 @@
 
 <p>First we need to connect to an IRC server (<code>freenode.net</code> in my case):</p>
 
-<div class="highlight"><pre><code class="bash"><span class="c">#!/bin/sh</span>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/sh</span>
 ii -s irc.freenode.net -n nick -f <span class="s2">&quot;UserName&quot;</span> <span class="p">&amp;</span>
 sleep 10
 <span class="nb">echo</span> <span class="s2">&quot;identify password&quot;</span>&gt; ~/irc/irc.freenode.net/nickserv/in
 <span class="nb">echo</span> <span class="s2">&quot;/j #channel1&quot;</span>&gt; ~/irc/irc.freenode.net/in
 <span class="nb">echo</span> <span class="s2">&quot;/j #channel2&quot;</span>&gt; ~/irc/irc.freenode.net/in
-<span class="nb">echo</span> <span class="s2">&quot;/j #channel3&quot;</span>&gt; ~/irc/irc.freenode.net/in
-</code></pre></div>
+<span class="nb">echo</span> <span class="s2">&quot;/j #channel3&quot;</span>&gt; ~/irc/irc.freenode.net/in</code></pre></div>
 
 
 <p>Next step is to create handy console-based environment to use it. A small bash script can be used for this purpose (I've split the implementation):</p>
 
-<div class="highlight"><pre><code class="bash"><span class="c">#!/bin/sh</span>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/sh</span>
 <span class="c"># tmux_open.sh</span>
 tmux -2 new-session -s session_name <span class="s2">&quot;ii_open.sh $1&quot;</span>
 
 <span class="c">#!/bin/sh</span>
 <span class="c"># tmux_open.sh</span>
-tmux splitw -v -p 30 <span class="s1">&#39;vim&#39;</span>
-multitail -cS ii ~/irc/irc.freenode.net/#<span class="nv">$1</span>/out
-</code></pre></div>
+tmux splitw -v -p <span class="m">30</span> <span class="s1">&#39;vim&#39;</span>
+multitail -cS ii ~/irc/irc.freenode.net/#<span class="nv">$1</span>/out</code></pre></div>
 
 
 <p>We should use <code>-2</code> option for <code>tmux</code> to force 256 colors, and <code>-cS ii</code> option for <code>multitail</code> to ii syntax highlighting. After all this we can execute <code>./tmux_open.sh channel</code> command to open a two pane, that will contain IRC channel log and vim ifself.</p>
 
 <p>To type in IRC session we will use <code>vim</code> with the following mappings:</p>
 
-<div class="highlight"><pre><code class="vim">map <span class="p">&lt;</span>leader<span class="p">&gt;</span>ii :.<span class="k">w</span> <span class="p">&gt;&gt;</span> <span class="p">~</span><span class="sr">/irc/</span>irc.freenode.net/<span class="k">in</span><span class="p">&lt;</span><span class="k">cr</span><span class="p">&gt;</span>dd
+<div class="highlight"><pre><code class="language-vim" data-lang="vim">map <span class="p">&lt;</span>leader<span class="p">&gt;</span>ii :.<span class="k">w</span> <span class="p">&gt;&gt;</span> <span class="p">~</span><span class="sr">/irc/</span>irc.freenode.net/<span class="k">in</span><span class="p">&lt;</span><span class="k">cr</span><span class="p">&gt;</span>dd
 map <span class="p">&lt;</span>leader<span class="p">&gt;</span>i1 :.<span class="k">w</span> <span class="p">&gt;&gt;</span> <span class="p">~</span><span class="sr">/irc/</span>irc.freenode.net<span class="sr">/\#channel1/</span><span class="k">in</span><span class="p">&lt;</span><span class="k">cr</span><span class="p">&gt;</span>dd
 map <span class="p">&lt;</span>leader<span class="p">&gt;</span>i2 :.<span class="k">w</span> <span class="p">&gt;&gt;</span> <span class="p">~</span><span class="sr">/irc/</span>irc.freenode.net<span class="sr">/\#channel2/</span><span class="k">in</span><span class="p">&lt;</span><span class="k">cr</span><span class="p">&gt;</span>dd
-map <span class="p">&lt;</span>leader<span class="p">&gt;</span>i3 :.<span class="k">w</span> <span class="p">&gt;&gt;</span> <span class="p">~</span><span class="sr">/irc/</span>irc.freenode.net<span class="sr">/\#channel3/</span><span class="k">in</span><span class="p">&lt;</span><span class="k">cr</span><span class="p">&gt;</span>dd
-</code></pre></div>
+map <span class="p">&lt;</span>leader<span class="p">&gt;</span>i3 :.<span class="k">w</span> <span class="p">&gt;&gt;</span> <span class="p">~</span><span class="sr">/irc/</span>irc.freenode.net<span class="sr">/\#channel3/</span><span class="k">in</span><span class="p">&lt;</span><span class="k">cr</span><span class="p">&gt;</span>dd</code></pre></div>
 
 
 <p>Also we can hide tmux status line globally (I prefer a vim status line) to achieve an ideal:</p>
 
-<div class="highlight"><pre><code class="bash"><span class="c"># .tmux.conf</span>
-<span class="nb">set</span>-option -g status off
-</code></pre></div>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># .tmux.conf</span>
+<span class="nb">set</span>-option -g status off</code></pre></div>
 
 
 <p>or hide it only with the vim</p>
 
-<div class="highlight"><pre><code class="vim">; .vimrc
-autocmd <span class="nb">VimEnter</span><span class="p">,</span><span class="nb">VimLeave</span> * <span class="k">silent</span> <span class="p">!</span>tmux <span class="k">set</span> status
-</code></pre></div>
+<div class="highlight"><pre><code class="language-vim" data-lang="vim">; .vimrc
+<span class="k">autocmd</span> <span class="nb">VimEnter</span><span class="p">,</span><span class="nb">VimLeave</span> * <span class="k">silent</span> <span class="p">!</span>tmux <span class="k">set</span> status</code></pre></div>
 
 
 
@@ -137,27 +132,27 @@ autocmd <span class="nb">VimEnter</span><span class="p">,</span><span class="nb"
     
       <li>
         <h3>
-          <a href="/2014/05/24/gnuchess/">
+          <a href="/2014/08/09/from-bash-to-fish/">
+            From bash to fish
+            <small>09 Aug 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2014/05/25/gnuchess/">
             Little guide about the gnuchess
-            <small>24 May 2014</small>
+            <small>25 May 2014</small>
           </a>
         </h3>
       </li>
     
       <li>
         <h3>
-          <a href="/2014/04/21/endless-paginator/">
+          <a href="/2014/04/22/endless-paginator/">
             Another strange thing - an endless paginator
-            <small>21 Apr 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2014/03/25/xi/">
-            xi or the fast and furious Haskell
-            <small>25 Mar 2014</small>
+            <small>22 Apr 2014</small>
           </a>
         </h3>
       </li>

@@ -68,17 +68,16 @@
 
 <p>First of all - you shouldn't use the <code>options</code> key to choice a schema like this:</p>
 
-<div class="highlight"><pre><code class="python">    <span class="n">DATABASES</span><span class="p">[</span><span class="s">&#39;default&#39;</span><span class="p">][</span><span class="s">&#39;OPTIONS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">DATABASES</span><span class="p">[</span><span class="s">&#39;default&#39;</span><span class="p">][</span><span class="s">&#39;OPTIONS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s">&#39;options&#39;</span><span class="p">:</span> <span class="s">&#39;-c search_path=schema&#39;</span>
-    <span class="p">}</span>
-</code></pre></div>
+    <span class="p">}</span></code></pre></div>
 
 
 <p>It can be working, until you <a href="http://lists.pgfoundry.org/pipermail/pgbouncer-general/2011-August/000842.html">don't use pgbouncer</a>. This option hasn't supported because of the connection pool - when you close a connection with <code>search_path</code>, it will be returned into the pool, and can be reused with out of date <code>search_path</code>.</p>
 
 <p>So what we gonna do? The only choice is to use <code>connection_create</code> signal:</p>
 
-<div class="highlight"><pre><code class="python"><span class="c"># schema.py</span>
+<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># schema.py</span>
 <span class="k">def</span> <span class="nf">set_search_path</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 
@@ -93,30 +92,26 @@
 <span class="kn">from</span> <span class="nn">django.db.backends.signals</span> <span class="kn">import</span> <span class="n">connection_created</span>
 <span class="kn">from</span> <span class="nn">schema</span> <span class="kn">import</span> <span class="n">set_search_path</span>
 
-<span class="n">connection_created</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">set_search_path</span><span class="p">)</span>
-</code></pre></div>
+<span class="n">connection_created</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">set_search_path</span><span class="p">)</span></code></pre></div>
 
 
 <p>But where should we place this code? In general case if we want to handle the migrations, the only place is a settings file (a <code>model.py</code> isn't suitable for this, when we want to distribute an application models and third-party models over a different schemas). And to avoid a circular dependencies, we should use three (OMG!) configuration files - <code>default.py</code> (main configuration), <code>local.py/staging.py/production.py</code> (depends on the server), <code>migration.py</code> (used to set a search path). The last configuration is used only for the migration purposes:</p>
 
-<div class="highlight"><pre><code class="bash">python manage.py migrate app --settings<span class="o">=</span>project.migration
-</code></pre></div>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py migrate app --settings<span class="o">=</span>project.migration</code></pre></div>
 
 
 <p>For the normal usage we can connect <code>set_search_path</code> function to the <code>connection_create</code> signal in the root <code>urls.py</code> and avoid the <code>migration.py</code> configuration of course.</p>
 
 <p>But that's not all - there is one more trouble with the different schemas, if you using <code>TransactionTestCase</code> for testing. Sometimes you can see an error at the tests <code>tear_down</code>:</p>
 
-<div class="highlight"><pre><code class="bash">Error: Database test_store couldn<span class="err">&#39;</span>t be flushed. 
-DETAIL:  Table <span class="s2">&quot;some_table&quot;</span> references <span class="s2">&quot;some_other_table&quot;</span>.
-</code></pre></div>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">Error: Database test_store couldn<span class="err">&#39;</span>t be flushed. 
+DETAIL:  Table <span class="s2">&quot;some_table&quot;</span> references <span class="s2">&quot;some_other_table&quot;</span>.</code></pre></div>
 
 
 <p>To avoid this error you can define <code>available_apps</code> field, which must contain the minimum of apps required for testing:</p>
 
-<div class="highlight"><pre><code class="bash">class SomeTests<span class="o">(</span>TransactionTestCase<span class="o">)</span>:
-    <span class="nv">available_apps</span> <span class="o">=</span> <span class="o">(</span><span class="s1">&#39;one_app&#39;</span>, <span class="s1">&#39;another_app&#39;</span><span class="o">)</span>
-</code></pre></div>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">class SomeTests<span class="o">(</span>TransactionTestCase<span class="o">)</span>:
+    <span class="nv">available_apps</span> <span class="o">=</span> <span class="o">(</span><span class="s1">&#39;one_app&#39;</span>, <span class="s1">&#39;another_app&#39;</span><span class="o">)</span></code></pre></div>
 
 
 <p>So we finished. I hope I have described the all possibe issues =)</p>
@@ -129,27 +124,27 @@ DETAIL:  Table <span class="s2">&quot;some_table&quot;</span> references <span c
     
       <li>
         <h3>
-          <a href="/2014/05/24/gnuchess/">
+          <a href="/2014/08/09/from-bash-to-fish/">
+            From bash to fish
+            <small>09 Aug 2014</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2014/05/25/gnuchess/">
             Little guide about the gnuchess
-            <small>24 May 2014</small>
+            <small>25 May 2014</small>
           </a>
         </h3>
       </li>
     
       <li>
         <h3>
-          <a href="/2014/04/21/endless-paginator/">
+          <a href="/2014/04/22/endless-paginator/">
             Another strange thing - an endless paginator
-            <small>21 Apr 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2014/03/25/xi/">
-            xi or the fast and furious Haskell
-            <small>25 Mar 2014</small>
+            <small>22 Apr 2014</small>
           </a>
         </h3>
       </li>
