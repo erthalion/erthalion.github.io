@@ -4,7 +4,7 @@
  <title>Blog</title>
  <link href="http://erthalion.info/atom.xml" rel="self"/>
  <link href="http://erthalion.info/"/>
- <updated>2014-08-09T00:35:52+07:00</updated>
+ <updated>2014-08-09T13:28:10+07:00</updated>
  <id>http://erthalion.info</id>
  <author>
    <name></name>
@@ -27,7 +27,7 @@ If you want to make your command line more productive, more useful, and more fun
 &lt;p&gt;And this is almost true =) But there is another concrete reason, why I like fish shell:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;Search by history out of box (as an autocomplete by tab)&lt;/li&gt;
+&lt;li&gt;Search by history (as an autocomplete by tab)&lt;/li&gt;
 &lt;li&gt;More intuitive and clean configuration files&lt;/li&gt;
 &lt;li&gt;Vim mode &lt;a href=&quot;https://github.com/fish-shell/fish-shell/issues/65&quot;&gt;support&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;

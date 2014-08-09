@@ -14,7 +14,7 @@ Let's see, what says the official tutorial:
 
 And this is almost true =) But there is another concrete reason, why I like fish shell:
 
-* Search by history out of box (as an autocomplete by tab)
+* Search by history (as an autocomplete by tab)
 * More intuitive and clean configuration files
 * Vim mode [support][vim-ticket]
 
