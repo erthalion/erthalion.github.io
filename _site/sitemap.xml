@@ -2,6 +2,15 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
     <url>
+      <loc>http://erthalion.info/2014/08/16/fenv-exceptions/</loc>
+      
+        <lastmod>2014-08-16T22:20:42+07:00</lastmod>
+      
+      <changefreq>weekly</changefreq>
+      <priority>1.0</priority>
+    </url>
+  
+    <url>
       <loc>http://erthalion.info/2014/08/09/from-bash-to-fish/</loc>
       
         <lastmod>2014-08-09T05:20:42+07:00</lastmod>
