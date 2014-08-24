@@ -5,11 +5,11 @@ date:   2014-05-24 22:20:42
 comments: true
 ---
 
-I'm at the beginning of my journey into the world of gnuchess. Its interface is a slightly tricky, than I've expected, but nevertheless I was interested. So I've decided to make some notes about this.
+I'm at the beginning of my journey into the world of gnuchess. Its interface is a slightly tricky, than I've expected, but I was interested. So I've decided to make some notes about this.
 
 > GNU Chess performs at the senior master/weak international master strength of 2500+ on the Elo rating system
 
-I've don't know, what does this mean really, but sounds cool =)
+I don't know, what does this mean really, but sounds cool =)
 
 > It is often used in conjunction with a GUI program such as XBoard or glChess
 

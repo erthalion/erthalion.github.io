@@ -70,7 +70,7 @@
 
     <span class="post-date">16 Aug 2014</span>
 
-    <p>This is a small notice about a very useful trick. I often have to deal with a computations, because the CFD is the part of my activity. And one of the annoying problem in this kind of research is when after many hours of computations you got a <code>Not A Number</code> result, caused by a stupid mistake. It would be nice, if a computation was interrupted by the NaN.</p>
+    <p>This is a small notice about a very useful trick. I often have to deal with computations, because the CFD is the part of my activity. And one of the annoying problem in this kind of research is when after many hours of computations you got a <code>Not A Number</code> result, caused by a stupid mistake. It would be nice, if a computation was interrupted by the NaN.</p>
 
 <p>And there is the <a href="http://stackoverflow.com/a/2949452">solution</a>:</p>
 
@@ -120,7 +120,7 @@ According to man:</p>
 
     <span class="post-date">09 Aug 2014</span>
 
-    <p>I'm doing a small revolution in the my environment from time to time. I think "hey, a cool stuff", take a deep breath and doing something new. And this is story about my migration from the bash to the fish shell.</p>
+    <p>I'm doing a small revolution in my environment from time to time. I think "hey, a cool stuff", take a deep breath and doing something new. And this is story about my migration from the bash to the fish shell.</p>
 
 <p>Let's see, what says the official tutorial:</p>
 
@@ -136,7 +136,7 @@ If you want to make your command line more productive, more useful, and more fun
 </ul>
 
 
-<p>I would to avoid an unnecessary lyrics, and pay more attention to the configuration and gotchas (from the bash point of view).</p>
+<p>I would to avoid unnecessary lyrics, and pay more attention to the configuration and gotchas (from the bash point of view).</p>
 
 <p>First of all - use <code>.</code> command instead <code>source</code> for the inclusion of the script.</p>
 
@@ -147,7 +147,7 @@ If you want to make your command line more productive, more useful, and more fun
 fish_vi_key_bindings</code></pre></div>
 
 
-<p>I've used <code>some-install-path</code> because I'm a vim hacker (<del>an extra pathos</del>), and I want a fresh version for the vim support, so the manual compilation from github is the my way. Then I've turned on vim mode (<code>fish_vi_mode.fish</code> is necessary for this). <code>fish_prompt.fish</code> and <code>fish_right_prompt.fish</code> contain a description for the shell prompt and will be discussed later. If you use <code>autojump</code>, you should also include <code>autojump.fish</code> (if this file doesn't exist, download it from repo).</p>
+<p>I've used <code>some-install-path</code> because I'm a Vim hacker (<del>an extra pathos</del>), and I want a fresh version for the Vim support, so the manual compilation from github is my way. Then I've turned on Vim mode (<code>fish_vi_mode.fish</code> is necessary for this). <code>fish_prompt.fish</code> and <code>fish_right_prompt.fish</code> contain a description for the shell prompt and will be discussed later. If you use <code>autojump</code>, you should also include <code>autojump.fish</code> (if this file doesn't exist, download it from repo).</p>
 
 <div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">set </span>fish_greeting <span class="s2">&quot;&quot;</span></code></pre></div>
 
@@ -167,7 +167,7 @@ fish_vi_key_bindings</code></pre></div>
 
 <p>Now get closer to the prompt. It described by the two functions - <code>fish_prompt</code> and <code>fish_right_prompt</code> (your C.O.). I have no advices for this section. Really. You can use your imagination and do what you want =) There are my examples - <a href="https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_prompt.fish">left</a> and <a href="https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_right_prompt.fish">right</a>. Only one comment - you may want to show <code>virtualenv</code> name in the prompt. In that case you should disable original by the variable <code>set -x VIRTUAL_ENV_DISABLE_PROMPT 1</code>.</p>
 
-<p>But unfortunatelly, vim support isn't very well in the fish shell. For example, there is no <code>replace (r)</code> command, or <code>undo (u)</code>. Actually it's a horrible problem for me, especially the first one =) And here is my <a href="https://github.com/fish-shell/fish-shell/pull/1595">solution</a> of this problem.</p>
+<p>But unfortunately, Vim support isn't very well in the fish shell. For example, there is no <code>replace (r)</code> command, or <code>undo (u)</code>. Actually it's a horrible problem for me, especially the first one =) And here is my <a href="https://github.com/fish-shell/fish-shell/pull/1595">solution</a> of this problem.</p>
 
 <p>I think, fish shell is available for a lot of improvements. All, that described above, is only a base for a convenient environment, and I hope, it will be useful.</p>
 
@@ -182,11 +182,11 @@ fish_vi_key_bindings</code></pre></div>
 
     <span class="post-date">25 May 2014</span>
 
-    <p>I'm at the beginning of my journey into the world of gnuchess. Its interface is a slightly tricky, than I've expected, but nevertheless I was interested. So I've decided to make some notes about this.</p>
+    <p>I'm at the beginning of my journey into the world of gnuchess. Its interface is a slightly tricky, than I've expected, but I was interested. So I've decided to make some notes about this.</p>
 
 <blockquote><p>GNU Chess performs at the senior master/weak international master strength of 2500+ on the Elo rating system</p></blockquote>
 
-<p>I've don't know, what does this mean really, but sounds cool =)</p>
+<p>I don't know, what does this mean really, but sounds cool =)</p>
 
 <blockquote><p>It is often used in conjunction with a GUI program such as XBoard or glChess</p></blockquote>
 
@@ -329,7 +329,7 @@ White <span class="o">(</span>2<span class="o">)</span> :</code></pre></div>
 
     <span class="post-date">22 Apr 2014</span>
 
-    <p>A little bit about my new program-frankenstein. Now it is a endless <code>Paginator</code> for Django. It sounds crazy, isn't?</p>
+    <p>A little bit about my new program-frankenstein. Now it is an endless <code>Paginator</code> for Django. It sounds crazy, isn't?</p>
 
 <p>Standart Django <code>Paginator</code> uses the <code>count()</code> function for the verification of page number. It is converted to the <code>SELECT COUNT(*) ...</code> query, of course. But as I was explained (I really don't know, maybe it's just an exaggeration - you can post your opinion in the commentaries), this is not a such lightweight query, as we want for the paginated rest api, because of the <a href="http://wiki.postgresql.org/wiki/MVCC">MVCC</a> in PostgreSQL.</p>
 

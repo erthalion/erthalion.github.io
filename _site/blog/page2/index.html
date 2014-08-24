@@ -70,7 +70,7 @@
 
     <span class="post-date">26 Mar 2014</span>
 
-    <p>Don't be confused by the title of this post - I will tell you about my experience in the development of xmpp client <a href="https://github.com/erthalion/xi">xi</a>. The first version of this client was written in Haskell in shortest time (for me, of cource), and this fact provides the second emotional part of title =)</p>
+    <p>Don't be confused by the title of this post - I will tell you about my experience in the development of xmpp client <a href="https://github.com/erthalion/xi">xi</a>. The first version of this client was written in Haskell in the shortest time (for me, of cource), and this fact provides the second emotional part of title =)</p>
 
 <p>First of all - <code>xi</code> was inspired by <a href="http://tools.suckless.org/ii/]">ii</a> irc client. It explains the all of its features, design and main idea. In short - after <a href="http://erthalion.info/2014/02/16/ii/">this</a> post I'm a huge fan of this tool and philosophy.</p>
 
@@ -83,7 +83,7 @@ cabal sandbox init
 cabal sandbox add-source .deps/pontarius-xmpp</code></pre></div>
 
 
-<p>Also if we want to support <code>gmail.com</code>, we must use some extra <code>TLS</code> options:</p>
+<p>Also, if we want to support <code>gmail.com</code>, we must use some extra <code>TLS</code> options:</p>
 
 <div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kr">import</span> <span class="nn">Network.TLS</span>
 <span class="kr">import</span> <span class="nn">Network.TLS.Extra</span>
@@ -98,7 +98,7 @@ cabal sandbox add-source .deps/pontarius-xmpp</code></pre></div>
                 <span class="p">,</span> <span class="n">pCiphers</span> <span class="ow">=</span> <span class="n">ciphersuite_medium</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span></code></pre></div>
 
 
-<p>Other important feature is the listening of the file, which will contain a user input. We will use a <code>fsnotify</code> library for this purposes. Michael Snoyman <a href="http://stackoverflow.com/a/22128940/1423473">shared the implementation</a> of this feature (he always flying to help, when SO question contains the <code>haskell</code> and <code>conduit</code> keywords =). The main idea is the monitoring file changes by <code>fsnotify</code>, and save the current position in file. There are several disadvanteges with this approach - e.g. we can't handle a file truncation. But for the our purposes we can use a files, that will never be truncated.</p>
+<p>Other important feature is the listening of the file, which will contain a user input. We will use a <code>fsnotify</code> library for these purposes. Michael Snoyman <a href="http://stackoverflow.com/a/22128940/1423473">shared the implementation</a> of this feature (he always flying to help, when SO question contains the <code>haskell</code> and <code>conduit</code> keywords =). The main idea is the monitoring file changes by <code>fsnotify</code>, and save the current position in file. There are several disadvanteges with this approach - e.g. we can't handle a file truncation. But for our purposes we can use files, that will never be truncated.</p>
 
 <div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="nf">sourceFileForever</span> <span class="ow">::</span> <span class="kt">MonadResource</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="kt">FilePath</span> <span class="ow">-&gt;</span> <span class="kt">Source</span> <span class="n">m</span> <span class="kt">ByteString</span>
 <span class="nf">sourceFileForever</span> <span class="n">fp&#39;</span> <span class="ow">=</span> <span class="n">bracketP</span> <span class="n">startManager</span> <span class="n">stopManager</span> <span class="o">$</span> <span class="nf">\</span><span class="n">manager</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
@@ -127,14 +127,14 @@ cabal sandbox add-source .deps/pontarius-xmpp</code></pre></div>
 
 <ul>
 <li>establish connection</li>
-<li>get an user roster and convert it to the internal representation (the <code>ContactList</code> type)</li>
+<li>get a user roster and convert it to the internal representation (the <code>ContactList</code> type)</li>
 <li>create an appropriate directory structure (a separate directory for each contact with <code>in</code>/<code>out</code>)</li>
 <li>for the each input file start a separate thread to monitoring the user input</li>
 <li>start a thread for monitoring the incoming messages</li>
 </ul>
 
 
-<p>Little bit about client details. A <code>Session</code> and <code>ContactList</code> objects have been shared through the <code>Reader</code> monad. For the parsing of configuration file <code>yaml-config</code> library has been used. Also there is an ability to see an entire xmpp data flow - this requires only the debug mode in configuration.</p>
+<p>Little bit about client details. A <code>Session</code> and <code>ContactList</code> objects have been shared through the <code>Reader</code> monad. For the parsing of configuration file <code>yaml-config</code> library has been used. Also, there is an ability to see an entire xmpp data flow - this requires only the debug mode in configuration.</p>
 
 <p>Client source code hosted on the <a href="https://github.com/erthalion/xi">github</a>, but you should keep in mind, that it's more prototype, than a completed project. So if you want to improve something - welcome =)</p>
 
@@ -160,7 +160,7 @@ cabal sandbox add-source .deps/pontarius-xmpp</code></pre></div>
     <span class="p">}</span></code></pre></div>
 
 
-<p>It can be working, until you <a href="http://lists.pgfoundry.org/pipermail/pgbouncer-general/2011-August/000842.html">don't use pgbouncer</a>. This option hasn't supported because of the connection pool - when you close a connection with <code>search_path</code>, it will be returned into the pool, and can be reused with out of date <code>search_path</code>.</p>
+<p>It can be working, until you <a href="http://lists.pgfoundry.org/pipermail/pgbouncer-general/2011-August/000842.html">don't use pgbouncer</a>. This option hasn't supported because of the connection pool - when you close a connection with <code>search_path</code>, it will be returned into the pool, and can be reused with the out of date <code>search_path</code>.</p>
 
 <p>So what we gonna do? The only choice is to use <code>connection_create</code> signal:</p>
 
@@ -182,7 +182,7 @@ cabal sandbox add-source .deps/pontarius-xmpp</code></pre></div>
 <span class="n">connection_created</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">set_search_path</span><span class="p">)</span></code></pre></div>
 
 
-<p>But where should we place this code? In general case if we want to handle the migrations, the only place is a settings file (a <code>model.py</code> isn't suitable for this, when we want to distribute an application models and third-party models over a different schemas). And to avoid a circular dependencies, we should use three (OMG!) configuration files - <code>default.py</code> (main configuration), <code>local.py/staging.py/production.py</code> (depends on the server), <code>migration.py</code> (used to set a search path). The last configuration is used only for the migration purposes:</p>
+<p>But where should we place this code? In general case if we want to handle the migrations, the only place is a settings file (a <code>model.py</code> isn't suitable for this, when we want to distribute an application models and third-party models over different schemas). And to avoid circular dependencies, we should use three (OMG!) configuration files - <code>default.py</code> (main configuration), <code>local.py/staging.py/production.py</code> (depends on the server), <code>migration.py</code> (used to set a search path). The last configuration is used only for the migration purposes:</p>
 
 <div class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py migrate app --settings<span class="o">=</span>project.migration</code></pre></div>
 
@@ -216,7 +216,7 @@ DETAIL:  Table <span class="s2">&quot;some_table&quot;</span> references <span c
 
     <blockquote><p>Write programs that do one thing and do it well. Write programs to work together. Write programs to handle text streams, because that is a universal interface.</p></blockquote>
 
-<p>It seems like there is no good IRC plugin for vim - I found none of them at least. But there is an brilliant geeky alternative - <a href="http://tools.suckless.org/ii/">ii</a>. Here is a quote from its site:</p>
+<p>It seems like there is no good IRC plugin for vim - I found none of them at least. But there is a brilliant geeky alternative - <a href="http://tools.suckless.org/ii/">ii</a>. Here is a quote from its site:</p>
 
 <blockquote><p>ii is a minimalist FIFO and filesystem-based IRC client. It creates an irc directory tree with server, channel and nick name directories. In every directory a FIFO in file and a normal out file is created.</p>
 
@@ -262,7 +262,7 @@ map <span class="p">&lt;</span>leader<span class="p">&gt;</span>i2 :.<span class
 map <span class="p">&lt;</span>leader<span class="p">&gt;</span>i3 :.<span class="k">w</span> <span class="p">&gt;&gt;</span> <span class="p">~</span><span class="sr">/irc/</span>irc.freenode.net<span class="sr">/\#channel3/</span><span class="k">in</span><span class="p">&lt;</span><span class="k">cr</span><span class="p">&gt;</span>dd</code></pre></div>
 
 
-<p>Also we can hide tmux status line globally (I prefer a vim status line) to achieve an ideal:</p>
+<p>Also, we can hide tmux status line globally (I prefer a vim status line) to achieve an ideal:</p>
 
 <div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># .tmux.conf</span>
 <span class="nb">set</span>-option -g status off</code></pre></div>
@@ -294,11 +294,11 @@ map <span class="p">&lt;</span>leader<span class="p">&gt;</span>i3 :.<span class
 <blockquote><p>A database shard is a horizontal partition in a database.
 Horizontal partitioning is a database design principle whereby rows of a database table are held separately, rather than being split into columns (which is what normalization and vertical partitioning do, to differing extents). Each partition forms part of a shard, which may in turn be located on a separate database server or physical location.</p></blockquote>
 
-<p>We wanted split the our database entities by the different PostgreSQL schemas and used something like <a href="http://instagram-engineering.tumblr.com/post/10853187575/sharding-ids-at-instagram">this</a> for the <code>id</code> generation. The sharding model was clear, but how to implement it in the Django application?</p>
+<p>We wanted split our database entities by the different PostgreSQL schemas and used something like <a href="http://instagram-engineering.tumblr.com/post/10853187575/sharding-ids-at-instagram">this</a> for the <code>id</code> generation. The sharding model was clear, but how to implement it in the Django application?</p>
 
 <p>My solution of this problem was a custom database backend, that contains a custom sql compilers. Maybe it was a dirty hack, but I hope it wasn't =)</p>
 
-<p>To create your own custom database backend, you can copy structure from one of the existing backends from <code>django.db.backends</code> (<code>postgresql_psycopg2</code> for the our case) and override <code>DatabaseOperations</code>:</p>
+<p>To create your own custom database backend, you can copy structure from one of the existing backends from <code>django.db.backends</code> (<code>postgresql_psycopg2</code> for our case) and override <code>DatabaseOperations</code>:</p>
 
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># operations.py</span>
 <span class="kn">from</span> <span class="nn">django.db.backends.postgresql_psycopg2.operations</span> <span class="kn">import</span> <span class="o">*</span>
@@ -347,7 +347,7 @@ Horizontal partitioning is a database design principle whereby rows of a databas
 
 <p>That's all! Oh, okay, that's not all =) Now you must create a custom <code>QuerySet</code> (with the two overrided methods - <code>get</code> &amp; <code>create</code>) to provide a correct sharded id for an all entities.</p>
 
-<p>But there is one problem - a migrations. You can't migrate correctly a your sharded models and it's sad. To avoid this we inctoruced the some more complex database configuration dictionary. We used the special method, that converted this complex config into the standard with a lot of database connections - a one for each shard. All connections have the <code>search_path</code> option. In the <code>settings.py</code> we must take in account a type of action:</p>
+<p>But there is one problem - migrations. You can't migrate correctly your sharded models and it's sad. To avoid this we inctoruced the some more complex database configuration dictionary. We used the special method, that converted this complex config into the standard with a lot of database connections - a one for each shard. All connections have the <code>search_path</code> option. In the <code>settings.py</code> we must take in account a type of action:</p>
 
 <div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># settings.py</span>
 

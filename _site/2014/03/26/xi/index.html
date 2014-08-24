@@ -62,7 +62,7 @@
       <div class="post">
   <h1>xi or the fast and furious Haskell</h1>
   <span class="post-date">26 Mar 2014</span>
-  <p>Don't be confused by the title of this post - I will tell you about my experience in the development of xmpp client <a href="https://github.com/erthalion/xi">xi</a>. The first version of this client was written in Haskell in shortest time (for me, of cource), and this fact provides the second emotional part of title =)</p>
+  <p>Don't be confused by the title of this post - I will tell you about my experience in the development of xmpp client <a href="https://github.com/erthalion/xi">xi</a>. The first version of this client was written in Haskell in the shortest time (for me, of cource), and this fact provides the second emotional part of title =)</p>
 
 <p>First of all - <code>xi</code> was inspired by <a href="http://tools.suckless.org/ii/]">ii</a> irc client. It explains the all of its features, design and main idea. In short - after <a href="http://erthalion.info/2014/02/16/ii/">this</a> post I'm a huge fan of this tool and philosophy.</p>
 
@@ -75,7 +75,7 @@ cabal sandbox init
 cabal sandbox add-source .deps/pontarius-xmpp</code></pre></div>
 
 
-<p>Also if we want to support <code>gmail.com</code>, we must use some extra <code>TLS</code> options:</p>
+<p>Also, if we want to support <code>gmail.com</code>, we must use some extra <code>TLS</code> options:</p>
 
 <div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kr">import</span> <span class="nn">Network.TLS</span>
 <span class="kr">import</span> <span class="nn">Network.TLS.Extra</span>
@@ -90,7 +90,7 @@ cabal sandbox add-source .deps/pontarius-xmpp</code></pre></div>
                 <span class="p">,</span> <span class="n">pCiphers</span> <span class="ow">=</span> <span class="n">ciphersuite_medium</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span></code></pre></div>
 
 
-<p>Other important feature is the listening of the file, which will contain a user input. We will use a <code>fsnotify</code> library for this purposes. Michael Snoyman <a href="http://stackoverflow.com/a/22128940/1423473">shared the implementation</a> of this feature (he always flying to help, when SO question contains the <code>haskell</code> and <code>conduit</code> keywords =). The main idea is the monitoring file changes by <code>fsnotify</code>, and save the current position in file. There are several disadvanteges with this approach - e.g. we can't handle a file truncation. But for the our purposes we can use a files, that will never be truncated.</p>
+<p>Other important feature is the listening of the file, which will contain a user input. We will use a <code>fsnotify</code> library for these purposes. Michael Snoyman <a href="http://stackoverflow.com/a/22128940/1423473">shared the implementation</a> of this feature (he always flying to help, when SO question contains the <code>haskell</code> and <code>conduit</code> keywords =). The main idea is the monitoring file changes by <code>fsnotify</code>, and save the current position in file. There are several disadvanteges with this approach - e.g. we can't handle a file truncation. But for our purposes we can use files, that will never be truncated.</p>
 
 <div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="nf">sourceFileForever</span> <span class="ow">::</span> <span class="kt">MonadResource</span> <span class="n">m</span> <span class="ow">=&gt;</span> <span class="kt">FilePath</span> <span class="ow">-&gt;</span> <span class="kt">Source</span> <span class="n">m</span> <span class="kt">ByteString</span>
 <span class="nf">sourceFileForever</span> <span class="n">fp&#39;</span> <span class="ow">=</span> <span class="n">bracketP</span> <span class="n">startManager</span> <span class="n">stopManager</span> <span class="o">$</span> <span class="nf">\</span><span class="n">manager</span> <span class="ow">-&gt;</span> <span class="kr">do</span>
@@ -119,14 +119,14 @@ cabal sandbox add-source .deps/pontarius-xmpp</code></pre></div>
 
 <ul>
 <li>establish connection</li>
-<li>get an user roster and convert it to the internal representation (the <code>ContactList</code> type)</li>
+<li>get a user roster and convert it to the internal representation (the <code>ContactList</code> type)</li>
 <li>create an appropriate directory structure (a separate directory for each contact with <code>in</code>/<code>out</code>)</li>
 <li>for the each input file start a separate thread to monitoring the user input</li>
 <li>start a thread for monitoring the incoming messages</li>
 </ul>
 
 
-<p>Little bit about client details. A <code>Session</code> and <code>ContactList</code> objects have been shared through the <code>Reader</code> monad. For the parsing of configuration file <code>yaml-config</code> library has been used. Also there is an ability to see an entire xmpp data flow - this requires only the debug mode in configuration.</p>
+<p>Little bit about client details. A <code>Session</code> and <code>ContactList</code> objects have been shared through the <code>Reader</code> monad. For the parsing of configuration file <code>yaml-config</code> library has been used. Also, there is an ability to see an entire xmpp data flow - this requires only the debug mode in configuration.</p>
 
 <p>Client source code hosted on the <a href="https://github.com/erthalion/xi">github</a>, but you should keep in mind, that it's more prototype, than a completed project. So if you want to improve something - welcome =)</p>
 

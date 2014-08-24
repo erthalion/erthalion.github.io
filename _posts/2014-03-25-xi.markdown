@@ -5,7 +5,7 @@ date:   2014-03-25 22:11:42
 comments: true
 ---
 
-Don't be confused by the title of this post - I will tell you about my experience in the development of xmpp client [xi][xi_github]. The first version of this client was written in Haskell in shortest time (for me, of cource), and this fact provides the second emotional part of title =)
+Don't be confused by the title of this post - I will tell you about my experience in the development of xmpp client [xi][xi_github]. The first version of this client was written in Haskell in the shortest time (for me, of cource), and this fact provides the second emotional part of title =)
 
 First of all - `xi` was inspired by [ii][ii] irc client. It explains the all of its features, design and main idea. In short - after [this][erthalion_ii] post I'm a huge fan of this tool and philosophy.
 
@@ -19,7 +19,7 @@ cabal sandbox init
 cabal sandbox add-source .deps/pontarius-xmpp
 {% endhighlight %}
 
-Also if we want to support `gmail.com`, we must use some extra `TLS` options:
+Also, if we want to support `gmail.com`, we must use some extra `TLS` options:
 
 {% highlight haskell %}
 import Network.TLS
@@ -36,7 +36,7 @@ sess <- session
 
 {% endhighlight %}
 
-Other important feature is the listening of the file, which will contain a user input. We will use a `fsnotify` library for this purposes. Michael Snoyman [shared the implementation][snoyman] of this feature (he always flying to help, when SO question contains the `haskell` and `conduit` keywords =). The main idea is the monitoring file changes by `fsnotify`, and save the current position in file. There are several disadvanteges with this approach - e.g. we can't handle a file truncation. But for the our purposes we can use a files, that will never be truncated.
+Other important feature is the listening of the file, which will contain a user input. We will use a `fsnotify` library for these purposes. Michael Snoyman [shared the implementation][snoyman] of this feature (he always flying to help, when SO question contains the `haskell` and `conduit` keywords =). The main idea is the monitoring file changes by `fsnotify`, and save the current position in file. There are several disadvanteges with this approach - e.g. we can't handle a file truncation. But for our purposes we can use files, that will never be truncated.
 
 {% highlight haskell %}
 sourceFileForever :: MonadResource m => FilePath -> Source m ByteString
@@ -65,12 +65,12 @@ sourceFileForever fp' = bracketP startManager stopManager $ \manager -> do
 `xi` uses the  following algorithm:
 
 * establish connection
-* get an user roster and convert it to the internal representation (the `ContactList` type)
+* get a user roster and convert it to the internal representation (the `ContactList` type)
 * create an appropriate directory structure (a separate directory for each contact with `in`/`out`)
 * for the each input file start a separate thread to monitoring the user input
 * start a thread for monitoring the incoming messages
 
-Little bit about client details. A `Session` and `ContactList` objects have been shared through the `Reader` monad. For the parsing of configuration file `yaml-config` library has been used. Also there is an ability to see an entire xmpp data flow - this requires only the debug mode in configuration.
+Little bit about client details. A `Session` and `ContactList` objects have been shared through the `Reader` monad. For the parsing of configuration file `yaml-config` library has been used. Also, there is an ability to see an entire xmpp data flow - this requires only the debug mode in configuration.
 
 Client source code hosted on the [github][xi_github], but you should keep in mind, that it's more prototype, than a completed project. So if you want to improve something - welcome =)
 

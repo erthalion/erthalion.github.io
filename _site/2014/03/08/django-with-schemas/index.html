@@ -73,7 +73,7 @@
     <span class="p">}</span></code></pre></div>
 
 
-<p>It can be working, until you <a href="http://lists.pgfoundry.org/pipermail/pgbouncer-general/2011-August/000842.html">don't use pgbouncer</a>. This option hasn't supported because of the connection pool - when you close a connection with <code>search_path</code>, it will be returned into the pool, and can be reused with out of date <code>search_path</code>.</p>
+<p>It can be working, until you <a href="http://lists.pgfoundry.org/pipermail/pgbouncer-general/2011-August/000842.html">don't use pgbouncer</a>. This option hasn't supported because of the connection pool - when you close a connection with <code>search_path</code>, it will be returned into the pool, and can be reused with the out of date <code>search_path</code>.</p>
 
 <p>So what we gonna do? The only choice is to use <code>connection_create</code> signal:</p>
 
@@ -95,7 +95,7 @@
 <span class="n">connection_created</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">set_search_path</span><span class="p">)</span></code></pre></div>
 
 
-<p>But where should we place this code? In general case if we want to handle the migrations, the only place is a settings file (a <code>model.py</code> isn't suitable for this, when we want to distribute an application models and third-party models over a different schemas). And to avoid a circular dependencies, we should use three (OMG!) configuration files - <code>default.py</code> (main configuration), <code>local.py/staging.py/production.py</code> (depends on the server), <code>migration.py</code> (used to set a search path). The last configuration is used only for the migration purposes:</p>
+<p>But where should we place this code? In general case if we want to handle the migrations, the only place is a settings file (a <code>model.py</code> isn't suitable for this, when we want to distribute an application models and third-party models over different schemas). And to avoid circular dependencies, we should use three (OMG!) configuration files - <code>default.py</code> (main configuration), <code>local.py/staging.py/production.py</code> (depends on the server), <code>migration.py</code> (used to set a search path). The last configuration is used only for the migration purposes:</p>
 
 <div class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py migrate app --settings<span class="o">=</span>project.migration</code></pre></div>
 

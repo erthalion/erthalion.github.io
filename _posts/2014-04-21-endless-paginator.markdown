@@ -5,7 +5,7 @@ date:   2014-04-21 18:14:42
 comments: true
 ---
 
-A little bit about my new program-frankenstein. Now it is a endless `Paginator` for Django. It sounds crazy, isn't?
+A little bit about my new program-frankenstein. Now it is an endless `Paginator` for Django. It sounds crazy, isn't?
 
 Standart Django `Paginator` uses the `count()` function for the verification of page number. It is converted to the `SELECT COUNT(*) ...` query, of course. But as I was explained (I really don't know, maybe it's just an exaggeration - you can post your opinion in the commentaries), this is not a such lightweight query, as we want for the paginated rest api, because of the [MVCC][mvcc] in PostgreSQL.
 

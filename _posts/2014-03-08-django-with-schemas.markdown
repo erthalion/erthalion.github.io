@@ -16,7 +16,7 @@ First of all - you shouldn't use the `options` key to choice a schema like this:
     }
 {% endhighlight %}
 
-It can be working, until you [don't use pgbouncer][pgbouncer_maillist]. This option hasn't supported because of the connection pool - when you close a connection with `search_path`, it will be returned into the pool, and can be reused with out of date `search_path`.
+It can be working, until you [don't use pgbouncer][pgbouncer_maillist]. This option hasn't supported because of the connection pool - when you close a connection with `search_path`, it will be returned into the pool, and can be reused with the out of date `search_path`.
 
 So what we gonna do? The only choice is to use `connection_create` signal:
 {% highlight python %}
@@ -38,7 +38,7 @@ from schema import set_search_path
 connection_created.connect(set_search_path)
 {% endhighlight %}
 
-But where should we place this code? In general case if we want to handle the migrations, the only place is a settings file (a `model.py` isn't suitable for this, when we want to distribute an application models and third-party models over a different schemas). And to avoid a circular dependencies, we should use three (OMG!) configuration files - `default.py` (main configuration), `local.py/staging.py/production.py` (depends on the server), `migration.py` (used to set a search path). The last configuration is used only for the migration purposes:
+But where should we place this code? In general case if we want to handle the migrations, the only place is a settings file (a `model.py` isn't suitable for this, when we want to distribute an application models and third-party models over different schemas). And to avoid circular dependencies, we should use three (OMG!) configuration files - `default.py` (main configuration), `local.py/staging.py/production.py` (depends on the server), `migration.py` (used to set a search path). The last configuration is used only for the migration purposes:
 {% highlight bash %}
 python manage.py migrate app --settings=project.migration
 {% endhighlight %}

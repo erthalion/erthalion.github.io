@@ -5,7 +5,7 @@ date:   2014-08-08 22:20:42
 comments: true
 ---
 
-I'm doing a small revolution in the my environment from time to time. I think "hey, a cool stuff", take a deep breath and doing something new. And this is story about my migration from the bash to the fish shell.
+I'm doing a small revolution in my environment from time to time. I think "hey, a cool stuff", take a deep breath and doing something new. And this is story about my migration from the bash to the fish shell.
 
 Let's see, what says the official tutorial:
 
@@ -18,7 +18,7 @@ And this is almost true =) But there is another concrete reason, why I like fish
 * More intuitive and clean configuration files
 * Vim mode [support][vim-ticket]
 
-I would to avoid an unnecessary lyrics, and pay more attention to the configuration and gotchas (from the bash point of view).
+I would to avoid unnecessary lyrics, and pay more attention to the configuration and gotchas (from the bash point of view).
 
 First of all - use `.` command instead `source` for the inclusion of the script.
 
@@ -30,7 +30,7 @@ First of all - use `.` command instead `source` for the inclusion of the script.
 fish_vi_key_bindings
 {% endhighlight %}
 
-I've used `some-install-path` because I'm a vim hacker (~~an extra pathos~~), and I want a fresh version for the vim support, so the manual compilation from github is the my way. Then I've turned on vim mode (`fish_vi_mode.fish` is necessary for this). `fish_prompt.fish` and `fish_right_prompt.fish` contain a description for the shell prompt and will be discussed later. If you use `autojump`, you should also include `autojump.fish` (if this file doesn't exist, download it from repo).
+I've used `some-install-path` because I'm a Vim hacker (~~an extra pathos~~), and I want a fresh version for the Vim support, so the manual compilation from github is my way. Then I've turned on Vim mode (`fish_vi_mode.fish` is necessary for this). `fish_prompt.fish` and `fish_right_prompt.fish` contain a description for the shell prompt and will be discussed later. If you use `autojump`, you should also include `autojump.fish` (if this file doesn't exist, download it from repo).
 
 {% highlight sh %}
 set fish_greeting ""
@@ -53,7 +53,7 @@ One more observation - we should replace `&&` by the `;` or `and` commands.
 
 Now get closer to the prompt. It described by the two functions - `fish_prompt` and `fish_right_prompt` (your C.O.). I have no advices for this section. Really. You can use your imagination and do what you want =) There are my examples - [left][fish_prompt] and [right][fish_right_prompt]. Only one comment - you may want to show `virtualenv` name in the prompt. In that case you should disable original by the variable `set -x VIRTUAL_ENV_DISABLE_PROMPT 1`.
 
-But unfortunatelly, vim support isn't very well in the fish shell. For example, there is no `replace (r)` command, or `undo (u)`. Actually it's a horrible problem for me, especially the first one =) And here is my [solution][pull-request] of this problem.
+But unfortunately, Vim support isn't very well in the fish shell. For example, there is no `replace (r)` command, or `undo (u)`. Actually it's a horrible problem for me, especially the first one =) And here is my [solution][pull-request] of this problem.
 
 I think, fish shell is available for a lot of improvements. All, that described above, is only a base for a convenient environment, and I hope, it will be useful.
 

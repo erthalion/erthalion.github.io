@@ -12,11 +12,11 @@ Let's start with definitions. Wikipedia says that:
 > A database shard is a horizontal partition in a database.
 > Horizontal partitioning is a database design principle whereby rows of a database table are held separately, rather than being split into columns (which is what normalization and vertical partitioning do, to differing extents). Each partition forms part of a shard, which may in turn be located on a separate database server or physical location.
 
-We wanted split the our database entities by the different PostgreSQL schemas and used something like [this][instagramm_id] for the `id` generation. The sharding model was clear, but how to implement it in the Django application?
+We wanted split our database entities by the different PostgreSQL schemas and used something like [this][instagramm_id] for the `id` generation. The sharding model was clear, but how to implement it in the Django application?
 
 My solution of this problem was a custom database backend, that contains a custom sql compilers. Maybe it was a dirty hack, but I hope it wasn't =)
 
-To create your own custom database backend, you can copy structure from one of the existing backends from `django.db.backends` (`postgresql_psycopg2` for the our case) and override `DatabaseOperations`:
+To create your own custom database backend, you can copy structure from one of the existing backends from `django.db.backends` (`postgresql_psycopg2` for our case) and override `DatabaseOperations`:
 
 {% highlight python %}
 # operations.py
@@ -66,7 +66,7 @@ SQLCompiler = CustomSQLCompiler
 
 That's all! Oh, okay, that's not all =) Now you must create a custom `QuerySet` (with the two overrided methods - `get` & `create`) to provide a correct sharded id for an all entities.
 
-But there is one problem - a migrations. You can't migrate correctly a your sharded models and it's sad. To avoid this we inctoruced the some more complex database configuration dictionary. We used the special method, that converted this complex config into the standard with a lot of database connections - a one for each shard. All connections have the `search_path` option. In the `settings.py` we must take in account a type of action:
+But there is one problem - migrations. You can't migrate correctly your sharded models and it's sad. To avoid this we inctoruced the some more complex database configuration dictionary. We used the special method, that converted this complex config into the standard with a lot of database connections - a one for each shard. All connections have the `search_path` option. In the `settings.py` we must take in account a type of action:
 {% highlight python %}
 # settings.py
 

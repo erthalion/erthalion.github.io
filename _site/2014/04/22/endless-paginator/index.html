@@ -62,7 +62,7 @@
       <div class="post">
   <h1>Another strange thing - an endless paginator</h1>
   <span class="post-date">22 Apr 2014</span>
-  <p>A little bit about my new program-frankenstein. Now it is a endless <code>Paginator</code> for Django. It sounds crazy, isn't?</p>
+  <p>A little bit about my new program-frankenstein. Now it is an endless <code>Paginator</code> for Django. It sounds crazy, isn't?</p>
 
 <p>Standart Django <code>Paginator</code> uses the <code>count()</code> function for the verification of page number. It is converted to the <code>SELECT COUNT(*) ...</code> query, of course. But as I was explained (I really don't know, maybe it's just an exaggeration - you can post your opinion in the commentaries), this is not a such lightweight query, as we want for the paginated rest api, because of the <a href="http://wiki.postgresql.org/wiki/MVCC">MVCC</a> in PostgreSQL.</p>
 

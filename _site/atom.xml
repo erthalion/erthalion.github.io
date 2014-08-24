@@ -4,7 +4,7 @@
  <title>Blog</title>
  <link href="http://erthalion.info/atom.xml" rel="self"/>
  <link href="http://erthalion.info/"/>
- <updated>2014-08-16T14:31:54+07:00</updated>
+ <updated>2014-08-24T17:23:57+07:00</updated>
  <id>http://erthalion.info</id>
  <author>
    <name></name>
@@ -17,7 +17,7 @@
    <link href="http://erthalion.info/2014/08/16/fenv-exceptions/"/>
    <updated>2014-08-16T22:20:42+07:00</updated>
    <id>http://erthalion.info/2014/08/16/fenv-exceptions</id>
-   <content type="html">&lt;p&gt;This is a small notice about a very useful trick. I often have to deal with a computations, because the CFD is the part of my activity. And one of the annoying problem in this kind of research is when after many hours of computations you got a &lt;code&gt;Not A Number&lt;/code&gt; result, caused by a stupid mistake. It would be nice, if a computation was interrupted by the NaN.&lt;/p&gt;
+   <content type="html">&lt;p&gt;This is a small notice about a very useful trick. I often have to deal with computations, because the CFD is the part of my activity. And one of the annoying problem in this kind of research is when after many hours of computations you got a &lt;code&gt;Not A Number&lt;/code&gt; result, caused by a stupid mistake. It would be nice, if a computation was interrupted by the NaN.&lt;/p&gt;
 
 &lt;p&gt;And there is the &lt;a href=&quot;http://stackoverflow.com/a/2949452&quot;&gt;solution&lt;/a&gt;:&lt;/p&gt;
 
@@ -63,7 +63,7 @@ According to man:&lt;/p&gt;
    <link href="http://erthalion.info/2014/08/09/from-bash-to-fish/"/>
    <updated>2014-08-09T05:20:42+07:00</updated>
    <id>http://erthalion.info/2014/08/09/from-bash-to-fish</id>
-   <content type="html">&lt;p&gt;I&#39;m doing a small revolution in the my environment from time to time. I think &quot;hey, a cool stuff&quot;, take a deep breath and doing something new. And this is story about my migration from the bash to the fish shell.&lt;/p&gt;
+   <content type="html">&lt;p&gt;I&#39;m doing a small revolution in my environment from time to time. I think &quot;hey, a cool stuff&quot;, take a deep breath and doing something new. And this is story about my migration from the bash to the fish shell.&lt;/p&gt;
 
 &lt;p&gt;Let&#39;s see, what says the official tutorial:&lt;/p&gt;
 
@@ -79,7 +79,7 @@ If you want to make your command line more productive, more useful, and more fun
 &lt;/ul&gt;
 
 
-&lt;p&gt;I would to avoid an unnecessary lyrics, and pay more attention to the configuration and gotchas (from the bash point of view).&lt;/p&gt;
+&lt;p&gt;I would to avoid unnecessary lyrics, and pay more attention to the configuration and gotchas (from the bash point of view).&lt;/p&gt;
 
 &lt;p&gt;First of all - use &lt;code&gt;.&lt;/code&gt; command instead &lt;code&gt;source&lt;/code&gt; for the inclusion of the script.&lt;/p&gt;
 
@@ -90,7 +90,7 @@ If you want to make your command line more productive, more useful, and more fun
 fish_vi_key_bindings&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;I&#39;ve used &lt;code&gt;some-install-path&lt;/code&gt; because I&#39;m a vim hacker (&lt;del&gt;an extra pathos&lt;/del&gt;), and I want a fresh version for the vim support, so the manual compilation from github is the my way. Then I&#39;ve turned on vim mode (&lt;code&gt;fish_vi_mode.fish&lt;/code&gt; is necessary for this). &lt;code&gt;fish_prompt.fish&lt;/code&gt; and &lt;code&gt;fish_right_prompt.fish&lt;/code&gt; contain a description for the shell prompt and will be discussed later. If you use &lt;code&gt;autojump&lt;/code&gt;, you should also include &lt;code&gt;autojump.fish&lt;/code&gt; (if this file doesn&#39;t exist, download it from repo).&lt;/p&gt;
+&lt;p&gt;I&#39;ve used &lt;code&gt;some-install-path&lt;/code&gt; because I&#39;m a Vim hacker (&lt;del&gt;an extra pathos&lt;/del&gt;), and I want a fresh version for the Vim support, so the manual compilation from github is my way. Then I&#39;ve turned on Vim mode (&lt;code&gt;fish_vi_mode.fish&lt;/code&gt; is necessary for this). &lt;code&gt;fish_prompt.fish&lt;/code&gt; and &lt;code&gt;fish_right_prompt.fish&lt;/code&gt; contain a description for the shell prompt and will be discussed later. If you use &lt;code&gt;autojump&lt;/code&gt;, you should also include &lt;code&gt;autojump.fish&lt;/code&gt; (if this file doesn&#39;t exist, download it from repo).&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;fish_greeting &lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
@@ -110,7 +110,7 @@ fish_vi_key_bindings&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Now get closer to the prompt. It described by the two functions - &lt;code&gt;fish_prompt&lt;/code&gt; and &lt;code&gt;fish_right_prompt&lt;/code&gt; (your C.O.). I have no advices for this section. Really. You can use your imagination and do what you want =) There are my examples - &lt;a href=&quot;https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_prompt.fish&quot;&gt;left&lt;/a&gt; and &lt;a href=&quot;https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_right_prompt.fish&quot;&gt;right&lt;/a&gt;. Only one comment - you may want to show &lt;code&gt;virtualenv&lt;/code&gt; name in the prompt. In that case you should disable original by the variable &lt;code&gt;set -x VIRTUAL_ENV_DISABLE_PROMPT 1&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;But unfortunatelly, vim support isn&#39;t very well in the fish shell. For example, there is no &lt;code&gt;replace (r)&lt;/code&gt; command, or &lt;code&gt;undo (u)&lt;/code&gt;. Actually it&#39;s a horrible problem for me, especially the first one =) And here is my &lt;a href=&quot;https://github.com/fish-shell/fish-shell/pull/1595&quot;&gt;solution&lt;/a&gt; of this problem.&lt;/p&gt;
+&lt;p&gt;But unfortunately, Vim support isn&#39;t very well in the fish shell. For example, there is no &lt;code&gt;replace (r)&lt;/code&gt; command, or &lt;code&gt;undo (u)&lt;/code&gt;. Actually it&#39;s a horrible problem for me, especially the first one =) And here is my &lt;a href=&quot;https://github.com/fish-shell/fish-shell/pull/1595&quot;&gt;solution&lt;/a&gt; of this problem.&lt;/p&gt;
 
 &lt;p&gt;I think, fish shell is available for a lot of improvements. All, that described above, is only a base for a convenient environment, and I hope, it will be useful.&lt;/p&gt;
 </content>
@@ -121,11 +121,11 @@ fish_vi_key_bindings&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
    <link href="http://erthalion.info/2014/05/25/gnuchess/"/>
    <updated>2014-05-25T05:20:42+07:00</updated>
    <id>http://erthalion.info/2014/05/25/gnuchess</id>
-   <content type="html">&lt;p&gt;I&#39;m at the beginning of my journey into the world of gnuchess. Its interface is a slightly tricky, than I&#39;ve expected, but nevertheless I was interested. So I&#39;ve decided to make some notes about this.&lt;/p&gt;
+   <content type="html">&lt;p&gt;I&#39;m at the beginning of my journey into the world of gnuchess. Its interface is a slightly tricky, than I&#39;ve expected, but I was interested. So I&#39;ve decided to make some notes about this.&lt;/p&gt;
 
 &lt;blockquote&gt;&lt;p&gt;GNU Chess performs at the senior master/weak international master strength of 2500+ on the Elo rating system&lt;/p&gt;&lt;/blockquote&gt;
 
-&lt;p&gt;I&#39;ve don&#39;t know, what does this mean really, but sounds cool =)&lt;/p&gt;
+&lt;p&gt;I don&#39;t know, what does this mean really, but sounds cool =)&lt;/p&gt;
 
 &lt;blockquote&gt;&lt;p&gt;It is often used in conjunction with a GUI program such as XBoard or glChess&lt;/p&gt;&lt;/blockquote&gt;
 
@@ -264,7 +264,7 @@ White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot
    <link href="http://erthalion.info/2014/04/22/endless-paginator/"/>
    <updated>2014-04-22T01:14:42+07:00</updated>
    <id>http://erthalion.info/2014/04/22/endless-paginator</id>
-   <content type="html">&lt;p&gt;A little bit about my new program-frankenstein. Now it is a endless &lt;code&gt;Paginator&lt;/code&gt; for Django. It sounds crazy, isn&#39;t?&lt;/p&gt;
+   <content type="html">&lt;p&gt;A little bit about my new program-frankenstein. Now it is an endless &lt;code&gt;Paginator&lt;/code&gt; for Django. It sounds crazy, isn&#39;t?&lt;/p&gt;
 
 &lt;p&gt;Standart Django &lt;code&gt;Paginator&lt;/code&gt; uses the &lt;code&gt;count()&lt;/code&gt; function for the verification of page number. It is converted to the &lt;code&gt;SELECT COUNT(*) ...&lt;/code&gt; query, of course. But as I was explained (I really don&#39;t know, maybe it&#39;s just an exaggeration - you can post your opinion in the commentaries), this is not a such lightweight query, as we want for the paginated rest api, because of the &lt;a href=&quot;http://wiki.postgresql.org/wiki/MVCC&quot;&gt;MVCC&lt;/a&gt; in PostgreSQL.&lt;/p&gt;
 
@@ -349,7 +349,7 @@ White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot
    <link href="http://erthalion.info/2014/03/26/xi/"/>
    <updated>2014-03-26T05:11:42+07:00</updated>
    <id>http://erthalion.info/2014/03/26/xi</id>
-   <content type="html">&lt;p&gt;Don&#39;t be confused by the title of this post - I will tell you about my experience in the development of xmpp client &lt;a href=&quot;https://github.com/erthalion/xi&quot;&gt;xi&lt;/a&gt;. The first version of this client was written in Haskell in shortest time (for me, of cource), and this fact provides the second emotional part of title =)&lt;/p&gt;
+   <content type="html">&lt;p&gt;Don&#39;t be confused by the title of this post - I will tell you about my experience in the development of xmpp client &lt;a href=&quot;https://github.com/erthalion/xi&quot;&gt;xi&lt;/a&gt;. The first version of this client was written in Haskell in the shortest time (for me, of cource), and this fact provides the second emotional part of title =)&lt;/p&gt;
 
 &lt;p&gt;First of all - &lt;code&gt;xi&lt;/code&gt; was inspired by &lt;a href=&quot;http://tools.suckless.org/ii/]&quot;&gt;ii&lt;/a&gt; irc client. It explains the all of its features, design and main idea. In short - after &lt;a href=&quot;http://erthalion.info/2014/02/16/ii/&quot;&gt;this&lt;/a&gt; post I&#39;m a huge fan of this tool and philosophy.&lt;/p&gt;
 
@@ -362,7 +362,7 @@ cabal sandbox init
 cabal sandbox add-source .deps/pontarius-xmpp&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Also if we want to support &lt;code&gt;gmail.com&lt;/code&gt;, we must use some extra &lt;code&gt;TLS&lt;/code&gt; options:&lt;/p&gt;
+&lt;p&gt;Also, if we want to support &lt;code&gt;gmail.com&lt;/code&gt;, we must use some extra &lt;code&gt;TLS&lt;/code&gt; options:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-haskell&quot; data-lang=&quot;haskell&quot;&gt;&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Network.TLS&lt;/span&gt;
 &lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Network.TLS.Extra&lt;/span&gt;
@@ -377,7 +377,7 @@ cabal sandbox add-source .deps/pontarius-xmpp&lt;/code&gt;&lt;/pre&gt;&lt;/div&g
                 &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pCiphers&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ciphersuite_medium&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Other important feature is the listening of the file, which will contain a user input. We will use a &lt;code&gt;fsnotify&lt;/code&gt; library for this purposes. Michael Snoyman &lt;a href=&quot;http://stackoverflow.com/a/22128940/1423473&quot;&gt;shared the implementation&lt;/a&gt; of this feature (he always flying to help, when SO question contains the &lt;code&gt;haskell&lt;/code&gt; and &lt;code&gt;conduit&lt;/code&gt; keywords =). The main idea is the monitoring file changes by &lt;code&gt;fsnotify&lt;/code&gt;, and save the current position in file. There are several disadvanteges with this approach - e.g. we can&#39;t handle a file truncation. But for the our purposes we can use a files, that will never be truncated.&lt;/p&gt;
+&lt;p&gt;Other important feature is the listening of the file, which will contain a user input. We will use a &lt;code&gt;fsnotify&lt;/code&gt; library for these purposes. Michael Snoyman &lt;a href=&quot;http://stackoverflow.com/a/22128940/1423473&quot;&gt;shared the implementation&lt;/a&gt; of this feature (he always flying to help, when SO question contains the &lt;code&gt;haskell&lt;/code&gt; and &lt;code&gt;conduit&lt;/code&gt; keywords =). The main idea is the monitoring file changes by &lt;code&gt;fsnotify&lt;/code&gt;, and save the current position in file. There are several disadvanteges with this approach - e.g. we can&#39;t handle a file truncation. But for our purposes we can use files, that will never be truncated.&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-haskell&quot; data-lang=&quot;haskell&quot;&gt;&lt;span class=&quot;nf&quot;&gt;sourceFileForever&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;MonadResource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;FilePath&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Source&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ByteString&lt;/span&gt;
 &lt;span class=&quot;nf&quot;&gt;sourceFileForever&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fp&amp;#39;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bracketP&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;startManager&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stopManager&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;manager&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
@@ -406,14 +406,14 @@ cabal sandbox add-source .deps/pontarius-xmpp&lt;/code&gt;&lt;/pre&gt;&lt;/div&g
 
 &lt;ul&gt;
 &lt;li&gt;establish connection&lt;/li&gt;
-&lt;li&gt;get an user roster and convert it to the internal representation (the &lt;code&gt;ContactList&lt;/code&gt; type)&lt;/li&gt;
+&lt;li&gt;get a user roster and convert it to the internal representation (the &lt;code&gt;ContactList&lt;/code&gt; type)&lt;/li&gt;
 &lt;li&gt;create an appropriate directory structure (a separate directory for each contact with &lt;code&gt;in&lt;/code&gt;/&lt;code&gt;out&lt;/code&gt;)&lt;/li&gt;
 &lt;li&gt;for the each input file start a separate thread to monitoring the user input&lt;/li&gt;
 &lt;li&gt;start a thread for monitoring the incoming messages&lt;/li&gt;
 &lt;/ul&gt;
 
 
-&lt;p&gt;Little bit about client details. A &lt;code&gt;Session&lt;/code&gt; and &lt;code&gt;ContactList&lt;/code&gt; objects have been shared through the &lt;code&gt;Reader&lt;/code&gt; monad. For the parsing of configuration file &lt;code&gt;yaml-config&lt;/code&gt; library has been used. Also there is an ability to see an entire xmpp data flow - this requires only the debug mode in configuration.&lt;/p&gt;
+&lt;p&gt;Little bit about client details. A &lt;code&gt;Session&lt;/code&gt; and &lt;code&gt;ContactList&lt;/code&gt; objects have been shared through the &lt;code&gt;Reader&lt;/code&gt; monad. For the parsing of configuration file &lt;code&gt;yaml-config&lt;/code&gt; library has been used. Also, there is an ability to see an entire xmpp data flow - this requires only the debug mode in configuration.&lt;/p&gt;
 
 &lt;p&gt;Client source code hosted on the &lt;a href=&quot;https://github.com/erthalion/xi&quot;&gt;github&lt;/a&gt;, but you should keep in mind, that it&#39;s more prototype, than a completed project. So if you want to improve something - welcome =)&lt;/p&gt;
 </content>
@@ -435,7 +435,7 @@ cabal sandbox add-source .deps/pontarius-xmpp&lt;/code&gt;&lt;/pre&gt;&lt;/div&g
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;It can be working, until you &lt;a href=&quot;http://lists.pgfoundry.org/pipermail/pgbouncer-general/2011-August/000842.html&quot;&gt;don&#39;t use pgbouncer&lt;/a&gt;. This option hasn&#39;t supported because of the connection pool - when you close a connection with &lt;code&gt;search_path&lt;/code&gt;, it will be returned into the pool, and can be reused with out of date &lt;code&gt;search_path&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;It can be working, until you &lt;a href=&quot;http://lists.pgfoundry.org/pipermail/pgbouncer-general/2011-August/000842.html&quot;&gt;don&#39;t use pgbouncer&lt;/a&gt;. This option hasn&#39;t supported because of the connection pool - when you close a connection with &lt;code&gt;search_path&lt;/code&gt;, it will be returned into the pool, and can be reused with the out of date &lt;code&gt;search_path&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;So what we gonna do? The only choice is to use &lt;code&gt;connection_create&lt;/code&gt; signal:&lt;/p&gt;
 
@@ -457,7 +457,7 @@ cabal sandbox add-source .deps/pontarius-xmpp&lt;/code&gt;&lt;/pre&gt;&lt;/div&g
 &lt;span class=&quot;n&quot;&gt;connection_created&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;connect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_search_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;But where should we place this code? In general case if we want to handle the migrations, the only place is a settings file (a &lt;code&gt;model.py&lt;/code&gt; isn&#39;t suitable for this, when we want to distribute an application models and third-party models over a different schemas). And to avoid a circular dependencies, we should use three (OMG!) configuration files - &lt;code&gt;default.py&lt;/code&gt; (main configuration), &lt;code&gt;local.py/staging.py/production.py&lt;/code&gt; (depends on the server), &lt;code&gt;migration.py&lt;/code&gt; (used to set a search path). The last configuration is used only for the migration purposes:&lt;/p&gt;
+&lt;p&gt;But where should we place this code? In general case if we want to handle the migrations, the only place is a settings file (a &lt;code&gt;model.py&lt;/code&gt; isn&#39;t suitable for this, when we want to distribute an application models and third-party models over different schemas). And to avoid circular dependencies, we should use three (OMG!) configuration files - &lt;code&gt;default.py&lt;/code&gt; (main configuration), &lt;code&gt;local.py/staging.py/production.py&lt;/code&gt; (depends on the server), &lt;code&gt;migration.py&lt;/code&gt; (used to set a search path). The last configuration is used only for the migration purposes:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;python manage.py migrate app --settings&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;project.migration&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
@@ -487,7 +487,7 @@ DETAIL:  Table &lt;span class=&quot;s2&quot;&gt;&amp;quot;some_table&amp;quot;&l
    <id>http://erthalion.info/2014/02/17/ii</id>
    <content type="html">&lt;blockquote&gt;&lt;p&gt;Write programs that do one thing and do it well. Write programs to work together. Write programs to handle text streams, because that is a universal interface.&lt;/p&gt;&lt;/blockquote&gt;
 
-&lt;p&gt;It seems like there is no good IRC plugin for vim - I found none of them at least. But there is an brilliant geeky alternative - &lt;a href=&quot;http://tools.suckless.org/ii/&quot;&gt;ii&lt;/a&gt;. Here is a quote from its site:&lt;/p&gt;
+&lt;p&gt;It seems like there is no good IRC plugin for vim - I found none of them at least. But there is a brilliant geeky alternative - &lt;a href=&quot;http://tools.suckless.org/ii/&quot;&gt;ii&lt;/a&gt;. Here is a quote from its site:&lt;/p&gt;
 
 &lt;blockquote&gt;&lt;p&gt;ii is a minimalist FIFO and filesystem-based IRC client. It creates an irc directory tree with server, channel and nick name directories. In every directory a FIFO in file and a normal out file is created.&lt;/p&gt;
 
@@ -533,7 +533,7 @@ map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&q
 map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;i3 :.&lt;span class=&quot;k&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/irc/&lt;/span&gt;irc.freenode.net&lt;span class=&quot;sr&quot;&gt;/\#channel3/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;cr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;dd&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Also we can hide tmux status line globally (I prefer a vim status line) to achieve an ideal:&lt;/p&gt;
+&lt;p&gt;Also, we can hide tmux status line globally (I prefer a vim status line) to achieve an ideal:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# .tmux.conf&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;-option -g status off&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
@@ -561,11 +561,11 @@ map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&q
 &lt;blockquote&gt;&lt;p&gt;A database shard is a horizontal partition in a database.
 Horizontal partitioning is a database design principle whereby rows of a database table are held separately, rather than being split into columns (which is what normalization and vertical partitioning do, to differing extents). Each partition forms part of a shard, which may in turn be located on a separate database server or physical location.&lt;/p&gt;&lt;/blockquote&gt;
 
-&lt;p&gt;We wanted split the our database entities by the different PostgreSQL schemas and used something like &lt;a href=&quot;http://instagram-engineering.tumblr.com/post/10853187575/sharding-ids-at-instagram&quot;&gt;this&lt;/a&gt; for the &lt;code&gt;id&lt;/code&gt; generation. The sharding model was clear, but how to implement it in the Django application?&lt;/p&gt;
+&lt;p&gt;We wanted split our database entities by the different PostgreSQL schemas and used something like &lt;a href=&quot;http://instagram-engineering.tumblr.com/post/10853187575/sharding-ids-at-instagram&quot;&gt;this&lt;/a&gt; for the &lt;code&gt;id&lt;/code&gt; generation. The sharding model was clear, but how to implement it in the Django application?&lt;/p&gt;
 
 &lt;p&gt;My solution of this problem was a custom database backend, that contains a custom sql compilers. Maybe it was a dirty hack, but I hope it wasn&#39;t =)&lt;/p&gt;
 
-&lt;p&gt;To create your own custom database backend, you can copy structure from one of the existing backends from &lt;code&gt;django.db.backends&lt;/code&gt; (&lt;code&gt;postgresql_psycopg2&lt;/code&gt; for the our case) and override &lt;code&gt;DatabaseOperations&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;To create your own custom database backend, you can copy structure from one of the existing backends from &lt;code&gt;django.db.backends&lt;/code&gt; (&lt;code&gt;postgresql_psycopg2&lt;/code&gt; for our case) and override &lt;code&gt;DatabaseOperations&lt;/code&gt;:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# operations.py&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.db.backends.postgresql_psycopg2.operations&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;
@@ -614,7 +614,7 @@ Horizontal partitioning is a database design principle whereby rows of a databas
 
 &lt;p&gt;That&#39;s all! Oh, okay, that&#39;s not all =) Now you must create a custom &lt;code&gt;QuerySet&lt;/code&gt; (with the two overrided methods - &lt;code&gt;get&lt;/code&gt; &amp;amp; &lt;code&gt;create&lt;/code&gt;) to provide a correct sharded id for an all entities.&lt;/p&gt;
 
-&lt;p&gt;But there is one problem - a migrations. You can&#39;t migrate correctly a your sharded models and it&#39;s sad. To avoid this we inctoruced the some more complex database configuration dictionary. We used the special method, that converted this complex config into the standard with a lot of database connections - a one for each shard. All connections have the &lt;code&gt;search_path&lt;/code&gt; option. In the &lt;code&gt;settings.py&lt;/code&gt; we must take in account a type of action:&lt;/p&gt;
+&lt;p&gt;But there is one problem - migrations. You can&#39;t migrate correctly your sharded models and it&#39;s sad. To avoid this we inctoruced the some more complex database configuration dictionary. We used the special method, that converted this complex config into the standard with a lot of database connections - a one for each shard. All connections have the &lt;code&gt;search_path&lt;/code&gt; option. In the &lt;code&gt;settings.py&lt;/code&gt; we must take in account a type of action:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# settings.py&lt;/span&gt;
 
