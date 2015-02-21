@@ -7,7 +7,7 @@
   <link href="http://gmpg.org/xfn/11" rel="profile">
 
   <title>
-    What about sharding in the Django? &middot; 
+    
     Erthalion's blog
   </title>
 
@@ -59,10 +59,18 @@
     </header>
 
     <div class="content container">
-      <div class="post">
-  <h1>What about sharding in the Django?</h1>
-  <span class="post-date">14 Feb 2014</span>
-  <p>Some time ago I was faced with the need to implement the sharding in Django 1.6 . It was an attempt to make step beyond the standart features of this framework and I felt the resistance of Django =) I'll talk a bit about this challenge and its results.</p>
+      <div class="posts">
+  
+  <div class="post">
+    <h1>
+      <a href="/2014/02/14/django-sharding/">
+        What about sharding in the Django?
+      </a>
+    </h1>
+
+    <span class="post-date">14 Feb 2014</span>
+
+    <p>Some time ago I was faced with the need to implement the sharding in Django 1.6 . It was an attempt to make step beyond the standart features of this framework and I felt the resistance of Django =) I'll talk a bit about this challenge and its results.</p>
 
 <p>Let's start with definitions. Wikipedia says that:</p>
 
@@ -154,56 +162,21 @@ Horizontal partitioning is a database design principle whereby rows of a databas
 
 <p>And one more and last caveat - you must create <code>SOUTH_DATABASE_ADAPTERS</code> variable, that will be pointing to original postgres adapter <code>south.db.postgresql_psycopg2</code> - south can't create a correct migration otherwise.</p>
 
+  </div>
+  
 </div>
 
-<div class="related">
-  <h2>Other Posts</h2>
-  <ul class="related-posts">
+<!-- Pagination links -->
+<div class="pagination">
+  
+    <span class="next">Older</span>
+  
+  
     
-      <li>
-        <h3>
-          <a href="/2015/02/22/gentoo-lenovo/">
-            Gentoo and Lenovo u430p - the sad story
-            <small>22 Feb 2015</small>
-          </a>
-        </h3>
-      </li>
+      <a href="/blog/page2" class="newer">Newer</a>
     
-      <li>
-        <h3>
-          <a href="/2014/08/16/fenv-exceptions/">
-            Use an exception instead of the NaN
-            <small>16 Aug 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2014/08/09/from-bash-to-fish/">
-            From bash to fish
-            <small>09 Aug 2014</small>
-          </a>
-        </h3>
-      </li>
-    
-  </ul>
+  
 </div>
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-    var disqus_shortname = 'erthalion'; // required: replace example with your forum shortname
-
-    /* * * DON'T EDIT BELOW THIS LINE * * */
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
     </div>
 
