@@ -5,7 +5,7 @@ date:   2015-02-22 1:14:21
 comments: true
 ---
 
-Finally I decided to replace my old laptop, and my chose fell on the Lenovo u430p. As I understand now, it was not a good idea in case of Gentoo =) Actually, I was surprised, how many nerves you can lose only because of the adaptation of you hardware to your requirements. And here is the shortlist of what you shouldn't forget, if you want to do the same more easily.
+Finally, I decided to replace my old laptop, and my chose fell on the Lenovo u430p. As I understand now, it was not a good idea in case of Gentoo =) Actually, I was surprised, how many nerves you can lose only because of the adaptation of you hardware to your requirements. And here is the shortlist of what you shouldn't forget, if you want to do the same more easily.
 
 ## EFI loader
 
@@ -145,8 +145,23 @@ Section "InputClass"
 EndSection
 {% endhighlight %}
 
+And one more note - if you're using the `laptop-mode` and a wireless keyboard from Logitech, it probably will be better to put this device into blacklist to avoid annoying problems with an unexpectedly frozen keyboard:
+
+{% highlight bash %}
+$ lsusb
+......
+Bus 001 Device 002: ID 046d:c52b Logitech, Inc. Unifying Receiver
+......
+{% endhighlight %}
+
+{% highlight bash %}
+# /etc/laptop-mode/conf.d/runtime-pm.conf
+
+AUTOSUSPEND_RUNTIME_DEVID_BLACKLIST="046d:c52b"
+{% endhighlight %}
+
 ## End
 
-It was interesting journey to the world of bugs, strange configurations and default options. I hope this shortlist can be useful, at least for the me in the future =)
+It was interesting journey to the world of bugs, strange configurations and default options. I hope this shortlist can be useful, at least for me in the future =)
 
 <img src="/public/img/futurama.jpg" border="0" width="50%" style="margin: auto">

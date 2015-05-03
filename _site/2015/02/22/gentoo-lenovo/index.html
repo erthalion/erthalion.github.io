@@ -62,7 +62,7 @@
       <div class="post">
   <h1>Gentoo and Lenovo u430p - the sad story</h1>
   <span class="post-date">22 Feb 2015</span>
-  <p>Finally I decided to replace my old laptop, and my chose fell on the Lenovo u430p. As I understand now, it was not a good idea in case of Gentoo =) Actually, I was surprised, how many nerves you can lose only because of the adaptation of you hardware to your requirements. And here is the shortlist of what you shouldn't forget, if you want to do the same more easily.</p>
+  <p>Finally, I decided to replace my old laptop, and my chose fell on the Lenovo u430p. As I understand now, it was not a good idea in case of Gentoo =) Actually, I was surprised, how many nerves you can lose only because of the adaptation of you hardware to your requirements. And here is the shortlist of what you shouldn't forget, if you want to do the same more easily.</p>
 
 <h2>EFI loader</h2>
 
@@ -195,9 +195,24 @@ Section <span class="s2">&quot;InputClass&quot;</span>
 EndSection</code></pre></div>
 
 
+<p>And one more note - if you're using the <code>laptop-mode</code> and a wireless keyboard from Logitech, it probably will be better to put this device into blacklist to avoid annoying problems with an unexpectedly frozen keyboard:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>lsusb
+......
+Bus <span class="m">001</span> Device 002: ID 046d:c52b Logitech, Inc. Unifying Receiver
+......</code></pre></div>
+
+
+
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># /etc/laptop-mode/conf.d/runtime-pm.conf</span>
+
+<span class="nv">AUTOSUSPEND_RUNTIME_DEVID_BLACKLIST</span><span class="o">=</span><span class="s2">&quot;046d:c52b&quot;</span></code></pre></div>
+
+
 <h2>End</h2>
 
-<p>It was interesting journey to the world of bugs, strange configurations and default options. I hope this shortlist can be useful, at least for the me in the future =)</p>
+<p>It was interesting journey to the world of bugs, strange configurations and default options. I hope this shortlist can be useful, at least for me in the future =)</p>
 
 <p><img src="/public/img/futurama.jpg" border="0" width="50%" style="margin: auto"></p>
 

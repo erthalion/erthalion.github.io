@@ -4,7 +4,7 @@
  <title>Blog</title>
  <link href="http://erthalion.info/atom.xml" rel="self"/>
  <link href="http://erthalion.info/"/>
- <updated>2015-02-22T00:40:13+07:00</updated>
+ <updated>2015-05-03T16:12:54+07:00</updated>
  <id>http://erthalion.info</id>
  <author>
    <name></name>
@@ -17,7 +17,7 @@
    <link href="http://erthalion.info/2015/02/22/gentoo-lenovo/"/>
    <updated>2015-02-22T08:14:21+07:00</updated>
    <id>http://erthalion.info/2015/02/22/gentoo-lenovo</id>
-   <content type="html">&lt;p&gt;Finally I decided to replace my old laptop, and my chose fell on the Lenovo u430p. As I understand now, it was not a good idea in case of Gentoo =) Actually, I was surprised, how many nerves you can lose only because of the adaptation of you hardware to your requirements. And here is the shortlist of what you shouldn&#39;t forget, if you want to do the same more easily.&lt;/p&gt;
+   <content type="html">&lt;p&gt;Finally, I decided to replace my old laptop, and my chose fell on the Lenovo u430p. As I understand now, it was not a good idea in case of Gentoo =) Actually, I was surprised, how many nerves you can lose only because of the adaptation of you hardware to your requirements. And here is the shortlist of what you shouldn&#39;t forget, if you want to do the same more easily.&lt;/p&gt;
 
 &lt;h2&gt;EFI loader&lt;/h2&gt;
 
@@ -150,9 +150,24 @@ Section &lt;span class=&quot;s2&quot;&gt;&amp;quot;InputClass&amp;quot;&lt;/span
 EndSection&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
+&lt;p&gt;And one more note - if you&#39;re using the &lt;code&gt;laptop-mode&lt;/code&gt; and a wireless keyboard from Logitech, it probably will be better to put this device into blacklist to avoid annoying problems with an unexpectedly frozen keyboard:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;lsusb
+......
+Bus &lt;span class=&quot;m&quot;&gt;001&lt;/span&gt; Device 002: ID 046d:c52b Logitech, Inc. Unifying Receiver
+......&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# /etc/laptop-mode/conf.d/runtime-pm.conf&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;AUTOSUSPEND_RUNTIME_DEVID_BLACKLIST&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;046d:c52b&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
 &lt;h2&gt;End&lt;/h2&gt;
 
-&lt;p&gt;It was interesting journey to the world of bugs, strange configurations and default options. I hope this shortlist can be useful, at least for the me in the future =)&lt;/p&gt;
+&lt;p&gt;It was interesting journey to the world of bugs, strange configurations and default options. I hope this shortlist can be useful, at least for me in the future =)&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/public/img/futurama.jpg&quot; border=&quot;0&quot; width=&quot;50%&quot; style=&quot;margin: auto&quot;&gt;&lt;/p&gt;
 </content>
