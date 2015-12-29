@@ -63,6 +63,107 @@
   
   <div class="post">
     <h1>
+      <a href="/2015/12/29/json-benchmarks/">
+        Compare incomparable: PostgreSQL vs Mysql vs Mongodb
+      </a>
+    </h1>
+
+    <span class="post-date">29 Dec 2015</span>
+
+    <blockquote><p>As such, there’s really no “standard” benchmark that will inform you about the best technology to use for your application. Only your requirements, your data, and your infrastructure can tell you what you need to know.</p></blockquote>
+
+<p>NoSql is everywhere and we can't escape from it (although I can't say we want to escape). Let's leave the question about reasons outside this text,
+and just note one thing - this trend isn't related only to new or existing NoSql solutions. It has another side, namely the schema-less data support in
+traditional relational databases. It's amazing how many possibilities hiding at the edge of the relational model and everything else. But of course there is
+a balance that you should find for your specific data. It can't be easy, first of all because it's required to compare incomparable things,
+e.g. performance of a NoSql solution and traditional database. Here in this post I'll make such attempt and show the comparison of jsonb in PostgreSQL,
+json in Mysql and bson in Mongodb.</p>
+
+<h2>What the hell is going on here?</h2>
+
+<p>Breaking news:</p>
+
+<ul>
+<li><a href="http://www.postgresql.org/docs/9.4/static/datatype-json.html">PostgreSQL 9.4</a> - a new data type <code>jsonb</code> with slightly extended support in the upcoming release PostgreSQL 9.5</li>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/json.html">Mysql 5.7.7</a> - a new data type <code>json</code></li>
+</ul>
+
+
+<p>and several other examples (I'll talk about them later). Of course these data types supposed to be binary, which means great performance.
+Base functionality is equal across the implementations because it's just obvious CRUD. And what is the oldest and almost cave desire in this situation?
+Right, performance benchmarks!</p>
+
+<p>An <a href="http://www.enterprisedb.com/postgres-plus-edb-blog/marc-linster/postgres-outperforms-mongodb-and-ushers-new-developer-reality">EnterpriseDB research</a> is slightly outdated, but we can use it as a first step for the road of a thousand li.</p>
+
+<h2>Some details and initial data</h2>
+
+<p>The <code>pg_nosql_benchmark</code> from EnterpriseDB suggests an obvious approach - first of all the required amount of records must be generated using different kinds of
+data and some random fluctuations. This amount of data will be saved into the database, and we will perform several kinds of queries over it.
+<code>pg_nosql_benchmark</code> doesn't have any functional to work with Mysql, so I had to implement it similar to PostgreSQL.
+There is only one tricky thing with Mysql - it doesn't <a href="https://dev.mysql.com/doc/refman/5.7/en/create-table.html#create-table-secondary-indexes-virtual-columns">support json indexing</a> directly, it's required to create virtual columns and create index on them.</p>
+
+<p>Speaking of details, there was one strange thing in <code>pg_nosql_benchmark</code>. I figured out that few types of generated records
+were beyond the 4096 bytes limit for <a href="http://stackoverflow.com/a/13189298/1423473">mongo shell</a>, which means these records were
+just dropped out. As a dirty hack for that we can perform the inserts from a <code>js</code> file (and btw, that file must be splitted into the series of chunks
+less than 2GB).</p>
+
+<p>After all modifications above I've performed measurements for the following cases:</p>
+
+<ul>
+<li>PostgreSQL 9.5 beta1, gin</li>
+<li>PostgreSQL 9.5 beta1, jsonb_path_ops</li>
+<li>PostgreSQL 9.5 beta1, jsquery</li>
+<li>Mysql 5.7.9</li>
+<li>Mongodb 3.2.0 storage engine WiredTiger</li>
+<li>Mongodb 3.2.0 storage engie MMAPv1</li>
+</ul>
+
+
+<p>Each of them was tested on a separate <code>m4.xlarge</code> amazon instance with the <code>ubuntu 14.04 x64</code> and default configurations,
+all tests were performed for 1000000 records. And you shouldn't forget about the instructions for the <code>jsquery</code> -
+<code>bison</code>, <code>flex</code>, <code>libpq-dev</code> and <code>postgresql-server-dev-9.5</code> must be installed. All results were saved in json file,
+we can visualize them easily using matplotlib (see <a href="https://github.com/erthalion/pg_nosql_benchmark">here</a>).</p>
+
+<h2>Results</h2>
+
+<p>All charts presented in seconds (if they related to the time of query execution) or mb (if they related to the size of relation/index).
+Thus, for all charts the smaller value is better.</p>
+
+<h3>Insert</h3>
+
+<p><img src="/public/img/insert2.png" border="0" width="80%" style="margin: auto"></p>
+
+<h3>Select</h3>
+
+<p><img src="/public/img/select2.png" border="0" width="80%" style="margin: auto"></p>
+
+<h3>Update</h3>
+
+<p><img src="/public/img/update2.png" border="0" width="80%" style="margin: auto"></p>
+
+<p>Update is another difference between my benchmarks and <code>pg_nosql_benchmark</code>. It can bee seen, that Mongodb is an obvious
+leader here - mostly because of PostgreSQL and Mysql restrictions, I guess, when to update one value you must override an entire field.</p>
+
+<h3>Table/index size</h3>
+
+<p><img src="/public/img/table_size2.png" border="0" width="80%" style="margin: auto">
+<img src="/public/img/index_size2.png" border="0" width="80%" style="margin: auto"></p>
+
+<h2>I have a bad feeling about this</h2>
+
+<p>Performance measurement is a dangerous field especially in this case. Everything described above can't be a completed benchmark, it's just
+a first step to understand current situation. We're working now on <a href="https://github.com/brianfrankcooper/YCSB">ycsb</a> tests to make more
+finished measurements, and if we'll get lucky we'll compare the performance of cluster configurations.</p>
+
+<h2>PgConf.Russia 2016</h2>
+
+<p>It looks like I'll <a href="https://pgconf.ru/en/2016/89957">participate</a> in the PgConf.Russia this year, so if you're interested
+in this subject - welcome.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1>
       <a href="/2015/02/22/gentoo-lenovo/">
         Gentoo and Lenovo u430p - the sad story
       </a>
@@ -335,153 +436,6 @@ fish_vi_key_bindings</code></pre></div>
 <p>But unfortunately, Vim support isn't very well in the fish shell. For example, there is no <code>replace (r)</code> command, or <code>undo (u)</code>. Actually it's a horrible problem for me, especially the first one =) And here is my <a href="https://github.com/fish-shell/fish-shell/pull/1595">solution</a> of this problem.</p>
 
 <p>I think, fish shell is available for a lot of improvements. All, that described above, is only a base for a convenient environment, and I hope, it will be useful.</p>
-
-  </div>
-  
-  <div class="post">
-    <h1>
-      <a href="/2014/05/25/gnuchess/">
-        Little guide about the gnuchess
-      </a>
-    </h1>
-
-    <span class="post-date">25 May 2014</span>
-
-    <p>I'm at the beginning of my journey into the world of gnuchess. Its interface is a slightly tricky, than I've expected, but I was interested. So I've decided to make some notes about this.</p>
-
-<blockquote><p>GNU Chess performs at the senior master/weak international master strength of 2500+ on the Elo rating system</p></blockquote>
-
-<p>I don't know, what does this mean really, but sounds cool =)</p>
-
-<blockquote><p>It is often used in conjunction with a GUI program such as XBoard or glChess</p></blockquote>
-
-<p>No, it's not our way. Let's try to use original teminal-based client (more terminal for the terminal god, mwuahahahaha =).</p>
-
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>gnuchess
-
-GNU Chess 6.1.1
-Copyright <span class="o">(</span>C<span class="o">)</span> <span class="m">2013</span> Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version <span class="m">3</span> or later &lt;http://gnu.org/licenses/gpl.html&gt;
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
-White <span class="o">(</span>1<span class="o">)</span> : e2e4
-TimeLimit<span class="o">[</span>0<span class="o">]</span> <span class="o">=</span> 0
-TimeLimit<span class="o">[</span>1<span class="o">]</span> <span class="o">=</span> 0
-1. e2e4
-
-black  KQkq  e3
-r n b q k b n r 
-p p p p p p p p 
-. . . . . . . . 
-. . . . . . . . 
-. . . . P . . . 
-. . . . . . . . 
-P P P P . P P P 
-R N B Q K B N R 
- 
-Thinking...
-
-white  KQkq
-r n b q k b . r 
-p p p p p p p p 
-. . . . . n . . 
-. . . . . . . . 
-. . . . P . . . 
-. . . . . . . . 
-P P P P . P P P 
-R N B Q K B N R</code></pre></div>
-
-
-<p>Gnuchess uses the standard algebraic notation (SAN) required by FIDE, so we can type something like this to play:</p>
-
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">Nf3
-g1f3
-O-O
-e1g1</code></pre></div>
-
-
-<p>Ok. But what is it? Gnuchess uses the most of the CPU all time, even at the player's move. It's super, but it would be more convenient to limit the thinking time for gnuchess engine. In the documentation we can see, that the <code>--easy</code> options is responsible for this.</p>
-
-<blockquote><p>--easy, -e:  Disable thinking in opponent's time.  By default, the program runs in hard mode, i.e.  it thinks opponent's time to think too.</p></blockquote>
-
-<p>Now better. But how we can pause the game and continue later? There are an obvious commands for this: <code>save</code> and <code>load</code>, which save the game position into <code>EPD</code> format</p>
-
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">White <span class="o">(</span>2<span class="o">)</span> : save game_file
-TimeLimit<span class="o">[</span>0<span class="o">]</span> <span class="o">=</span> 0
-TimeLimit<span class="o">[</span>1<span class="o">]</span> <span class="o">=</span> 0
-White <span class="o">(</span>2<span class="o">)</span> : load game_file
-TimeLimit<span class="o">[</span>0<span class="o">]</span> <span class="o">=</span> 0
-TimeLimit<span class="o">[</span>1<span class="o">]</span> <span class="o">=</span> 0
-
- : Best <span class="nv">move</span> <span class="o">=</span> 1
-
-white  KQkq
-r n b q k b . r 
-p p p p p p p p 
-. . . . . n . . 
-. . . . . . . . 
-. . . . P . . . 
-. . . . . . . . 
-P P P P . P P P 
-R N B Q K B N R 
- 
-White <span class="o">(</span>1<span class="o">)</span> :</code></pre></div>
-
-
-<p>And little bit about usability - we can use the pseudo graphical mode (a unicode symbols will be used for output), but ... it looks ugly. Classical mode provides convenient enouth game, except the board's coordinates. To avoid this inconvenience, we can use the patch below:</p>
-
-<div style="font-size:14px">
-<script src="https://gist.github.com/erthalion/370a82f17ba95c23e4f5.js"></script>
-</div>
-
-
-
-
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>gnuchess -e
-GNU Chess 6.1.1
-Copyright <span class="o">(</span>C<span class="o">)</span> <span class="m">2013</span> Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version <span class="m">3</span> or later &lt;http://gnu.org/licenses/gpl.html&gt;
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
-White <span class="o">(</span>1<span class="o">)</span> : e2e4
-TimeLimit<span class="o">[</span>0<span class="o">]</span> <span class="o">=</span> 0
-TimeLimit<span class="o">[</span>1<span class="o">]</span> <span class="o">=</span> 0
-1. e2e4
-
-black  KQkq  e3
-
-<span class="m">8</span>  r n b q k b n r 
-<span class="m">7</span>  p p p p p p p p 
-<span class="m">6</span>  . . . . . . . . 
-<span class="m">5</span>  . . . . . . . . 
-<span class="m">4</span>  . . . . P . . . 
-<span class="m">3</span>  . . . . . . . . 
-<span class="m">2</span>  P P P P . P P P 
-<span class="m">1</span>  R N B Q K B N R 
-  
-   a b c d e f g h 
-
-Thinking...
-
-white  KQkq
-
-<span class="m">8</span>  r n b q k b . r 
-<span class="m">7</span>  p p p p p p p p 
-<span class="m">6</span>  . . . . . n . . 
-<span class="m">5</span>  . . . . . . . . 
-<span class="m">4</span>  . . . . P . . . 
-<span class="m">3</span>  . . . . . . . . 
-<span class="m">2</span>  P P P P . P P P 
-<span class="m">1</span>  R N B Q K B N R 
-  
-   a b c d e f g h 
-
-
-My move is : Nf6
-White <span class="o">(</span>2<span class="o">)</span> :</code></pre></div>
-
-
-<p>Have a nice game!</p>
 
   </div>
   
