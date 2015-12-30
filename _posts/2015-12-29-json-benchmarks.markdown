@@ -23,9 +23,7 @@ Breaking news:
 
 and several other examples (I'll talk about them later). Of course these data types supposed to be binary, which means great performance.
 Base functionality is equal across the implementations because it's just obvious CRUD. And what is the oldest and almost cave desire in this situation?
-Right, performance benchmarks!
-
-An [EnterpriseDB research](http://www.enterprisedb.com/postgres-plus-edb-blog/marc-linster/postgres-outperforms-mongodb-and-ushers-new-developer-reality) is slightly outdated, but we can use it as a first step for the road of a thousand li.
+Right, performance benchmarks! PostgreSQL and Mysql were choosen because they have quite similar implementation of json support, Mongodb - as a veteran of NoSql. An [EnterpriseDB research](http://www.enterprisedb.com/postgres-plus-edb-blog/marc-linster/postgres-outperforms-mongodb-and-ushers-new-developer-reality) is slightly outdated, but we can use it as a first step for the road of a thousand li. A final goal is not to display the performance in artificial environment, but to give a neutral evaluation and to get a feedback.
 
 ## Some details and initial data
 
