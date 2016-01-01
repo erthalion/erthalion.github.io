@@ -25,7 +25,7 @@ and several other examples (I'll talk about them later). Of course these data ty
 Base functionality is equal across the implementations because it's just obvious CRUD. And what is the oldest and almost cave desire in this situation?
 Right, performance benchmarks! PostgreSQL and Mysql were choosen because they have quite similar implementation of json support, Mongodb - as a veteran of NoSql. An [EnterpriseDB research](http://www.enterprisedb.com/postgres-plus-edb-blog/marc-linster/postgres-outperforms-mongodb-and-ushers-new-developer-reality) is slightly outdated, but we can use it as a first step for the road of a thousand li. A final goal is not to display the performance in artificial environment, but to give a neutral evaluation and to get a feedback.
 
-## Some details and initial data
+## Some details and configurations
 
 The `pg_nosql_benchmark` from EnterpriseDB suggests an obvious approach - first of all the required amount of records must be generated using different kinds of
 data and some random fluctuations. This amount of data will be saved into the database, and we will perform several kinds of queries over it.
@@ -36,6 +36,7 @@ Speaking of details, there was one strange thing in `pg_nosql_benchmark`. I figu
 were beyond the 4096 bytes limit for [mongo shell](http://stackoverflow.com/a/13189298/1423473), which means these records were
 just dropped out. As a dirty hack for that we can perform the inserts from a `js` file (and btw, that file must be splitted into the series of chunks
 less than 2GB).
+Besides, there are some unnecessary time expenses, related to shell client, authentication and so on. To estimate and exclude them I have to perform corresponding amount of "no-op" queries for all databases (but they're actually pretty small).
 
 After all modifications above I've performed measurements for the following cases:
 
@@ -51,18 +52,30 @@ all tests were performed for 1000000 records. And you shouldn't forget about the
 `bison`, `flex`, `libpq-dev` and `postgresql-server-dev-9.5` must be installed. All results were saved in json file,
 we can visualize them easily using matplotlib (see [here](https://github.com/erthalion/pg_nosql_benchmark)).
 
+Besides that there was a concern about durability. To take this into account I made few specific configurations
+(imho some of them are real, but some of them are quite theoretical, because I don't think someone will use them for production systems):
+
+* Mongodb 3.2.0 journaled (writeConcern j: true)
+* Mongodb 3.2.0 fsync (transaction_sync=(enabled=true,method=fsync))
+* PostgreSQL 9.5 beta 1, no fsync (fsync=off)
+* Mysql 5.7.9, no fsync (innodb_flush_method=nosync)
+
 ## Results
 
 All charts presented in seconds (if they related to the time of query execution) or mb (if they related to the size of relation/index).
 Thus, for all charts the smaller value is better.
 
+### Select
+
+<img src="/public/img/select2.png" border="0" width="80%" style="margin: auto">
+
 ### Insert
 
 <img src="/public/img/insert2.png" border="0" width="80%" style="margin: auto">
 
-### Select
+### Insert with configurations
 
-<img src="/public/img/select2.png" border="0" width="80%" style="margin: auto">
+<img src="/public/img/insert_configured.png" border="0" width="80%" style="margin: auto">
 
 ### Update
 
@@ -70,6 +83,15 @@ Thus, for all charts the smaller value is better.
 
 Update is another difference between my benchmarks and `pg_nosql_benchmark`. It can bee seen, that Mongodb is an obvious
 leader here - mostly because of PostgreSQL and Mysql restrictions, I guess, when to update one value you must override an entire field.
+
+### Update with configurations
+
+<img src="/public/img/update_configured.png" border="0" width="80%" style="margin: auto">
+
+As you can guess from documentation and this [answer](http://stackoverflow.com/a/29220739/1423473),
+`writeConcern j:true` is the highest possible transaction durability level (on a single server),
+that should be equal to configuration with `fsync`.
+I'm not sure about durability, but `fsync` is definitely slower for update operations here.
 
 ### Table/index size
 
