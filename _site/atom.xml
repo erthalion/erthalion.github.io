@@ -4,7 +4,7 @@
  <title>Blog</title>
  <link href="http://erthalion.info/atom.xml" rel="self"/>
  <link href="http://erthalion.info/"/>
- <updated>2016-01-01T21:11:21+06:00</updated>
+ <updated>2016-01-03T23:34:24+06:00</updated>
  <id>http://erthalion.info</id>
  <author>
    <name></name>
@@ -51,7 +51,7 @@ There is only one tricky thing with Mysql - it doesn&#39;t &lt;a href=&quot;http
 were beyond the 4096 bytes limit for &lt;a href=&quot;http://stackoverflow.com/a/13189298/1423473&quot;&gt;mongo shell&lt;/a&gt;, which means these records were
 just dropped out. As a dirty hack for that we can perform the inserts from a &lt;code&gt;js&lt;/code&gt; file (and btw, that file must be splitted into the series of chunks
 less than 2GB).
-Besides there are some unnecessary time expenses, related to shell client, authentication and so on. To estimate and exclude them I have to perform corresponding amount of &quot;no-op&quot; queries for all databases (but they&#39;re actually pretty small).&lt;/p&gt;
+Besides, there are some unnecessary time expenses, related to shell client, authentication and so on. To estimate and exclude them I have to perform corresponding amount of &quot;no-op&quot; queries for all databases (but they&#39;re actually pretty small).&lt;/p&gt;
 
 &lt;p&gt;After all modifications above I&#39;ve performed measurements for the following cases:&lt;/p&gt;
 

@@ -104,7 +104,7 @@ There is only one tricky thing with Mysql - it doesn't <a href="https://dev.mysq
 were beyond the 4096 bytes limit for <a href="http://stackoverflow.com/a/13189298/1423473">mongo shell</a>, which means these records were
 just dropped out. As a dirty hack for that we can perform the inserts from a <code>js</code> file (and btw, that file must be splitted into the series of chunks
 less than 2GB).
-Besides there are some unnecessary time expenses, related to shell client, authentication and so on. To estimate and exclude them I have to perform corresponding amount of "no-op" queries for all databases (but they're actually pretty small).</p>
+Besides, there are some unnecessary time expenses, related to shell client, authentication and so on. To estimate and exclude them I have to perform corresponding amount of "no-op" queries for all databases (but they're actually pretty small).</p>
 
 <p>After all modifications above I've performed measurements for the following cases:</p>
 

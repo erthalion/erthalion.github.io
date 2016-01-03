@@ -3,6 +3,7 @@ layout: post
 title:  "Compare incomparable: PostgreSQL vs Mysql vs Mongodb"
 date:   2015-12-29 1:14:21
 comments: true
+tags: [PostgreSQL]
 ---
 
 > As such, there’s really no “standard” benchmark that will inform you about the best technology to use for your application. Only your requirements, your data, and your infrastructure can tell you what you need to know.
