@@ -4,8 +4,8 @@ description:  "My thoughts and experiments."
 url:          http://erthalion.info
 version:      0.0.1
 author:
-  name:       ''
-  email:      ''
+  name:       'Dmitry Dolgov'
+  email:      '9erthalion6@gmail.com'
 markdown:     rdiscount
 permalink:    pretty
 pygments:     true
