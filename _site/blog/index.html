@@ -63,6 +63,68 @@
   
   <div class="post">
     <h1>
+      <a href="/2015/12/29/pandoc/">
+        The Knife
+      </a>
+    </h1>
+
+    <span class="post-date">29 Dec 2015</span>
+
+    <p>I really don't know how I lived before without pandoc. It's an amazing tool, that saved me from a terrible pain of
+latex -> MS Word convertion. If you're writing many scientific documents in <code>latex</code> format, and faced with
+the demand to convert it into MS Word, you can understand me. It's like a tiresome point-and-click game, which can
+consume unbelievable amount of time.</p>
+
+<p>Pandoc can do it, and I'm not kidding. All you need is to create a source file in <code>markdown</code> format and
+copy all latex formulas. In this post you can find several details.</p>
+
+<p>What do we need to install pandoc? I'll advise <a href="https://github.com/commercialhaskell/stack">stack</a>:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>stack install pandoc pandoc-citeproc pandoc-crossref</code></pre></div>
+
+
+<p><code>pandoc-citeproc</code> and <code>pandoc-crossref</code> will be used to generate nice bibliography and references.</p>
+
+<p>Now we can do something like this:</p>
+
+<div class="highlight"><pre><code class="language-latex" data-lang="latex"><span class="sb">$$</span><span class="nv">\frac</span><span class="nb">{</span><span class="nv">\partial</span><span class="nb"> </span><span class="nv">\vec</span><span class="nb">{u}}{</span><span class="nv">\partial</span><span class="nb"> t} </span><span class="o">+</span><span class="nb"> </span><span class="o">(</span><span class="nv">\vec</span><span class="nb">{u} </span><span class="nv">\cdot</span><span class="nb"> </span><span class="nv">\nabla</span><span class="o">)</span><span class="nb"> </span><span class="nv">\vec</span><span class="nb">{u} </span><span class="o">=</span><span class="nb"> </span><span class="o">-</span><span class="nb"> </span><span class="nv">\frac</span><span class="nb">{</span><span class="m">1</span><span class="nb">}{</span><span class="nv">\rho</span><span class="nb">} </span><span class="nv">\nabla</span><span class="nb"> p </span><span class="o">+</span><span class="nb"> </span><span class="nv">\nabla</span><span class="nb"> </span><span class="nv">\sigma</span><span class="nb"> </span><span class="o">+</span><span class="nb"> </span><span class="nv">\vec</span><span class="nb">{f}</span><span class="s">$$</span> <span class="nb">{</span>#eq:navier<span class="nb">_</span>stokes:motion<span class="nb">}</span>
+
+<span class="sb">$$</span><span class="nv">\frac</span><span class="nb">{</span><span class="nv">\partial</span><span class="nb"> </span><span class="nv">\rho</span><span class="nb">}{</span><span class="nv">\partial</span><span class="nb"> t} </span><span class="o">+</span><span class="nb"> </span><span class="nv">\nabla</span><span class="nb"> </span><span class="nv">\cdot</span><span class="nb"> </span><span class="o">(</span><span class="nv">\rho</span><span class="nb"> </span><span class="nv">\vec</span><span class="nb">{u}</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="m">0</span><span class="s">$$</span> <span class="nb">{</span>#eq:navier<span class="nb">_</span>stokes:continuity<span class="nb">}</span></code></pre></div>
+
+
+<p>Here you can see a label <code>eq:navier_stokes:motion</code> for corresponding equation. General template for references is:</p>
+
+<div class="highlight"><pre><code class="language-latex" data-lang="latex">some<span class="nb">_</span>content <span class="nb">{</span>#type:label<span class="nb">}</span>
+
+label will be used here [@type:label]</code></pre></div>
+
+
+<p>More documentation about types and usage is <a href="https://github.com/lierdakil/pandoc-crossref">here</a>.
+You can enable <code>pandoc-crossref</code> using command line argument <code>--filter</code>:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>pandoc --filter pandoc-crossref -o result.docx source.md</code></pre></div>
+
+
+<p>Note, that if we will use <code>begin/end</code> environment or "\\" for multiple equations, pandoc couldn't generate MS Word
+formula. Also, you shouldn't forget about empy line between equations.</p>
+
+<p>To use bibliography we can create a regular <code>bib</code> file and enable <code>pandoc-cireproc</code> like this:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>pandoc --filter pandoc-crossref --bibliography report.bib -o result.docx source.md</code></pre></div>
+
+
+<p>The last one thing is a language. If you're writing in russian, you can suffer from encoding issues - to avoid
+this you need to specify language:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>pandoc --filter pandoc-crossref --bibliography report.bib -o result.docx source.md -V lang:russian</code></pre></div>
+
+
+<p>That's it, you will get a well-formed MS Word file with nice formulas.</p>
+
+  </div>
+  
+  <div class="post">
+    <h1>
       <a href="/2015/12/29/json-benchmarks/">
         Compare incomparable: PostgreSQL vs Mysql vs Mongodb
       </a>
@@ -397,68 +459,6 @@ According to man:</p>
 
 
 
-
-  </div>
-  
-  <div class="post">
-    <h1>
-      <a href="/2014/08/09/from-bash-to-fish/">
-        From bash to fish
-      </a>
-    </h1>
-
-    <span class="post-date">09 Aug 2014</span>
-
-    <p>I'm doing a small revolution in my environment from time to time. I think "hey, a cool stuff", take a deep breath and doing something new. And this is story about my migration from the bash to the fish shell.</p>
-
-<p>Let's see, what says the official tutorial:</p>
-
-<blockquote><p>fish is a fully-equipped command line shell (like bash or zsh) that is smart and user-friendly. fish supports powerful features like syntax highlighting, autosuggestions, and tab completions that just work, with nothing to learn or configure.
-If you want to make your command line more productive, more useful, and more fun, without learning a bunch of arcane syntax and configuration options, then fish might be just what you're looking for!</p></blockquote>
-
-<p>And this is almost true =) But there is another concrete reason, why I like fish shell:</p>
-
-<ul>
-<li>Search by history (as an autocomplete by tab)</li>
-<li>More intuitive and clean configuration files</li>
-<li>Vim mode <a href="https://github.com/fish-shell/fish-shell/issues/65">support</a></li>
-</ul>
-
-
-<p>I would to avoid unnecessary lyrics, and pay more attention to the configuration and gotchas (from the bash point of view).</p>
-
-<p>First of all - use <code>.</code> command instead <code>source</code> for the inclusion of the script.</p>
-
-<div class="highlight"><pre><code class="language-sh" data-lang="sh">. /some-install-path/fish-shell/share/fish/functions/fish_vi_mode.fish
-. /some-install-path/.config/fish/themes/fish_right_prompt.fish
-. /some-install-path/.config/fish/themes/fish_prompt.fish
-. /etc/profile.d/autojump.fish
-fish_vi_key_bindings</code></pre></div>
-
-
-<p>I've used <code>some-install-path</code> because I'm a Vim hacker (<del>an extra pathos</del>), and I want a fresh version for the Vim support, so the manual compilation from github is my way. Then I've turned on Vim mode (<code>fish_vi_mode.fish</code> is necessary for this). <code>fish_prompt.fish</code> and <code>fish_right_prompt.fish</code> contain a description for the shell prompt and will be discussed later. If you use <code>autojump</code>, you should also include <code>autojump.fish</code> (if this file doesn't exist, download it from repo).</p>
-
-<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">set </span>fish_greeting <span class="s2">&quot;&quot;</span></code></pre></div>
-
-
-<p>This greeting is very distracting, so disable it. No comments =)</p>
-
-<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">set</span> -x EDITOR vim
-<span class="nb">set </span>PATH /home/erthalion/.local/bin /usr/local/bin /opt/bin <span class="nv">$PATH</span></code></pre></div>
-
-
-<p>We should set environment variables in this format. Pay attention to the <code>PATH</code> variable - don't forget about <code>/usr/local/bin</code> and <code>/opt/bin</code> (looks like fish shell doesn't include them by default).</p>
-
-<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">alias </span><span class="nv">goutshow</span><span class="o">=</span><span class="s1">&#39;git fetch; git show origin/master..&#39;</span></code></pre></div>
-
-
-<p>One more observation - we should replace <code>&amp;&amp;</code> by the <code>;</code> or <code>and</code> commands.</p>
-
-<p>Now get closer to the prompt. It described by the two functions - <code>fish_prompt</code> and <code>fish_right_prompt</code> (your C.O.). I have no advices for this section. Really. You can use your imagination and do what you want =) There are my examples - <a href="https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_prompt.fish">left</a> and <a href="https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_right_prompt.fish">right</a>. Only one comment - you may want to show <code>virtualenv</code> name in the prompt. In that case you should disable original by the variable <code>set -x VIRTUAL_ENV_DISABLE_PROMPT 1</code>.</p>
-
-<p>But unfortunately, Vim support isn't very well in the fish shell. For example, there is no <code>replace (r)</code> command, or <code>undo (u)</code>. Actually it's a horrible problem for me, especially the first one =) And here is my <a href="https://github.com/fish-shell/fish-shell/pull/1595">solution</a> of this problem.</p>
-
-<p>I think, fish shell is available for a lot of improvements. All, that described above, is only a base for a convenient environment, and I hope, it will be useful.</p>
 
   </div>
   

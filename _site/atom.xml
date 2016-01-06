@@ -4,13 +4,71 @@
  <title>Blog</title>
  <link href="http://erthalion.info/atom.xml" rel="self"/>
  <link href="http://erthalion.info/"/>
- <updated>2016-01-04T18:33:23+06:00</updated>
+ <updated>2016-01-06T19:55:42+06:00</updated>
  <id>http://erthalion.info</id>
  <author>
    <name>Dmitry Dolgov</name>
    <email>9erthalion6@gmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>The Knife</title>
+   <link href="http://erthalion.info/2015/12/29/pandoc/"/>
+   <updated>2015-12-29T07:14:21+06:00</updated>
+   <id>http://erthalion.info/2015/12/29/pandoc</id>
+   <content type="html">&lt;p&gt;I really don&#39;t know how I lived before without pandoc. It&#39;s an amazing tool, that saved me from a terrible pain of
+latex -&gt; MS Word convertion. If you&#39;re writing many scientific documents in &lt;code&gt;latex&lt;/code&gt; format, and faced with
+the demand to convert it into MS Word, you can understand me. It&#39;s like a tiresome point-and-click game, which can
+consume unbelievable amount of time.&lt;/p&gt;
+
+&lt;p&gt;Pandoc can do it, and I&#39;m not kidding. All you need is to create a source file in &lt;code&gt;markdown&lt;/code&gt; format and
+copy all latex formulas. In this post you can find several details.&lt;/p&gt;
+
+&lt;p&gt;What do we need to install pandoc? I&#39;ll advise &lt;a href=&quot;https://github.com/commercialhaskell/stack&quot;&gt;stack&lt;/a&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;stack install pandoc pandoc-citeproc pandoc-crossref&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;&lt;code&gt;pandoc-citeproc&lt;/code&gt; and &lt;code&gt;pandoc-crossref&lt;/code&gt; will be used to generate nice bibliography and references.&lt;/p&gt;
+
+&lt;p&gt;Now we can do something like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-latex&quot; data-lang=&quot;latex&quot;&gt;&lt;span class=&quot;sb&quot;&gt;$$&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\frac&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\partial&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\vec&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;{u}}{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\partial&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; t} &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\vec&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;{u} &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\cdot&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\nabla&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\vec&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;{u} &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\frac&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;}{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\rho&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;} &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\nabla&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; p &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\nabla&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\sigma&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\vec&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;{f}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;$$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;{&lt;/span&gt;#eq:navier&lt;span class=&quot;nb&quot;&gt;_&lt;/span&gt;stokes:motion&lt;span class=&quot;nb&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;sb&quot;&gt;$$&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\frac&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\partial&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\rho&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;}{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\partial&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; t} &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\nabla&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\cdot&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\rho&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\vec&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;{u}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;$$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;{&lt;/span&gt;#eq:navier&lt;span class=&quot;nb&quot;&gt;_&lt;/span&gt;stokes:continuity&lt;span class=&quot;nb&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Here you can see a label &lt;code&gt;eq:navier_stokes:motion&lt;/code&gt; for corresponding equation. General template for references is:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-latex&quot; data-lang=&quot;latex&quot;&gt;some&lt;span class=&quot;nb&quot;&gt;_&lt;/span&gt;content &lt;span class=&quot;nb&quot;&gt;{&lt;/span&gt;#type:label&lt;span class=&quot;nb&quot;&gt;}&lt;/span&gt;
+
+label will be used here [@type:label]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;More documentation about types and usage is &lt;a href=&quot;https://github.com/lierdakil/pandoc-crossref&quot;&gt;here&lt;/a&gt;.
+You can enable &lt;code&gt;pandoc-crossref&lt;/code&gt; using command line argument &lt;code&gt;--filter&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pandoc --filter pandoc-crossref -o result.docx source.md&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Note, that if we will use &lt;code&gt;begin/end&lt;/code&gt; environment or &quot;\\&quot; for multiple equations, pandoc couldn&#39;t generate MS Word
+formula. Also, you shouldn&#39;t forget about empy line between equations.&lt;/p&gt;
+
+&lt;p&gt;To use bibliography we can create a regular &lt;code&gt;bib&lt;/code&gt; file and enable &lt;code&gt;pandoc-cireproc&lt;/code&gt; like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pandoc --filter pandoc-crossref --bibliography report.bib -o result.docx source.md&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The last one thing is a language. If you&#39;re writing in russian, you can suffer from encoding issues - to avoid
+this you need to specify language:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pandoc --filter pandoc-crossref --bibliography report.bib -o result.docx source.md -V lang:russian&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;That&#39;s it, you will get a well-formed MS Word file with nice formulas.&lt;/p&gt;
+</content>
+ </entry>
  
  <entry>
    <title>Compare incomparable: PostgreSQL vs Mysql vs Mongodb</title>
