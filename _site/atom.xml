@@ -4,7 +4,7 @@
  <title>Blog</title>
  <link href="http://erthalion.info/atom.xml" rel="self"/>
  <link href="http://erthalion.info/"/>
- <updated>2016-01-06T19:55:42+06:00</updated>
+ <updated>2016-01-10T21:20:30+06:00</updated>
  <id>http://erthalion.info</id>
  <author>
    <name>Dmitry Dolgov</name>
@@ -38,6 +38,9 @@ copy all latex formulas. In this post you can find several details.&lt;/p&gt;
 
 &lt;span class=&quot;sb&quot;&gt;$$&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\frac&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\partial&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\rho&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;}{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\partial&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; t} &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\nabla&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\cdot&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\rho&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\vec&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;{u}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;$$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;{&lt;/span&gt;#eq:navier&lt;span class=&quot;nb&quot;&gt;_&lt;/span&gt;stokes:continuity&lt;span class=&quot;nb&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
+
+&lt;p&gt;ang get a nice result (e.g. from Word Online):
+&lt;img src=&quot;/public/img/navier.png&quot; border=&quot;0&quot; width=&quot;41%&quot; style=&quot;margin: auto&quot;&gt;&lt;/p&gt;
 
 &lt;p&gt;Here you can see a label &lt;code&gt;eq:navier_stokes:motion&lt;/code&gt; for corresponding equation. General template for references is:&lt;/p&gt;
 

@@ -28,6 +28,9 @@ $$\frac{\partial \vec{u}}{\partial t} + (\vec{u} \cdot \nabla) \vec{u} = - \frac
 $$\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec{u}) = 0$$ {#eq:navier_stokes:continuity}
 {% endhighlight %}
 
+ang get a nice result (e.g. from Word Online):
+<img src="/public/img/navier.png" border="0" width="41%" style="margin: auto">
+
 Here you can see a label `eq:navier_stokes:motion` for corresponding equation. General template for references is:
 {% highlight latex %}
 some_content {#type:label}
