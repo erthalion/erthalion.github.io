@@ -52,11 +52,20 @@ To use bibliography we can create a regular `bib` file and enable `pandoc-cirepr
 $ pandoc --filter pandoc-crossref --bibliography report.bib -o result.docx source.md
 {% endhighlight %}
 
-The last one thing is a language. If you're writing in russian, you can suffer from encoding issues - to avoid
+The default citation style in Pandoc is Chicago author-date, but you can change
+it. E.g. if you're writing an academic paper in Russian, I bet you would like
+to use `GOST` standard. You can get a corresponding `csl` file 
+[here](http://editor.citationstyles.org/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fgost-r-7-0-5-2008-numeric-alphabetical),
+and use it like this:
+{% highlight bash %}
+$ pandoc --filter pandoc-crossref --bibliography report.bib --csl=gost.csl -o result.docx source.md
+{% endhighlight %}
+
+The last one thing is a language. If you're writing in Russian, you can suffer from encoding issues - to avoid
 this you need to specify language:
 
 {% highlight bash %}
-$ pandoc --filter pandoc-crossref --bibliography report.bib -o result.docx source.md -V lang:russian
+$ pandoc --filter pandoc-crossref --bibliography report.bib --csl=gost.csl -o result.docx source.md -V lang:russian
 {% endhighlight %}
 
 That's it, you will get a well-formed MS Word file with nice formulas.

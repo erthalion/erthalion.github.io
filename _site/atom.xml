@@ -4,7 +4,7 @@
  <title>Blog</title>
  <link href="http://erthalion.info/atom.xml" rel="self"/>
  <link href="http://erthalion.info/"/>
- <updated>2016-01-10T21:20:30+06:00</updated>
+ <updated>2016-01-24T16:25:34+06:00</updated>
  <id>http://erthalion.info</id>
  <author>
    <name>Dmitry Dolgov</name>
@@ -63,10 +63,19 @@ formula. Also, you shouldn&#39;t forget about empy line between equations.&lt;/p
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pandoc --filter pandoc-crossref --bibliography report.bib -o result.docx source.md&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;The last one thing is a language. If you&#39;re writing in russian, you can suffer from encoding issues - to avoid
+&lt;p&gt;The default citation style in Pandoc is Chicago author-date, but you can change
+it. E.g. if you&#39;re writing an academic paper in Russian, I bet you would like
+to use &lt;code&gt;GOST&lt;/code&gt; standard. You can get a corresponding &lt;code&gt;csl&lt;/code&gt; file
+&lt;a href=&quot;http://editor.citationstyles.org/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fgost-r-7-0-5-2008-numeric-alphabetical&quot;&gt;here&lt;/a&gt;,
+and use it like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pandoc --filter pandoc-crossref --bibliography report.bib --csl&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;gost.csl -o result.docx source.md&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The last one thing is a language. If you&#39;re writing in Russian, you can suffer from encoding issues - to avoid
 this you need to specify language:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pandoc --filter pandoc-crossref --bibliography report.bib -o result.docx source.md -V lang:russian&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pandoc --filter pandoc-crossref --bibliography report.bib --csl&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;gost.csl -o result.docx source.md -V lang:russian&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;That&#39;s it, you will get a well-formed MS Word file with nice formulas.&lt;/p&gt;

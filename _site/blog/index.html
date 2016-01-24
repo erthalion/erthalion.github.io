@@ -116,10 +116,19 @@ formula. Also, you shouldn't forget about empy line between equations.</p>
 <div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>pandoc --filter pandoc-crossref --bibliography report.bib -o result.docx source.md</code></pre></div>
 
 
-<p>The last one thing is a language. If you're writing in russian, you can suffer from encoding issues - to avoid
+<p>The default citation style in Pandoc is Chicago author-date, but you can change
+it. E.g. if you're writing an academic paper in Russian, I bet you would like
+to use <code>GOST</code> standard. You can get a corresponding <code>csl</code> file
+<a href="http://editor.citationstyles.org/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fgost-r-7-0-5-2008-numeric-alphabetical">here</a>,
+and use it like this:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>pandoc --filter pandoc-crossref --bibliography report.bib --csl<span class="o">=</span>gost.csl -o result.docx source.md</code></pre></div>
+
+
+<p>The last one thing is a language. If you're writing in Russian, you can suffer from encoding issues - to avoid
 this you need to specify language:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>pandoc --filter pandoc-crossref --bibliography report.bib -o result.docx source.md -V lang:russian</code></pre></div>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>pandoc --filter pandoc-crossref --bibliography report.bib --csl<span class="o">=</span>gost.csl -o result.docx source.md -V lang:russian</code></pre></div>
 
 
 <p>That's it, you will get a well-formed MS Word file with nice formulas.</p>
