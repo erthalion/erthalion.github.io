@@ -62,43 +62,41 @@
       <div class="post">
   <h1>Use an exception instead of the NaN</h1>
   <span class="post-date">16 Aug 2014</span>
-  <p>This is a small notice about a very useful trick. I often have to deal with computations, because the CFD is the part of my activity. And one of the annoying problem in this kind of research is when after many hours of computations you got a <code>Not A Number</code> result, caused by a stupid mistake. It would be nice, if a computation was interrupted by the NaN.</p>
+  <p>This is a small notice about a very useful trick. I often have to deal with computations, because the CFD is the part of my activity. And one of the annoying problem in this kind of research is when after many hours of computations you got a <code class="highlighter-rouge">Not A Number</code> result, caused by a stupid mistake. It would be nice, if a computation was interrupted by the NaN.</p>
 
 <p>And there is the <a href="http://stackoverflow.com/a/2949452">solution</a>:</p>
 
-<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#define _GNU_SOURCE</span>
-<span class="cp">#include &lt;fenv.h&gt;</span>
-<span class="cp">#include &lt;stdio.h&gt;</span>
-
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#define _GNU_SOURCE
+#include &lt;fenv.h&gt;
+#include &lt;stdio.h&gt;
+</span>
 <span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
     <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">;</span>
     <span class="n">feenableexcept</span><span class="p">(</span><span class="n">FE_DIVBYZERO</span> <span class="o">|</span> <span class="n">FE_INVALID</span> <span class="o">|</span> <span class="n">FE_OVERFLOW</span><span class="p">);</span>
 
-    <span class="n">x</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
     <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="n">y</span><span class="p">;</span> <span class="cm">/* should cause an FPE */</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;result is %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">z</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"result is %f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">z</span><span class="p">);</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span></code></pre></div>
+<span class="p">}</span></code></pre></figure>
 
-
-<p>The <code>fenv.h</code> header declares a set of functions and macros to access the floating-point environment, along with specific types.
+<p>The <code class="highlighter-rouge">fenv.h</code> header declares a set of functions and macros to access the floating-point environment, along with specific types.
 According to man:</p>
 
-<blockquote><p>The  feenableexcept() function enable traps for each of the exceptions represented by excepts and return the previous set of enabled exceptions when successful, and -1 otherwise.</p></blockquote>
+<blockquote>
+  <p>The  feenableexcept() function enable traps for each of the exceptions represented by excepts and return the previous set of enabled exceptions when successful, and -1 otherwise. </p>
+</blockquote>
 
-<p>Now, what we have without <code>feenableexcept</code>:</p>
+<p>Now, what we have without <code class="highlighter-rouge">feenableexcept</code>:</p>
 
-<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>./test_no_fenv 
-&gt; result is -nan</code></pre></div>
-
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="gp">$ </span>./test_no_fenv 
+<span class="gp">&gt; </span>result is -nan</code></pre></figure>
 
 <p>And with:</p>
 
-<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>./test_fenv 
-&gt; fish: Job 1, <span class="s1">&#39;./test&#39;</span> terminated by signal SIGFPE <span class="o">(</span>Floating point exception<span class="o">)</span></code></pre></div>
-
-
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="gp">$ </span>./test_fenv 
+<span class="gp">&gt; </span>fish: Job 1, <span class="s1">'./test'</span> terminated by signal SIGFPE <span class="o">(</span>Floating point exception<span class="o">)</span></code></pre></figure>
 
 
 </div>

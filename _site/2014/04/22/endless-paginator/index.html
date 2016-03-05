@@ -62,45 +62,44 @@
       <div class="post">
   <h1>Another strange thing - an endless paginator</h1>
   <span class="post-date">22 Apr 2014</span>
-  <p>A little bit about my new program-frankenstein. Now it is an endless <code>Paginator</code> for Django. It sounds crazy, isn't?</p>
+  <p>A little bit about my new program-frankenstein. Now it is an endless <code class="highlighter-rouge">Paginator</code> for Django. It sounds crazy, isn’t?</p>
 
-<p>Standart Django <code>Paginator</code> uses the <code>count()</code> function for the verification of page number. It is converted to the <code>SELECT COUNT(*) ...</code> query, of course. But as I was explained (I really don't know, maybe it's just an exaggeration - you can post your opinion in the commentaries), this is not a such lightweight query, as we want for the paginated rest api, because of the <a href="http://wiki.postgresql.org/wiki/MVCC">MVCC</a> in PostgreSQL.</p>
+<p>Standart Django <code class="highlighter-rouge">Paginator</code> uses the <code class="highlighter-rouge">count()</code> function for the verification of page number. It is converted to the <code class="highlighter-rouge">SELECT COUNT(*) ...</code> query, of course. But as I was explained (I really don’t know, maybe it’s just an exaggeration - you can post your opinion in the commentaries), this is not a such lightweight query, as we want for the paginated rest api, because of the <a href="http://wiki.postgresql.org/wiki/MVCC">MVCC</a> in PostgreSQL.</p>
 
-<p>How we can avoid the extra <code>COUNT(*)</code> query? Don't panic, we can trick the Django.</p>
+<p>How we can avoid the extra <code class="highlighter-rouge">COUNT(*)</code> query? Don’t panic, we can trick the Django.</p>
 
-<p>First of all we need to disable <code>count</code> parameter from the api response. We can introduce a custom pagination serializer:</p>
+<p>First of all we need to disable <code class="highlighter-rouge">count</code> parameter from the api response. We can introduce a custom pagination serializer:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># serializers.py</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># serializers.py</span>
 <span class="k">class</span> <span class="nc">CustomPaginationSerializer</span><span class="p">(</span><span class="n">BasePaginationSerializer</span><span class="p">):</span>
-    <span class="nb">next</span> <span class="o">=</span> <span class="n">NextPageField</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s">&#39;*&#39;</span><span class="p">)</span>
-    <span class="n">previous</span> <span class="o">=</span> <span class="n">PreviousPageField</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s">&#39;*&#39;</span><span class="p">)</span>
+    <span class="nb">next</span> <span class="o">=</span> <span class="n">NextPageField</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s">'*'</span><span class="p">)</span>
+    <span class="n">previous</span> <span class="o">=</span> <span class="n">PreviousPageField</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s">'*'</span><span class="p">)</span>
 
 <span class="c"># api.py</span>
 <span class="k">class</span> <span class="nc">SomeListView</span><span class="p">(</span><span class="n">generics</span><span class="o">.</span><span class="n">ListAPIView</span><span class="p">):</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">SomeModel</span>
     <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">SomeSerializerClass</span>
-    <span class="n">pagination_serializer_class</span> <span class="o">=</span> <span class="n">CustomPaginationSerializer</span></code></pre></div>
-
+    <span class="n">pagination_serializer_class</span> <span class="o">=</span> <span class="n">CustomPaginationSerializer</span></code></pre></figure>
 
 <p>The next our move - disable the page number verification. This can be done by the custom paginator class:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">CustomPaginator</span><span class="p">(</span><span class="n">Paginator</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; HACK: To avoid unneseccary `SELECT COUNT(*) ...`</span>
-<span class="sd">        paginator has an infinity page number and a count of elements.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">CustomPaginator</span><span class="p">(</span><span class="n">Paginator</span><span class="p">):</span>
+    <span class="s">""" HACK: To avoid unneseccary `SELECT COUNT(*) ...`
+        paginator has an infinity page number and a count of elements.
+    """</span>
     <span class="k">def</span> <span class="nf">_get_num_pages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the total number of pages.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s">&#39;inf&#39;</span><span class="p">)</span>
+        <span class="s">"""
+        Returns the total number of pages.
+        """</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s">'inf'</span><span class="p">)</span>
 
     <span class="n">num_pages</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_num_pages</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the total number of objects, across all pages.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s">&#39;inf&#39;</span><span class="p">)</span>
+        <span class="s">"""
+        Returns the total number of objects, across all pages.
+        """</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s">'inf'</span><span class="p">)</span>
 
     <span class="n">count</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_count</span><span class="p">)</span>
 
@@ -112,18 +111,17 @@
     <span class="n">model</span> <span class="o">=</span> <span class="n">SomeModel</span>
     <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">SomeSerializerClass</span>
     <span class="n">pagination_serializer_class</span> <span class="o">=</span> <span class="n">CustomPaginationSerializer</span>
-    <span class="n">paginator_class</span> <span class="o">=</span> <span class="n">CustomPaginator</span></code></pre></div>
+    <span class="n">paginator_class</span> <span class="o">=</span> <span class="n">CustomPaginator</span></code></pre></figure>
 
+<p>Oh, goodness - we introduced the infinity number of the pages and the infinity number of elements… But we want also the correct next/prev links, so one more detail:</p>
 
-<p>Oh, goodness - we introduced the infinity number of the pages and the infinity number of elements... But we want also the correct next/prev links, so one more detail:</p>
-
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">CustomPage</span><span class="p">(</span><span class="n">Page</span><span class="p">):</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">CustomPage</span><span class="p">(</span><span class="n">Page</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">has_next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; HACK: Select object_list + 1 element</span>
-<span class="sd">            to verify next page existense.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">low</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="s">&#39;low_mark&#39;</span><span class="p">]</span>
-        <span class="n">high</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="s">&#39;high_mark&#39;</span><span class="p">]</span>
+        <span class="s">""" HACK: Select object_list + 1 element
+            to verify next page existense.
+        """</span>
+        <span class="n">low</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="s">'low_mark'</span><span class="p">]</span>
+        <span class="n">high</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="s">'high_mark'</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">clear_limits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">set_limits</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">high</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
 
@@ -135,10 +133,10 @@
             <span class="k">return</span> <span class="bp">True</span>
         <span class="k">finally</span><span class="p">:</span>
             <span class="c"># restore initial object_list count</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="p">[:(</span><span class="n">high</span><span class="o">-</span><span class="n">low</span><span class="p">)]</span></code></pre></div>
-
+            <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="p">[:(</span><span class="n">high</span><span class="o">-</span><span class="n">low</span><span class="p">)]</span></code></pre></figure>
 
 <p>This solution looks very questionable, but exciting for me. If you have something to say about this - welcome! =)</p>
+
 
 </div>
 

@@ -4,7 +4,7 @@
  <title>Blog</title>
  <link href="http://erthalion.info/atom.xml" rel="self"/>
  <link href="http://erthalion.info/"/>
- <updated>2016-03-05T00:12:54+06:00</updated>
+ <updated>2016-03-05T15:57:29+06:00</updated>
  <id>http://erthalion.info</id>
  <author>
    <name>Dmitry Dolgov</name>
@@ -17,68 +17,61 @@
    <link href="http://erthalion.info/2015/12/29/pandoc/"/>
    <updated>2015-12-29T07:14:21+06:00</updated>
    <id>http://erthalion.info/2015/12/29/pandoc</id>
-   <content type="html">&lt;p&gt;I really don&#39;t know how I lived before without pandoc. It&#39;s an amazing tool, that saved me from a terrible pain of
-latex -&gt; MS Word convertion. If you&#39;re writing many scientific documents in &lt;code&gt;latex&lt;/code&gt; format, and faced with
-the demand to convert it into MS Word, you can understand me. It&#39;s like a tiresome point-and-click game, which can
+   <content type="html">&lt;p&gt;I really don’t know how I lived before without pandoc. It’s an amazing tool, that saved me from a terrible pain of
+latex -&amp;gt; MS Word convertion. If you’re writing many scientific documents in &lt;code class=&quot;highlighter-rouge&quot;&gt;latex&lt;/code&gt; format, and faced with
+the demand to convert it into MS Word, you can understand me. It’s like a tiresome point-and-click game, which can
 consume unbelievable amount of time.&lt;/p&gt;
 
-&lt;p&gt;Pandoc can do it, and I&#39;m not kidding. All you need is to create a source file in &lt;code&gt;markdown&lt;/code&gt; format and
+&lt;p&gt;Pandoc can do it, and I’m not kidding. All you need is to create a source file in &lt;code class=&quot;highlighter-rouge&quot;&gt;markdown&lt;/code&gt; format and
 copy all latex formulas. In this post you can find several details.&lt;/p&gt;
 
-&lt;p&gt;What do we need to install pandoc? I&#39;ll advise &lt;a href=&quot;https://github.com/commercialhaskell/stack&quot;&gt;stack&lt;/a&gt;:&lt;/p&gt;
+&lt;p&gt;What do we need to install pandoc? I’ll advise &lt;a href=&quot;https://github.com/commercialhaskell/stack&quot;&gt;stack&lt;/a&gt;:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;stack install pandoc pandoc-citeproc pandoc-crossref&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;stack install pandoc pandoc-citeproc pandoc-crossref&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-
-&lt;p&gt;&lt;code&gt;pandoc-citeproc&lt;/code&gt; and &lt;code&gt;pandoc-crossref&lt;/code&gt; will be used to generate nice bibliography and references.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;pandoc-citeproc&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;pandoc-crossref&lt;/code&gt; will be used to generate nice bibliography and references.&lt;/p&gt;
 
 &lt;p&gt;Now we can do something like this:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-latex&quot; data-lang=&quot;latex&quot;&gt;&lt;span class=&quot;sb&quot;&gt;$$&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\frac&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\partial&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\vec&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;{u}}{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\partial&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; t} &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\vec&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;{u} &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\cdot&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\nabla&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\vec&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;{u} &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\frac&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;}{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\rho&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;} &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\nabla&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; p &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\nabla&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\sigma&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\vec&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;{f}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;$$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;{&lt;/span&gt;#eq:navier&lt;span class=&quot;nb&quot;&gt;_&lt;/span&gt;stokes:motion&lt;span class=&quot;nb&quot;&gt;}&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-latex&quot; data-lang=&quot;latex&quot;&gt;&lt;span class=&quot;p&quot;&gt;$$&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\frac&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\partial&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\vec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}}{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\partial&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\vec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\cdot&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\nabla&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\vec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\frac&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\rho&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\nabla&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; p &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\nabla&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\sigma&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\vec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}$$&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;#eq:navier&lt;span class=&quot;p&quot;&gt;_&lt;/span&gt;stokes:motion&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
-&lt;span class=&quot;sb&quot;&gt;$$&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\frac&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\partial&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\rho&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;}{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\partial&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; t} &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\nabla&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\cdot&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\rho&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\vec&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;{u}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;$$&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;{&lt;/span&gt;#eq:navier&lt;span class=&quot;nb&quot;&gt;_&lt;/span&gt;stokes:continuity&lt;span class=&quot;nb&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
+&lt;span class=&quot;p&quot;&gt;$$&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\frac&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\partial&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\rho&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}{&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\partial&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\nabla&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\cdot&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\rho&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;\vec&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;u&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt; &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;$$&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;#eq:navier&lt;span class=&quot;p&quot;&gt;_&lt;/span&gt;stokes:continuity&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;ang get a nice result (e.g. from Word Online):
-&lt;img src=&quot;/public/img/navier.png&quot; border=&quot;0&quot; width=&quot;41%&quot; style=&quot;margin: auto&quot;&gt;&lt;/p&gt;
+&lt;img src=&quot;/public/img/navier.png&quot; border=&quot;0&quot; width=&quot;41%&quot; style=&quot;margin: auto&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Here you can see a label &lt;code&gt;eq:navier_stokes:motion&lt;/code&gt; for corresponding equation. General template for references is:&lt;/p&gt;
+&lt;p&gt;Here you can see a label &lt;code class=&quot;highlighter-rouge&quot;&gt;eq:navier_stokes:motion&lt;/code&gt; for corresponding equation. General template for references is:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-latex&quot; data-lang=&quot;latex&quot;&gt;some&lt;span class=&quot;nb&quot;&gt;_&lt;/span&gt;content &lt;span class=&quot;nb&quot;&gt;{&lt;/span&gt;#type:label&lt;span class=&quot;nb&quot;&gt;}&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-latex&quot; data-lang=&quot;latex&quot;&gt;some&lt;span class=&quot;p&quot;&gt;_&lt;/span&gt;content &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;#type:label&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
-label will be used here [@type:label]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
+label will be used here [@type:label]&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;More documentation about types and usage is &lt;a href=&quot;https://github.com/lierdakil/pandoc-crossref&quot;&gt;here&lt;/a&gt;.
-You can enable &lt;code&gt;pandoc-crossref&lt;/code&gt; using command line argument &lt;code&gt;--filter&lt;/code&gt;:&lt;/p&gt;
+You can enable &lt;code class=&quot;highlighter-rouge&quot;&gt;pandoc-crossref&lt;/code&gt; using command line argument &lt;code class=&quot;highlighter-rouge&quot;&gt;--filter&lt;/code&gt;:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pandoc --filter pandoc-crossref -o result.docx source.md&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;pandoc --filter pandoc-crossref -o result.docx source.md &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;p&gt;Note, that if we will use &lt;code class=&quot;highlighter-rouge&quot;&gt;begin/end&lt;/code&gt; environment or “\\” for multiple equations, pandoc couldn’t generate MS Word
+formula. Also, you shouldn’t forget about empy line between equations.&lt;/p&gt;
 
-&lt;p&gt;Note, that if we will use &lt;code&gt;begin/end&lt;/code&gt; environment or &quot;\\&quot; for multiple equations, pandoc couldn&#39;t generate MS Word
-formula. Also, you shouldn&#39;t forget about empy line between equations.&lt;/p&gt;
+&lt;p&gt;To use bibliography we can create a regular &lt;code class=&quot;highlighter-rouge&quot;&gt;bib&lt;/code&gt; file and enable &lt;code class=&quot;highlighter-rouge&quot;&gt;pandoc-cireproc&lt;/code&gt; like this:&lt;/p&gt;
 
-&lt;p&gt;To use bibliography we can create a regular &lt;code&gt;bib&lt;/code&gt; file and enable &lt;code&gt;pandoc-cireproc&lt;/code&gt; like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pandoc --filter pandoc-crossref --bibliography report.bib -o result.docx source.md&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;pandoc --filter pandoc-crossref --bibliography report.bib -o result.docx source.md&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;The default citation style in Pandoc is Chicago author-date, but you can change
-it. E.g. if you&#39;re writing an academic paper in Russian, I bet you would like
-to use &lt;code&gt;GOST&lt;/code&gt; standard. You can get a corresponding &lt;code&gt;csl&lt;/code&gt; file
+it. E.g. if you’re writing an academic paper in Russian, I bet you would like
+to use &lt;code class=&quot;highlighter-rouge&quot;&gt;GOST&lt;/code&gt; standard. You can get a corresponding &lt;code class=&quot;highlighter-rouge&quot;&gt;csl&lt;/code&gt; file 
 &lt;a href=&quot;http://editor.citationstyles.org/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fgost-r-7-0-5-2008-numeric-alphabetical&quot;&gt;here&lt;/a&gt;,
 and use it like this:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pandoc --filter pandoc-crossref --bibliography report.bib --csl&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;gost.csl -o result.docx source.md&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;pandoc --filter pandoc-crossref --bibliography report.bib --csl&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;gost.csl -o result.docx source.md&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-
-&lt;p&gt;The last one thing is a language. If you&#39;re writing in Russian, you can suffer from encoding issues - to avoid
+&lt;p&gt;The last one thing is a language. If you’re writing in Russian, you can suffer from encoding issues - to avoid
 this you need to specify language:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;pandoc --filter pandoc-crossref --bibliography report.bib --csl&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;gost.csl -o result.docx source.md -V lang:russian&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;pandoc --filter pandoc-crossref --bibliography report.bib --csl&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;gost.csl -o result.docx source.md -V lang:russian&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-
-&lt;p&gt;That&#39;s it, you will get a well-formed MS Word file with nice formulas.&lt;/p&gt;
+&lt;p&gt;That’s it, you will get a well-formed MS Word file with nice formulas.&lt;/p&gt;
 </content>
  </entry>
  
@@ -87,117 +80,116 @@ this you need to specify language:&lt;/p&gt;
    <link href="http://erthalion.info/2015/12/29/json-benchmarks/"/>
    <updated>2015-12-29T07:14:21+06:00</updated>
    <id>http://erthalion.info/2015/12/29/json-benchmarks</id>
-   <content type="html">&lt;blockquote&gt;&lt;p&gt;As such, there’s really no “standard” benchmark that will inform you about the best technology to use for your application. Only your requirements, your data, and your infrastructure can tell you what you need to know.&lt;/p&gt;&lt;/blockquote&gt;
+   <content type="html">&lt;blockquote&gt;
+  &lt;p&gt;As such, there’s really no “standard” benchmark that will inform you about the best technology to use for your application. Only your requirements, your data, and your infrastructure can tell you what you need to know.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-&lt;p&gt;NoSql is everywhere and we can&#39;t escape from it (although I can&#39;t say we want to escape). Let&#39;s leave the question about reasons outside this text,
-and just note one thing - this trend isn&#39;t related only to new or existing NoSql solutions. It has another side, namely the schema-less data support in
-traditional relational databases. It&#39;s amazing how many possibilities hiding at the edge of the relational model and everything else. But of course there is
-a balance that you should find for your specific data. It can&#39;t be easy, first of all because it&#39;s required to compare incomparable things,
-e.g. performance of a NoSql solution and traditional database. Here in this post I&#39;ll make such attempt and show the comparison of jsonb in PostgreSQL,
+&lt;p&gt;NoSql is everywhere and we can’t escape from it (although I can’t say we want to escape). Let’s leave the question about reasons outside this text,
+and just note one thing - this trend isn’t related only to new or existing NoSql solutions. It has another side, namely the schema-less data support in
+traditional relational databases. It’s amazing how many possibilities hiding at the edge of the relational model and everything else. But of course there is
+a balance that you should find for your specific data. It can’t be easy, first of all because it’s required to compare incomparable things,
+e.g. performance of a NoSql solution and traditional database. Here in this post I’ll make such attempt and show the comparison of jsonb in PostgreSQL,
 json in Mysql and bson in Mongodb.&lt;/p&gt;
 
-&lt;h2&gt;What the hell is going on here?&lt;/h2&gt;
+&lt;h2 id=&quot;what-the-hell-is-going-on-here&quot;&gt;What the hell is going on here?&lt;/h2&gt;
 
 &lt;p&gt;Breaking news:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.postgresql.org/docs/9.4/static/datatype-json.html&quot;&gt;PostgreSQL 9.4&lt;/a&gt; - a new data type &lt;code&gt;jsonb&lt;/code&gt; with slightly extended support in the upcoming release PostgreSQL 9.5&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://dev.mysql.com/doc/refman/5.7/en/json.html&quot;&gt;Mysql 5.7.7&lt;/a&gt; - a new data type &lt;code&gt;json&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.postgresql.org/docs/9.4/static/datatype-json.html&quot;&gt;PostgreSQL 9.4&lt;/a&gt; - a new data type &lt;code class=&quot;highlighter-rouge&quot;&gt;jsonb&lt;/code&gt; with slightly extended support in the upcoming release PostgreSQL 9.5&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://dev.mysql.com/doc/refman/5.7/en/json.html&quot;&gt;Mysql 5.7.7&lt;/a&gt; - a new data type &lt;code class=&quot;highlighter-rouge&quot;&gt;json&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-
-&lt;p&gt;and several other examples (I&#39;ll talk about them later). Of course these data types supposed to be binary, which means great performance.
-Base functionality is equal across the implementations because it&#39;s just obvious CRUD. And what is the oldest and almost cave desire in this situation?
+&lt;p&gt;and several other examples (I’ll talk about them later). Of course these data types supposed to be binary, which means great performance.
+Base functionality is equal across the implementations because it’s just obvious CRUD. And what is the oldest and almost cave desire in this situation?
 Right, performance benchmarks! PostgreSQL and Mysql were choosen because they have quite similar implementation of json support, Mongodb - as a veteran of NoSql. An &lt;a href=&quot;http://www.enterprisedb.com/postgres-plus-edb-blog/marc-linster/postgres-outperforms-mongodb-and-ushers-new-developer-reality&quot;&gt;EnterpriseDB research&lt;/a&gt; is slightly outdated, but we can use it as a first step for the road of a thousand li. A final goal is not to display the performance in artificial environment, but to give a neutral evaluation and to get a feedback.&lt;/p&gt;
 
-&lt;h2&gt;Some details and configurations&lt;/h2&gt;
+&lt;h2 id=&quot;some-details-and-configurations&quot;&gt;Some details and configurations&lt;/h2&gt;
 
-&lt;p&gt;The &lt;code&gt;pg_nosql_benchmark&lt;/code&gt; from EnterpriseDB suggests an obvious approach - first of all the required amount of records must be generated using different kinds of
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;pg_nosql_benchmark&lt;/code&gt; from EnterpriseDB suggests an obvious approach - first of all the required amount of records must be generated using different kinds of
 data and some random fluctuations. This amount of data will be saved into the database, and we will perform several kinds of queries over it.
-&lt;code&gt;pg_nosql_benchmark&lt;/code&gt; doesn&#39;t have any functional to work with Mysql, so I had to implement it similar to PostgreSQL.
-There is only one tricky thing with Mysql - it doesn&#39;t &lt;a href=&quot;https://dev.mysql.com/doc/refman/5.7/en/create-table.html#create-table-secondary-indexes-virtual-columns&quot;&gt;support json indexing&lt;/a&gt; directly, it&#39;s required to create virtual columns and create index on them.&lt;/p&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;pg_nosql_benchmark&lt;/code&gt; doesn’t have any functional to work with Mysql, so I had to implement it similar to PostgreSQL.
+There is only one tricky thing with Mysql - it doesn’t &lt;a href=&quot;https://dev.mysql.com/doc/refman/5.7/en/create-table.html#create-table-secondary-indexes-virtual-columns&quot;&gt;support json indexing&lt;/a&gt; directly, it’s required to create virtual columns and create index on them.&lt;/p&gt;
 
-&lt;p&gt;Speaking of details, there was one strange thing in &lt;code&gt;pg_nosql_benchmark&lt;/code&gt;. I figured out that few types of generated records
+&lt;p&gt;Speaking of details, there was one strange thing in &lt;code class=&quot;highlighter-rouge&quot;&gt;pg_nosql_benchmark&lt;/code&gt;. I figured out that few types of generated records
 were beyond the 4096 bytes limit for &lt;a href=&quot;http://stackoverflow.com/a/13189298/1423473&quot;&gt;mongo shell&lt;/a&gt;, which means these records were
-just dropped out. As a dirty hack for that we can perform the inserts from a &lt;code&gt;js&lt;/code&gt; file (and btw, that file must be splitted into the series of chunks
+just dropped out. As a dirty hack for that we can perform the inserts from a &lt;code class=&quot;highlighter-rouge&quot;&gt;js&lt;/code&gt; file (and btw, that file must be splitted into the series of chunks
 less than 2GB).
-Besides, there are some unnecessary time expenses, related to shell client, authentication and so on. To estimate and exclude them I have to perform corresponding amount of &quot;no-op&quot; queries for all databases (but they&#39;re actually pretty small).&lt;/p&gt;
+Besides, there are some unnecessary time expenses, related to shell client, authentication and so on. To estimate and exclude them I have to perform corresponding amount of “no-op” queries for all databases (but they’re actually pretty small).&lt;/p&gt;
 
-&lt;p&gt;After all modifications above I&#39;ve performed measurements for the following cases:&lt;/p&gt;
+&lt;p&gt;After all modifications above I’ve performed measurements for the following cases:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;PostgreSQL 9.5 beta1, gin&lt;/li&gt;
-&lt;li&gt;PostgreSQL 9.5 beta1, jsonb_path_ops&lt;/li&gt;
-&lt;li&gt;PostgreSQL 9.5 beta1, jsquery&lt;/li&gt;
-&lt;li&gt;Mysql 5.7.9&lt;/li&gt;
-&lt;li&gt;Mongodb 3.2.0 storage engine WiredTiger&lt;/li&gt;
-&lt;li&gt;Mongodb 3.2.0 storage engie MMAPv1&lt;/li&gt;
+  &lt;li&gt;PostgreSQL 9.5 beta1, gin&lt;/li&gt;
+  &lt;li&gt;PostgreSQL 9.5 beta1, jsonb_path_ops&lt;/li&gt;
+  &lt;li&gt;PostgreSQL 9.5 beta1, jsquery&lt;/li&gt;
+  &lt;li&gt;Mysql 5.7.9&lt;/li&gt;
+  &lt;li&gt;Mongodb 3.2.0 storage engine WiredTiger&lt;/li&gt;
+  &lt;li&gt;Mongodb 3.2.0 storage engie MMAPv1&lt;/li&gt;
 &lt;/ul&gt;
 
-
-&lt;p&gt;Each of them was tested on a separate &lt;code&gt;m4.xlarge&lt;/code&gt; amazon instance with the &lt;code&gt;ubuntu 14.04 x64&lt;/code&gt; and default configurations,
-all tests were performed for 1000000 records. And you shouldn&#39;t forget about the instructions for the &lt;code&gt;jsquery&lt;/code&gt; -
-&lt;code&gt;bison&lt;/code&gt;, &lt;code&gt;flex&lt;/code&gt;, &lt;code&gt;libpq-dev&lt;/code&gt; and &lt;code&gt;postgresql-server-dev-9.5&lt;/code&gt; must be installed. All results were saved in json file,
+&lt;p&gt;Each of them was tested on a separate &lt;code class=&quot;highlighter-rouge&quot;&gt;m4.xlarge&lt;/code&gt; amazon instance with the &lt;code class=&quot;highlighter-rouge&quot;&gt;ubuntu 14.04 x64&lt;/code&gt; and default configurations,
+all tests were performed for 1000000 records. And you shouldn’t forget about the instructions for the &lt;code class=&quot;highlighter-rouge&quot;&gt;jsquery&lt;/code&gt; -
+&lt;code class=&quot;highlighter-rouge&quot;&gt;bison&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;flex&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;libpq-dev&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;postgresql-server-dev-9.5&lt;/code&gt; must be installed. All results were saved in json file,
 we can visualize them easily using matplotlib (see &lt;a href=&quot;https://github.com/erthalion/pg_nosql_benchmark&quot;&gt;here&lt;/a&gt;).&lt;/p&gt;
 
 &lt;p&gt;Besides that there was a concern about durability. To take this into account I made few specific configurations
-(imho some of them are real, but some of them are quite theoretical, because I don&#39;t think someone will use them for production systems):&lt;/p&gt;
+(imho some of them are real, but some of them are quite theoretical, because I don’t think someone will use them for production systems):&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;Mongodb 3.2.0 journaled (writeConcern j: true)&lt;/li&gt;
-&lt;li&gt;Mongodb 3.2.0 fsync (transaction_sync=(enabled=true,method=fsync))&lt;/li&gt;
-&lt;li&gt;PostgreSQL 9.5 beta 1, no fsync (fsync=off)&lt;/li&gt;
-&lt;li&gt;Mysql 5.7.9, no fsync (innodb_flush_method=nosync)&lt;/li&gt;
+  &lt;li&gt;Mongodb 3.2.0 journaled (writeConcern j: true)&lt;/li&gt;
+  &lt;li&gt;Mongodb 3.2.0 fsync (transaction_sync=(enabled=true,method=fsync))&lt;/li&gt;
+  &lt;li&gt;PostgreSQL 9.5 beta 1, no fsync (fsync=off)&lt;/li&gt;
+  &lt;li&gt;Mysql 5.7.9, no fsync (innodb_flush_method=nosync)&lt;/li&gt;
 &lt;/ul&gt;
 
-
-&lt;h2&gt;Results&lt;/h2&gt;
+&lt;h2 id=&quot;results&quot;&gt;Results&lt;/h2&gt;
 
 &lt;p&gt;All charts presented in seconds (if they related to the time of query execution) or mb (if they related to the size of relation/index).
 Thus, for all charts the smaller value is better.&lt;/p&gt;
 
-&lt;h3&gt;Select&lt;/h3&gt;
+&lt;h3 id=&quot;select&quot;&gt;Select&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/img/select2.png&quot; border=&quot;0&quot; width=&quot;80%&quot; style=&quot;margin: auto&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/public/img/select2.png&quot; border=&quot;0&quot; width=&quot;80%&quot; style=&quot;margin: auto&quot; /&gt;&lt;/p&gt;
 
-&lt;h3&gt;Insert&lt;/h3&gt;
+&lt;h3 id=&quot;insert&quot;&gt;Insert&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/img/insert2.png&quot; border=&quot;0&quot; width=&quot;80%&quot; style=&quot;margin: auto&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/public/img/insert2.png&quot; border=&quot;0&quot; width=&quot;80%&quot; style=&quot;margin: auto&quot; /&gt;&lt;/p&gt;
 
-&lt;h3&gt;Insert with configurations&lt;/h3&gt;
+&lt;h3 id=&quot;insert-with-configurations&quot;&gt;Insert with configurations&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/img/insert_configured.png&quot; border=&quot;0&quot; width=&quot;80%&quot; style=&quot;margin: auto&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/public/img/insert_configured.png&quot; border=&quot;0&quot; width=&quot;80%&quot; style=&quot;margin: auto&quot; /&gt;&lt;/p&gt;
 
-&lt;h3&gt;Update&lt;/h3&gt;
+&lt;h3 id=&quot;update&quot;&gt;Update&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/img/update2.png&quot; border=&quot;0&quot; width=&quot;80%&quot; style=&quot;margin: auto&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/public/img/update2.png&quot; border=&quot;0&quot; width=&quot;80%&quot; style=&quot;margin: auto&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Update is another difference between my benchmarks and &lt;code&gt;pg_nosql_benchmark&lt;/code&gt;. It can bee seen, that Mongodb is an obvious
+&lt;p&gt;Update is another difference between my benchmarks and &lt;code class=&quot;highlighter-rouge&quot;&gt;pg_nosql_benchmark&lt;/code&gt;. It can bee seen, that Mongodb is an obvious
 leader here - mostly because of PostgreSQL and Mysql restrictions, I guess, when to update one value you must override an entire field.&lt;/p&gt;
 
-&lt;h3&gt;Update with configurations&lt;/h3&gt;
+&lt;h3 id=&quot;update-with-configurations&quot;&gt;Update with configurations&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/img/update_configured.png&quot; border=&quot;0&quot; width=&quot;80%&quot; style=&quot;margin: auto&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/public/img/update_configured.png&quot; border=&quot;0&quot; width=&quot;80%&quot; style=&quot;margin: auto&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;As you can guess from documentation and this &lt;a href=&quot;http://stackoverflow.com/a/29220739/1423473&quot;&gt;answer&lt;/a&gt;,
-&lt;code&gt;writeConcern j:true&lt;/code&gt; is the highest possible transaction durability level (on a single server),
-that should be equal to configuration with &lt;code&gt;fsync&lt;/code&gt;.
-I&#39;m not sure about durability, but &lt;code&gt;fsync&lt;/code&gt; is definitely slower for update operations here.&lt;/p&gt;
+&lt;code class=&quot;highlighter-rouge&quot;&gt;writeConcern j:true&lt;/code&gt; is the highest possible transaction durability level (on a single server),
+that should be equal to configuration with &lt;code class=&quot;highlighter-rouge&quot;&gt;fsync&lt;/code&gt;.
+I’m not sure about durability, but &lt;code class=&quot;highlighter-rouge&quot;&gt;fsync&lt;/code&gt; is definitely slower for update operations here.&lt;/p&gt;
 
-&lt;h3&gt;Table/index size&lt;/h3&gt;
+&lt;h3 id=&quot;tableindex-size&quot;&gt;Table/index size&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/img/table_size2.png&quot; border=&quot;0&quot; width=&quot;80%&quot; style=&quot;margin: auto&quot;&gt;
-&lt;img src=&quot;/public/img/index_size2.png&quot; border=&quot;0&quot; width=&quot;80%&quot; style=&quot;margin: auto&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/public/img/table_size2.png&quot; border=&quot;0&quot; width=&quot;80%&quot; style=&quot;margin: auto&quot; /&gt;
+&lt;img src=&quot;/public/img/index_size2.png&quot; border=&quot;0&quot; width=&quot;80%&quot; style=&quot;margin: auto&quot; /&gt;&lt;/p&gt;
 
-&lt;h2&gt;I have a bad feeling about this&lt;/h2&gt;
+&lt;h2 id=&quot;i-have-a-bad-feeling-about-this&quot;&gt;I have a bad feeling about this&lt;/h2&gt;
 
-&lt;p&gt;Performance measurement is a dangerous field especially in this case. Everything described above can&#39;t be a completed benchmark, it&#39;s just
-a first step to understand current situation. We&#39;re working now on &lt;a href=&quot;https://github.com/brianfrankcooper/YCSB&quot;&gt;ycsb&lt;/a&gt; tests to make more
-finished measurements, and if we&#39;ll get lucky we&#39;ll compare the performance of cluster configurations.&lt;/p&gt;
+&lt;p&gt;Performance measurement is a dangerous field especially in this case. Everything described above can’t be a completed benchmark, it’s just
+a first step to understand current situation. We’re working now on &lt;a href=&quot;https://github.com/brianfrankcooper/YCSB&quot;&gt;ycsb&lt;/a&gt; tests to make more
+finished measurements, and if we’ll get lucky we’ll compare the performance of cluster configurations.&lt;/p&gt;
 
-&lt;h2&gt;PgConf.Russia 2016&lt;/h2&gt;
+&lt;h2 id=&quot;pgconfrussia-2016&quot;&gt;PgConf.Russia 2016&lt;/h2&gt;
 
-&lt;p&gt;It looks like I&#39;ll &lt;a href=&quot;https://pgconf.ru/en/2016/89957&quot;&gt;participate&lt;/a&gt; in the PgConf.Russia this year, so if you&#39;re interested
+&lt;p&gt;It looks like I’ll &lt;a href=&quot;https://pgconf.ru/en/2016/89957&quot;&gt;participate&lt;/a&gt; in the PgConf.Russia this year, so if you’re interested
 in this subject - welcome.&lt;/p&gt;
 </content>
  </entry>
@@ -207,159 +199,147 @@ in this subject - welcome.&lt;/p&gt;
    <link href="http://erthalion.info/2015/02/22/gentoo-lenovo/"/>
    <updated>2015-02-22T07:14:21+06:00</updated>
    <id>http://erthalion.info/2015/02/22/gentoo-lenovo</id>
-   <content type="html">&lt;p&gt;Finally, I decided to replace my old laptop, and my chose fell on the Lenovo u430p. As I understand now, it was not a good idea in case of Gentoo =) Actually, I was surprised, how many nerves you can lose only because of the adaptation of you hardware to your requirements. And here is the shortlist of what you shouldn&#39;t forget, if you want to do the same more easily.&lt;/p&gt;
+   <content type="html">&lt;p&gt;Finally, I decided to replace my old laptop, and my chose fell on the Lenovo u430p. As I understand now, it was not a good idea in case of Gentoo =) Actually, I was surprised, how many nerves you can lose only because of the adaptation of you hardware to your requirements. And here is the shortlist of what you shouldn’t forget, if you want to do the same more easily.&lt;/p&gt;
 
-&lt;h2&gt;EFI loader&lt;/h2&gt;
+&lt;h2 id=&quot;efi-loader&quot;&gt;EFI loader&lt;/h2&gt;
 
-&lt;p&gt;So you&#39;ve successfully passed several steps from Gentoo Handbook. One of the last is Grub2 installation and configuration. You&#39;ve completed this, rebooted and...nothing happened, you see the Windows 8 again.&lt;/p&gt;
+&lt;p&gt;So you’ve successfully passed several steps from Gentoo Handbook. One of the last is Grub2 installation and configuration. You’ve completed this, rebooted and…nothing happened, you see the Windows 8 again.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/img/farnsworth.jpg&quot; border=&quot;0&quot; width=&quot;50%&quot; style=&quot;margin: auto&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/public/img/farnsworth.jpg&quot; border=&quot;0&quot; width=&quot;50%&quot; style=&quot;margin: auto&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;The clue to this problem is the &quot;Secure Boot&quot; option, which enabled by default in BIOS.&lt;/p&gt;
+&lt;p&gt;The clue to this problem is the “Secure Boot” option, which enabled by default in BIOS.&lt;/p&gt;
 
-&lt;h2&gt;iwlwifi&lt;/h2&gt;
+&lt;h2 id=&quot;iwlwifi&quot;&gt;iwlwifi&lt;/h2&gt;
 
-&lt;p&gt;Next big disaster is the &lt;code&gt;iwlwifi&lt;/code&gt; driver for the Intel Wireless 7260. The most of wifi routers are working in the mixed 11bgn mode, and 11n drives &lt;code&gt;iwlwifi&lt;/code&gt; (and you with him) mad. There are an endless disconnections and the terrible instability.&lt;/p&gt;
+&lt;p&gt;Next big disaster is the &lt;code class=&quot;highlighter-rouge&quot;&gt;iwlwifi&lt;/code&gt; driver for the Intel Wireless 7260. The most of wifi routers are working in the mixed 11bgn mode, and 11n drives &lt;code class=&quot;highlighter-rouge&quot;&gt;iwlwifi&lt;/code&gt; (and you with him) mad. There are an endless disconnections and the terrible instability.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/img/fry-bender-roar.jpg&quot; border=&quot;0&quot; width=&quot;50%&quot; style=&quot;margin: auto&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/public/img/fry-bender-roar.jpg&quot; border=&quot;0&quot; width=&quot;50%&quot; style=&quot;margin: auto&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The only known solution is cut out the 11n mode:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# /etc/modprobe.d/iwlwifi.conf&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# /etc/modprobe.d/iwlwifi.conf&lt;/span&gt;
 
-options iwlwifi &lt;span class=&quot;nv&quot;&gt;11n_disable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+options iwlwifi &lt;span class=&quot;nv&quot;&gt;11n_disable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;p&gt;And you shouldn’t forget to compile &lt;code class=&quot;highlighter-rouge&quot;&gt;iwlwifi&lt;/code&gt; as kernel module (otherwise, obviously, this option will not be applied). The last step is the firmware installation. You can download the &lt;code class=&quot;highlighter-rouge&quot;&gt;iwlwifi-7260-9.ucode&lt;/code&gt;, place it in &lt;code class=&quot;highlighter-rouge&quot;&gt;/lib/firmware&lt;/code&gt;, and configure to load this firmware with kernel:&lt;/p&gt;
 
-&lt;p&gt;And you shouldn&#39;t forget to compile &lt;code&gt;iwlwifi&lt;/code&gt; as kernel module (otherwise, obviously, this option will not be applied). The last step is the firmware installation. You can download the &lt;code&gt;iwlwifi-7260-9.ucode&lt;/code&gt;, place it in &lt;code&gt;/lib/firmware&lt;/code&gt;, and configure to load this firmware with kernel:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;Device Driver -&amp;gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;Device Driver -&amp;gt;
     Generic Driver Options -&amp;gt;
-        &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;*&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; Include in-kernel firmware blobs in kernel library
+        &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; Include &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;-kernel firmware blobs &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;kernel library
         &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;iwlwifi-7260-9.ucode&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; External firmware blobs to build into kernel library
-        &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;/lib/firmware&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; Firmware blobls root directory&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+        &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;/lib/firmware&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; Firmware blobls root directory&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;p&gt;Btw, one more note - loos like &lt;code class=&quot;highlighter-rouge&quot;&gt;iwlwifi-7269-9.ucode&lt;/code&gt; is working more stable, then &lt;code class=&quot;highlighter-rouge&quot;&gt;iwlwifi-7260-10.ucode&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;Btw, one more note - loos like &lt;code&gt;iwlwifi-7269-9.ucode&lt;/code&gt; is working more stable, then &lt;code&gt;iwlwifi-7260-10.ucode&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;microphone&quot;&gt;Microphone&lt;/h2&gt;
 
-&lt;h2&gt;Microphone&lt;/h2&gt;
+&lt;p&gt;I don’t know why, but this there was no working configuration for microphone out of box =) I installed alsa and pulseaudio (the last one for the Skype, of course), and issues with the audio capture were really unexpected for me.&lt;/p&gt;
 
-&lt;p&gt;I don&#39;t know why, but this there was no working configuration for microphone out of box =) I installed alsa and pulseaudio (the last one for the Skype, of course), and issues with the audio capture were really unexpected for me.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/public/img/fry-megaphone.jpg&quot; border=&quot;0&quot; width=&quot;50%&quot; style=&quot;margin: auto&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/public/img/fry-megaphone.jpg&quot; border=&quot;0&quot; width=&quot;50%&quot; style=&quot;margin: auto&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Actually, I though, that everything was unmutes in the alsamixer, but I was wrong:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;amixer -c 1
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;amixer -c 1
 ...
-Simple mixer control &lt;span class=&quot;s1&quot;&gt;&amp;#39;Capture&amp;#39;&lt;/span&gt;,0 
+Simple mixer control &lt;span class=&quot;s1&quot;&gt;&#39;Capture&#39;&lt;/span&gt;,0 
 Capabilities: cvolume cswitch 
 Capture channels: Front Left - Front Right 
-Limits: Capture &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; - &lt;span class=&quot;m&quot;&gt;63&lt;/span&gt; 
-Front Left: Capture &lt;span class=&quot;m&quot;&gt;63&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;100%&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;30.00dB&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;off&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; 
-Front Right: Capture &lt;span class=&quot;m&quot;&gt;63&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;100%&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;30.00dB&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;off&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-...&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+Limits: Capture 0 - 63 
+Front Left: Capture 63 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;100%] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;30.00dB] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;off] 
+Front Right: Capture 63 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;100%] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;30.00dB] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;off]
+...&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;p&gt;You can unmute the &lt;code class=&quot;highlighter-rouge&quot;&gt;Capture, 0&lt;/code&gt; control by this command (&lt;code class=&quot;highlighter-rouge&quot;&gt;-c 1&lt;/code&gt; is the card number):&lt;/p&gt;
 
-&lt;p&gt;You can unmute the &lt;code&gt;Capture, 0&lt;/code&gt; control by this command (&lt;code&gt;-c 1&lt;/code&gt; is the card number):&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;amixer -c 1 Capture, 0 80% 40% unmute cap&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;amixer -c &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; Capture, &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; 80% 40% unmute cap&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And btw, don’t forget about the web cam:&lt;/p&gt;
 
-
-&lt;p&gt;And btw, don&#39;t forget about the web cam:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;Device Drivers -&amp;gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;Device Drivers -&amp;gt;
     Multimedia support -&amp;gt;
-        &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;*&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; Cameras/video grabbers support
-        &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;*&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; Media USB Adapters -&amp;gt;
-            &amp;lt;*&amp;gt; USB input event device support&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+        &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; Cameras/video grabbers support
+        &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; Media USB Adapters -&amp;gt;
+            &amp;lt;&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;&amp;gt; USB input event device support&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;h2 id=&quot;windows-8-loading&quot;&gt;Windows 8 loading&lt;/h2&gt;
 
-&lt;h2&gt;Windows 8 loading&lt;/h2&gt;
+&lt;p&gt;Ok, it’s well enough. But if you’ll try to load now from the grub2 menu to Win8, you’ll suprised because of the messages &lt;code class=&quot;highlighter-rouge&quot;&gt;error: can&#39;t find command drivemap&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;error: invalid EFI file path&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;Ok, it&#39;s well enough. But if you&#39;ll try to load now from the grub2 menu to Win8, you&#39;ll suprised because of the messages &lt;code&gt;error: can&#39;t find command drivemap&lt;/code&gt; and &lt;code&gt;error: invalid EFI file path&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/public/img/fry-fall.jpg&quot; border=&quot;0&quot; width=&quot;50%&quot; style=&quot;margin: auto&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/img/fry-fall.jpg&quot; border=&quot;0&quot; width=&quot;50%&quot; style=&quot;margin: auto&quot;&gt;&lt;/p&gt;
+&lt;p&gt;To avoid this problem you should create custom menu entry for &lt;code class=&quot;highlighter-rouge&quot;&gt;grub.cfg&lt;/code&gt; with chainloader for Win8:&lt;/p&gt;
 
-&lt;p&gt;To avoid this problem you should create custom menu entry for &lt;code&gt;grub.cfg&lt;/code&gt; with chainloader for Win8:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# /etc/grub.d/40_custom&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;tail -n +3 &lt;span class=&quot;nv&quot;&gt;$0&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# This file provides an easy way to add custom menu entries.  Simply type the&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# menu entries you want to add after this comment.  Be careful not to change&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# the &amp;#39;exec tail&amp;#39; line above.&lt;/span&gt;
-menuentry &lt;span class=&quot;s1&quot;&gt;&amp;#39;Windows 8 (UEFI loader)&amp;#39;&lt;/span&gt; --class windows --class os &lt;span class=&quot;nv&quot;&gt;$menuentry_id_option&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;osprober-chain-02E42074E4206BDB&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    search --file --no-floppy --set&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;root /EFI/Microsoft/Boot/bootmgfw.efi
-    chainloader &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;/EFI/Microsoft/Boot/bootmgfw.efi
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;c&quot;&gt;# the &#39;exec tail&#39; line above.&lt;/span&gt;
+menuentry &lt;span class=&quot;s1&quot;&gt;&#39;Windows 8 (UEFI loader)&#39;&lt;/span&gt; --class windows --class os &lt;span class=&quot;nv&quot;&gt;$menuentry_id_option&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;osprober-chain-02E42074E4206BDB&#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+	search --file --no-floppy --set&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;root /EFI/Microsoft/Boot/bootmgfw.efi
+	chainloader &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;/EFI/Microsoft/Boot/bootmgfw.efi
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;p&gt;Don’t forget to update &lt;code class=&quot;highlighter-rouge&quot;&gt;grub.cfg&lt;/code&gt;:&lt;/p&gt;
 
-&lt;p&gt;Don&#39;t forget to update &lt;code&gt;grub.cfg&lt;/code&gt;:&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# grub2-mkconfig -o /boot/grub/grub.cfg&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# grub2-mkconfig -o /boot/grub/grub.cfg&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2 id=&quot;touchpad&quot;&gt;Touchpad&lt;/h2&gt;
 
+&lt;p&gt;Default configuration for touchpad is terrible…&lt;/p&gt;
 
-&lt;h2&gt;Touchpad&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/public/img/fry-coffee.jpg&quot; border=&quot;0&quot; width=&quot;50%&quot; style=&quot;margin: auto&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Default configuration for touchpad is terrible...&lt;/p&gt;
+&lt;p&gt;You can improve it - just don’t forget, that this model doesn’t have the hardware right mouse button (so you shouldn’t disable software button). Here is my configuration:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/img/fry-coffee.jpg&quot; border=&quot;0&quot; width=&quot;50%&quot; style=&quot;margin: auto&quot;&gt;&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# /etc/X11/xorg.conf.d/50-synaptics.conf&lt;/span&gt;
 
-&lt;p&gt;You can improve it - just don&#39;t forget, that this model doesn&#39;t have the hardware right mouse button (so you shouldn&#39;t disable software button). Here is my configuration:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# /etc/X11/xorg.conf.d/50-synaptics.conf&lt;/span&gt;
-
-Section &lt;span class=&quot;s2&quot;&gt;&amp;quot;InputClass&amp;quot;&lt;/span&gt;
-    Identifier &lt;span class=&quot;s2&quot;&gt;&amp;quot;touchpad&amp;quot;&lt;/span&gt;
-    MatchIsTouchpad &lt;span class=&quot;s2&quot;&gt;&amp;quot;on&amp;quot;&lt;/span&gt;
-    MatchDevicePath &lt;span class=&quot;s2&quot;&gt;&amp;quot;/dev/input/event*&amp;quot;&lt;/span&gt;
-    Driver &lt;span class=&quot;s2&quot;&gt;&amp;quot;synaptics&amp;quot;&lt;/span&gt;
+Section &lt;span class=&quot;s2&quot;&gt;&quot;InputClass&quot;&lt;/span&gt;
+    Identifier &lt;span class=&quot;s2&quot;&gt;&quot;touchpad&quot;&lt;/span&gt;
+    MatchIsTouchpad &lt;span class=&quot;s2&quot;&gt;&quot;on&quot;&lt;/span&gt;
+    MatchDevicePath &lt;span class=&quot;s2&quot;&gt;&quot;/dev/input/event*&quot;&lt;/span&gt;
+    Driver &lt;span class=&quot;s2&quot;&gt;&quot;synaptics&quot;&lt;/span&gt;
  
-    Option &lt;span class=&quot;s2&quot;&gt;&amp;quot;TapButton1&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;1&amp;quot;&lt;/span&gt;
-    Option &lt;span class=&quot;s2&quot;&gt;&amp;quot;TapButton2&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;3&amp;quot;&lt;/span&gt;
-    Option &lt;span class=&quot;s2&quot;&gt;&amp;quot;TapButton3&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;2&amp;quot;&lt;/span&gt;
+    Option &lt;span class=&quot;s2&quot;&gt;&quot;TapButton1&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt;
+    Option &lt;span class=&quot;s2&quot;&gt;&quot;TapButton2&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;3&quot;&lt;/span&gt;
+    Option &lt;span class=&quot;s2&quot;&gt;&quot;TapButton3&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;2&quot;&lt;/span&gt;
 
     &lt;span class=&quot;c&quot;&gt;# accurate tap-to-click!&lt;/span&gt;
-    Option &lt;span class=&quot;s2&quot;&gt;&amp;quot;FingerLow&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;50&amp;quot;&lt;/span&gt;
-    Option &lt;span class=&quot;s2&quot;&gt;&amp;quot;FingerHigh&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;55&amp;quot;&lt;/span&gt;
+    Option &lt;span class=&quot;s2&quot;&gt;&quot;FingerLow&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;50&quot;&lt;/span&gt;
+    Option &lt;span class=&quot;s2&quot;&gt;&quot;FingerHigh&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;55&quot;&lt;/span&gt;
  
     &lt;span class=&quot;c&quot;&gt;# prevents too many intentional clicks&lt;/span&gt;
-    Option &lt;span class=&quot;s2&quot;&gt;&amp;quot;PalmDetect&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;0&amp;quot;&lt;/span&gt;
+    Option &lt;span class=&quot;s2&quot;&gt;&quot;PalmDetect&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;0&quot;&lt;/span&gt;
  
-    &lt;span class=&quot;c&quot;&gt;# vertical and horizontal scrolling, use negative delta values for &amp;quot;natural&amp;quot; scrolling&lt;/span&gt;
-    Option &lt;span class=&quot;s2&quot;&gt;&amp;quot;VertTwoFingerScroll&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;1&amp;quot;&lt;/span&gt;
-    Option &lt;span class=&quot;s2&quot;&gt;&amp;quot;VertScrollDelta&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;75&amp;quot;&lt;/span&gt;
-    Option &lt;span class=&quot;s2&quot;&gt;&amp;quot;HorizTwoFingerScroll&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;1&amp;quot;&lt;/span&gt;
-    Option &lt;span class=&quot;s2&quot;&gt;&amp;quot;HorizScrollDelta&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;75&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;# vertical and horizontal scrolling, use negative delta values for &quot;natural&quot; scrolling&lt;/span&gt;
+    Option &lt;span class=&quot;s2&quot;&gt;&quot;VertTwoFingerScroll&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt;
+    Option &lt;span class=&quot;s2&quot;&gt;&quot;VertScrollDelta&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;75&quot;&lt;/span&gt;
+    Option &lt;span class=&quot;s2&quot;&gt;&quot;HorizTwoFingerScroll&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt;
+    Option &lt;span class=&quot;s2&quot;&gt;&quot;HorizScrollDelta&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;75&quot;&lt;/span&gt;
  
-    Option &lt;span class=&quot;s2&quot;&gt;&amp;quot;MinSpeed&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;1&amp;quot;&lt;/span&gt;
-    Option &lt;span class=&quot;s2&quot;&gt;&amp;quot;MaxSpeed&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;2&amp;quot;&lt;/span&gt;
+    Option &lt;span class=&quot;s2&quot;&gt;&quot;MinSpeed&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt;
+    Option &lt;span class=&quot;s2&quot;&gt;&quot;MaxSpeed&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;2&quot;&lt;/span&gt;
  
-    Option &lt;span class=&quot;s2&quot;&gt;&amp;quot;AccelerationProfile&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;2&amp;quot;&lt;/span&gt;
-    Option &lt;span class=&quot;s2&quot;&gt;&amp;quot;ConstantDeceleration&amp;quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;4&amp;quot;&lt;/span&gt;
-EndSection&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+    Option &lt;span class=&quot;s2&quot;&gt;&quot;AccelerationProfile&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;2&quot;&lt;/span&gt;
+    Option &lt;span class=&quot;s2&quot;&gt;&quot;ConstantDeceleration&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;4&quot;&lt;/span&gt;
+EndSection&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;p&gt;And one more note - if you’re using the &lt;code class=&quot;highlighter-rouge&quot;&gt;laptop-mode&lt;/code&gt; and a wireless keyboard from Logitech, it probably will be better to put this device into blacklist to avoid annoying problems with an unexpectedly frozen keyboard:&lt;/p&gt;
 
-&lt;p&gt;And one more note - if you&#39;re using the &lt;code&gt;laptop-mode&lt;/code&gt; and a wireless keyboard from Logitech, it probably will be better to put this device into blacklist to avoid annoying problems with an unexpectedly frozen keyboard:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;lsusb
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;lsusb
 ......
-Bus &lt;span class=&quot;m&quot;&gt;001&lt;/span&gt; Device 002: ID 046d:c52b Logitech, Inc. Unifying Receiver
-......&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+Bus 001 Device 002: ID 046d:c52b Logitech, Inc. Unifying Receiver
+......&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# /etc/laptop-mode/conf.d/runtime-pm.conf&lt;/span&gt;
 
+&lt;span class=&quot;nv&quot;&gt;AUTOSUSPEND_RUNTIME_DEVID_BLACKLIST&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;046d:c52b&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# /etc/laptop-mode/conf.d/runtime-pm.conf&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;AUTOSUSPEND_RUNTIME_DEVID_BLACKLIST&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;046d:c52b&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;h2&gt;End&lt;/h2&gt;
+&lt;h2 id=&quot;end&quot;&gt;End&lt;/h2&gt;
 
 &lt;p&gt;It was interesting journey to the world of bugs, strange configurations and default options. I hope this shortlist can be useful, at least for me in the future =)&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/img/futurama.jpg&quot; border=&quot;0&quot; width=&quot;50%&quot; style=&quot;margin: auto&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/public/img/futurama.jpg&quot; border=&quot;0&quot; width=&quot;50%&quot; style=&quot;margin: auto&quot; /&gt;&lt;/p&gt;
 </content>
  </entry>
  
@@ -368,43 +348,41 @@ Bus &lt;span class=&quot;m&quot;&gt;001&lt;/span&gt; Device 002: ID 046d:c52b Lo
    <link href="http://erthalion.info/2014/08/16/fenv-exceptions/"/>
    <updated>2014-08-16T22:20:42+07:00</updated>
    <id>http://erthalion.info/2014/08/16/fenv-exceptions</id>
-   <content type="html">&lt;p&gt;This is a small notice about a very useful trick. I often have to deal with computations, because the CFD is the part of my activity. And one of the annoying problem in this kind of research is when after many hours of computations you got a &lt;code&gt;Not A Number&lt;/code&gt; result, caused by a stupid mistake. It would be nice, if a computation was interrupted by the NaN.&lt;/p&gt;
+   <content type="html">&lt;p&gt;This is a small notice about a very useful trick. I often have to deal with computations, because the CFD is the part of my activity. And one of the annoying problem in this kind of research is when after many hours of computations you got a &lt;code class=&quot;highlighter-rouge&quot;&gt;Not A Number&lt;/code&gt; result, caused by a stupid mistake. It would be nice, if a computation was interrupted by the NaN.&lt;/p&gt;
 
 &lt;p&gt;And there is the &lt;a href=&quot;http://stackoverflow.com/a/2949452&quot;&gt;solution&lt;/a&gt;:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span class=&quot;cp&quot;&gt;#define _GNU_SOURCE&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;fenv.h&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;#include &amp;lt;stdio.h&amp;gt;&lt;/span&gt;
-
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-c&quot; data-lang=&quot;c&quot;&gt;&lt;span class=&quot;cp&quot;&gt;#define _GNU_SOURCE
+#include &amp;lt;fenv.h&amp;gt;
+#include &amp;lt;stdio.h&amp;gt;
+&lt;/span&gt;
 &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;kt&quot;&gt;double&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;feenableexcept&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;FE_DIVBYZERO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FE_INVALID&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FE_OVERFLOW&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 
-    &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;z&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/* should cause an FPE */&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;result is %f&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;result is %f&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-
-&lt;p&gt;The &lt;code&gt;fenv.h&lt;/code&gt; header declares a set of functions and macros to access the floating-point environment, along with specific types.
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;fenv.h&lt;/code&gt; header declares a set of functions and macros to access the floating-point environment, along with specific types.
 According to man:&lt;/p&gt;
 
-&lt;blockquote&gt;&lt;p&gt;The  feenableexcept() function enable traps for each of the exceptions represented by excepts and return the previous set of enabled exceptions when successful, and -1 otherwise.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;The  feenableexcept() function enable traps for each of the exceptions represented by excepts and return the previous set of enabled exceptions when successful, and -1 otherwise. &lt;/p&gt;
+&lt;/blockquote&gt;
 
-&lt;p&gt;Now, what we have without &lt;code&gt;feenableexcept&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;Now, what we have without &lt;code class=&quot;highlighter-rouge&quot;&gt;feenableexcept&lt;/code&gt;:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;./test_no_fenv 
-&amp;gt; result is -nan&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;./test_no_fenv 
+&lt;span class=&quot;gp&quot;&gt;&amp;gt; &lt;/span&gt;result is -nan&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;And with:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;./test_fenv 
-&amp;gt; fish: Job 1, &lt;span class=&quot;s1&quot;&gt;&amp;#39;./test&amp;#39;&lt;/span&gt; terminated by signal SIGFPE &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Floating point exception&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;./test_fenv 
+&lt;span class=&quot;gp&quot;&gt;&amp;gt; &lt;/span&gt;fish: Job 1, &lt;span class=&quot;s1&quot;&gt;&#39;./test&#39;&lt;/span&gt; terminated by signal SIGFPE &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Floating point exception&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 </content>
  </entry>
@@ -414,56 +392,54 @@ According to man:&lt;/p&gt;
    <link href="http://erthalion.info/2014/08/09/from-bash-to-fish/"/>
    <updated>2014-08-09T05:20:42+07:00</updated>
    <id>http://erthalion.info/2014/08/09/from-bash-to-fish</id>
-   <content type="html">&lt;p&gt;I&#39;m doing a small revolution in my environment from time to time. I think &quot;hey, a cool stuff&quot;, take a deep breath and doing something new. And this is story about my migration from the bash to the fish shell.&lt;/p&gt;
+   <content type="html">&lt;p&gt;I’m doing a small revolution in my environment from time to time. I think “hey, a cool stuff”, take a deep breath and doing something new. And this is story about my migration from the bash to the fish shell.&lt;/p&gt;
 
-&lt;p&gt;Let&#39;s see, what says the official tutorial:&lt;/p&gt;
+&lt;p&gt;Let’s see, what says the official tutorial:&lt;/p&gt;
 
-&lt;blockquote&gt;&lt;p&gt;fish is a fully-equipped command line shell (like bash or zsh) that is smart and user-friendly. fish supports powerful features like syntax highlighting, autosuggestions, and tab completions that just work, with nothing to learn or configure.
-If you want to make your command line more productive, more useful, and more fun, without learning a bunch of arcane syntax and configuration options, then fish might be just what you&#39;re looking for!&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;fish is a fully-equipped command line shell (like bash or zsh) that is smart and user-friendly. fish supports powerful features like syntax highlighting, autosuggestions, and tab completions that just work, with nothing to learn or configure.
+If you want to make your command line more productive, more useful, and more fun, without learning a bunch of arcane syntax and configuration options, then fish might be just what you’re looking for! &lt;/p&gt;
+&lt;/blockquote&gt;
 
 &lt;p&gt;And this is almost true =) But there is another concrete reason, why I like fish shell:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;Search by history (as an autocomplete by tab)&lt;/li&gt;
-&lt;li&gt;More intuitive and clean configuration files&lt;/li&gt;
-&lt;li&gt;Vim mode &lt;a href=&quot;https://github.com/fish-shell/fish-shell/issues/65&quot;&gt;support&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;Search by history (as an autocomplete by tab)&lt;/li&gt;
+  &lt;li&gt;More intuitive and clean configuration files&lt;/li&gt;
+  &lt;li&gt;Vim mode &lt;a href=&quot;https://github.com/fish-shell/fish-shell/issues/65&quot;&gt;support&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-
 
 &lt;p&gt;I would to avoid unnecessary lyrics, and pay more attention to the configuration and gotchas (from the bash point of view).&lt;/p&gt;
 
-&lt;p&gt;First of all - use &lt;code&gt;.&lt;/code&gt; command instead &lt;code&gt;source&lt;/code&gt; for the inclusion of the script.&lt;/p&gt;
+&lt;p&gt;First of all - use &lt;code class=&quot;highlighter-rouge&quot;&gt;.&lt;/code&gt; command instead &lt;code class=&quot;highlighter-rouge&quot;&gt;source&lt;/code&gt; for the inclusion of the script.&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;. /some-install-path/fish-shell/share/fish/functions/fish_vi_mode.fish
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;. /some-install-path/fish-shell/share/fish/functions/fish_vi_mode.fish
 . /some-install-path/.config/fish/themes/fish_right_prompt.fish
 . /some-install-path/.config/fish/themes/fish_prompt.fish
 . /etc/profile.d/autojump.fish
-fish_vi_key_bindings&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+fish_vi_key_bindings&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;p&gt;I’ve used &lt;code class=&quot;highlighter-rouge&quot;&gt;some-install-path&lt;/code&gt; because I’m a Vim hacker (~~an extra pathos~~), and I want a fresh version for the Vim support, so the manual compilation from github is my way. Then I’ve turned on Vim mode (&lt;code class=&quot;highlighter-rouge&quot;&gt;fish_vi_mode.fish&lt;/code&gt; is necessary for this). &lt;code class=&quot;highlighter-rouge&quot;&gt;fish_prompt.fish&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;fish_right_prompt.fish&lt;/code&gt; contain a description for the shell prompt and will be discussed later. If you use &lt;code class=&quot;highlighter-rouge&quot;&gt;autojump&lt;/code&gt;, you should also include &lt;code class=&quot;highlighter-rouge&quot;&gt;autojump.fish&lt;/code&gt; (if this file doesn’t exist, download it from repo).&lt;/p&gt;
 
-&lt;p&gt;I&#39;ve used &lt;code&gt;some-install-path&lt;/code&gt; because I&#39;m a Vim hacker (&lt;del&gt;an extra pathos&lt;/del&gt;), and I want a fresh version for the Vim support, so the manual compilation from github is my way. Then I&#39;ve turned on Vim mode (&lt;code&gt;fish_vi_mode.fish&lt;/code&gt; is necessary for this). &lt;code&gt;fish_prompt.fish&lt;/code&gt; and &lt;code&gt;fish_right_prompt.fish&lt;/code&gt; contain a description for the shell prompt and will be discussed later. If you use &lt;code&gt;autojump&lt;/code&gt;, you should also include &lt;code&gt;autojump.fish&lt;/code&gt; (if this file doesn&#39;t exist, download it from repo).&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;fish_greeting &lt;span class=&quot;s2&quot;&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;fish_greeting &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;This greeting is very distracting, so disable it. No comments =)&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; -x EDITOR vim
-&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;PATH /home/erthalion/.local/bin /usr/local/bin /opt/bin &lt;span class=&quot;nv&quot;&gt;$PATH&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; -x EDITOR vim
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;PATH /home/erthalion/.local/bin /usr/local/bin /opt/bin &lt;span class=&quot;nv&quot;&gt;$PATH&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;p&gt;We should set environment variables in this format. Pay attention to the &lt;code class=&quot;highlighter-rouge&quot;&gt;PATH&lt;/code&gt; variable - don’t forget about &lt;code class=&quot;highlighter-rouge&quot;&gt;/usr/local/bin&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;/opt/bin&lt;/code&gt; (looks like fish shell doesn’t include them by default).&lt;/p&gt;
 
-&lt;p&gt;We should set environment variables in this format. Pay attention to the &lt;code&gt;PATH&lt;/code&gt; variable - don&#39;t forget about &lt;code&gt;/usr/local/bin&lt;/code&gt; and &lt;code&gt;/opt/bin&lt;/code&gt; (looks like fish shell doesn&#39;t include them by default).&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;goutshow&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;git fetch; git show origin/master..&#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-sh&quot; data-lang=&quot;sh&quot;&gt;&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;goutshow&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;git fetch; git show origin/master..&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;One more observation - we should replace &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&amp;amp;&lt;/code&gt; by the &lt;code class=&quot;highlighter-rouge&quot;&gt;;&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;and&lt;/code&gt; commands.&lt;/p&gt;
 
+&lt;p&gt;Now get closer to the prompt. It described by the two functions - &lt;code class=&quot;highlighter-rouge&quot;&gt;fish_prompt&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;fish_right_prompt&lt;/code&gt; (your C.O.). I have no advices for this section. Really. You can use your imagination and do what you want =) There are my examples - &lt;a href=&quot;https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_prompt.fish&quot;&gt;left&lt;/a&gt; and &lt;a href=&quot;https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_right_prompt.fish&quot;&gt;right&lt;/a&gt;. Only one comment - you may want to show &lt;code class=&quot;highlighter-rouge&quot;&gt;virtualenv&lt;/code&gt; name in the prompt. In that case you should disable original by the variable &lt;code class=&quot;highlighter-rouge&quot;&gt;set -x VIRTUAL_ENV_DISABLE_PROMPT 1&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;One more observation - we should replace &lt;code&gt;&amp;amp;&amp;amp;&lt;/code&gt; by the &lt;code&gt;;&lt;/code&gt; or &lt;code&gt;and&lt;/code&gt; commands.&lt;/p&gt;
-
-&lt;p&gt;Now get closer to the prompt. It described by the two functions - &lt;code&gt;fish_prompt&lt;/code&gt; and &lt;code&gt;fish_right_prompt&lt;/code&gt; (your C.O.). I have no advices for this section. Really. You can use your imagination and do what you want =) There are my examples - &lt;a href=&quot;https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_prompt.fish&quot;&gt;left&lt;/a&gt; and &lt;a href=&quot;https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_right_prompt.fish&quot;&gt;right&lt;/a&gt;. Only one comment - you may want to show &lt;code&gt;virtualenv&lt;/code&gt; name in the prompt. In that case you should disable original by the variable &lt;code&gt;set -x VIRTUAL_ENV_DISABLE_PROMPT 1&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;But unfortunately, Vim support isn&#39;t very well in the fish shell. For example, there is no &lt;code&gt;replace (r)&lt;/code&gt; command, or &lt;code&gt;undo (u)&lt;/code&gt;. Actually it&#39;s a horrible problem for me, especially the first one =) And here is my &lt;a href=&quot;https://github.com/fish-shell/fish-shell/pull/1595&quot;&gt;solution&lt;/a&gt; of this problem.&lt;/p&gt;
+&lt;p&gt;But unfortunately, Vim support isn’t very well in the fish shell. For example, there is no &lt;code class=&quot;highlighter-rouge&quot;&gt;replace (r)&lt;/code&gt; command, or &lt;code class=&quot;highlighter-rouge&quot;&gt;undo (u)&lt;/code&gt;. Actually it’s a horrible problem for me, especially the first one =) And here is my &lt;a href=&quot;https://github.com/fish-shell/fish-shell/pull/1595&quot;&gt;solution&lt;/a&gt; of this problem.&lt;/p&gt;
 
 &lt;p&gt;I think, fish shell is available for a lot of improvements. All, that described above, is only a base for a convenient environment, and I hope, it will be useful.&lt;/p&gt;
+
 </content>
  </entry>
  
@@ -472,26 +448,30 @@ fish_vi_key_bindings&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
    <link href="http://erthalion.info/2014/05/25/gnuchess/"/>
    <updated>2014-05-25T05:20:42+07:00</updated>
    <id>http://erthalion.info/2014/05/25/gnuchess</id>
-   <content type="html">&lt;p&gt;I&#39;m at the beginning of my journey into the world of gnuchess. Its interface is a slightly tricky, than I&#39;ve expected, but I was interested. So I&#39;ve decided to make some notes about this.&lt;/p&gt;
+   <content type="html">&lt;p&gt;I’m at the beginning of my journey into the world of gnuchess. Its interface is a slightly tricky, than I’ve expected, but I was interested. So I’ve decided to make some notes about this.&lt;/p&gt;
 
-&lt;blockquote&gt;&lt;p&gt;GNU Chess performs at the senior master/weak international master strength of 2500+ on the Elo rating system&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;GNU Chess performs at the senior master/weak international master strength of 2500+ on the Elo rating system&lt;/p&gt;
+&lt;/blockquote&gt;
 
-&lt;p&gt;I don&#39;t know, what does this mean really, but sounds cool =)&lt;/p&gt;
+&lt;p&gt;I don’t know, what does this mean really, but sounds cool =)&lt;/p&gt;
 
-&lt;blockquote&gt;&lt;p&gt;It is often used in conjunction with a GUI program such as XBoard or glChess&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;It is often used in conjunction with a GUI program such as XBoard or glChess&lt;/p&gt;
+&lt;/blockquote&gt;
 
-&lt;p&gt;No, it&#39;s not our way. Let&#39;s try to use original teminal-based client (more terminal for the terminal god, mwuahahahaha =).&lt;/p&gt;
+&lt;p&gt;No, it’s not our way. Let’s try to use original teminal-based client (more terminal for the terminal god, mwuahahahaha =).&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gnuchess
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;gnuchess
 
 GNU Chess 6.1.1
-Copyright &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;C&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2013&lt;/span&gt; Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt; or later &amp;lt;http://gnu.org/licenses/gpl.html&amp;gt;
+Copyright &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;C&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 2013 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later &amp;lt;http://gnu.org/licenses/gpl.html&amp;gt;
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : e2e4
-TimeLimit&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;0&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0
-TimeLimit&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0
+TimeLimit[0] &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0
+TimeLimit[1] &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0
 1. e2e4
 
 black  KQkq  e3
@@ -514,31 +494,31 @@ p p p p p p p p
 . . . . P . . . 
 . . . . . . . . 
 P P P P . P P P 
-R N B Q K B N R&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
+R N B Q K B N R&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;Gnuchess uses the standard algebraic notation (SAN) required by FIDE, so we can type something like this to play:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;Nf3
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;Nf3
 g1f3
 O-O
-e1g1&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+e1g1&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;p&gt;Ok. But what is it? Gnuchess uses the most of the CPU all time, even at the player’s move. It’s super, but it would be more convenient to limit the thinking time for gnuchess engine. In the documentation we can see, that the &lt;code class=&quot;highlighter-rouge&quot;&gt;--easy&lt;/code&gt; options is responsible for this.&lt;/p&gt;
 
-&lt;p&gt;Ok. But what is it? Gnuchess uses the most of the CPU all time, even at the player&#39;s move. It&#39;s super, but it would be more convenient to limit the thinking time for gnuchess engine. In the documentation we can see, that the &lt;code&gt;--easy&lt;/code&gt; options is responsible for this.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;–easy, -e:  Disable thinking in opponent’s time.  By default, the program runs in hard mode, i.e.  it thinks opponent’s time to think too.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-&lt;blockquote&gt;&lt;p&gt;--easy, -e:  Disable thinking in opponent&#39;s time.  By default, the program runs in hard mode, i.e.  it thinks opponent&#39;s time to think too.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;Now better. But how we can pause the game and continue later? There are an obvious commands for this: &lt;code class=&quot;highlighter-rouge&quot;&gt;save&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;load&lt;/code&gt;, which save the game position into &lt;code class=&quot;highlighter-rouge&quot;&gt;EPD&lt;/code&gt; format&lt;/p&gt;
 
-&lt;p&gt;Now better. But how we can pause the game and continue later? There are an obvious commands for this: &lt;code&gt;save&lt;/code&gt; and &lt;code&gt;load&lt;/code&gt;, which save the game position into &lt;code&gt;EPD&lt;/code&gt; format&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : save game_file
-TimeLimit&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;0&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0
-TimeLimit&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : save game_file
+TimeLimit[0] &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0
+TimeLimit[1] &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0
 White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : load game_file
-TimeLimit&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;0&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0
-TimeLimit&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0
+TimeLimit[0] &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0
+TimeLimit[1] &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0
 
- : Best &lt;span class=&quot;nv&quot;&gt;move&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 1
+ : Best move &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 1
 
 white  KQkq
 r n b q k b . r 
@@ -550,39 +530,35 @@ p p p p p p p p
 P P P P . P P P 
 R N B Q K B N R 
  
-White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; :&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-
-&lt;p&gt;And little bit about usability - we can use the pseudo graphical mode (a unicode symbols will be used for output), but ... it looks ugly. Classical mode provides convenient enouth game, except the board&#39;s coordinates. To avoid this inconvenience, we can use the patch below:&lt;/p&gt;
+&lt;p&gt;And little bit about usability - we can use the pseudo graphical mode (a unicode symbols will be used for output), but … it looks ugly. Classical mode provides convenient enouth game, except the board’s coordinates. To avoid this inconvenience, we can use the patch below:&lt;/p&gt;
 
 &lt;div style=&quot;font-size:14px&quot;&gt;
 &lt;script src=&quot;https://gist.github.com/erthalion/370a82f17ba95c23e4f5.js&quot;&gt;&lt;/script&gt;
 &lt;/div&gt;
 
-
-
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;gnuchess -e
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;gnuchess -e
 GNU Chess 6.1.1
-Copyright &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;C&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2013&lt;/span&gt; Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt; or later &amp;lt;http://gnu.org/licenses/gpl.html&amp;gt;
+Copyright &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;C&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 2013 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later &amp;lt;http://gnu.org/licenses/gpl.html&amp;gt;
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : e2e4
-TimeLimit&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;0&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0
-TimeLimit&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0
+TimeLimit[0] &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0
+TimeLimit[1] &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0
 1. e2e4
 
 black  KQkq  e3
 
-&lt;span class=&quot;m&quot;&gt;8&lt;/span&gt;  r n b q k b n r 
-&lt;span class=&quot;m&quot;&gt;7&lt;/span&gt;  p p p p p p p p 
-&lt;span class=&quot;m&quot;&gt;6&lt;/span&gt;  . . . . . . . . 
-&lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;  . . . . . . . . 
-&lt;span class=&quot;m&quot;&gt;4&lt;/span&gt;  . . . . P . . . 
-&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;  . . . . . . . . 
-&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;  P P P P . P P P 
-&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;  R N B Q K B N R 
+8  r n b q k b n r 
+7  p p p p p p p p 
+6  . . . . . . . . 
+5  . . . . . . . . 
+4  . . . . P . . . 
+3  . . . . . . . . 
+2  P P P P . P P P 
+1  R N B Q K B N R 
   
    a b c d e f g h 
 
@@ -590,21 +566,20 @@ Thinking...
 
 white  KQkq
 
-&lt;span class=&quot;m&quot;&gt;8&lt;/span&gt;  r n b q k b . r 
-&lt;span class=&quot;m&quot;&gt;7&lt;/span&gt;  p p p p p p p p 
-&lt;span class=&quot;m&quot;&gt;6&lt;/span&gt;  . . . . . n . . 
-&lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;  . . . . . . . . 
-&lt;span class=&quot;m&quot;&gt;4&lt;/span&gt;  . . . . P . . . 
-&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;  . . . . . . . . 
-&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;  P P P P . P P P 
-&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;  R N B Q K B N R 
+8  r n b q k b . r 
+7  p p p p p p p p 
+6  . . . . . n . . 
+5  . . . . . . . . 
+4  . . . . P . . . 
+3  . . . . . . . . 
+2  P P P P . P P P 
+1  R N B Q K B N R 
   
    a b c d e f g h 
 
 
 My move is : Nf6
-White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; :&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
+White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; : &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;Have a nice game!&lt;/p&gt;
 </content>
@@ -615,45 +590,44 @@ White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot
    <link href="http://erthalion.info/2014/04/22/endless-paginator/"/>
    <updated>2014-04-22T01:14:42+07:00</updated>
    <id>http://erthalion.info/2014/04/22/endless-paginator</id>
-   <content type="html">&lt;p&gt;A little bit about my new program-frankenstein. Now it is an endless &lt;code&gt;Paginator&lt;/code&gt; for Django. It sounds crazy, isn&#39;t?&lt;/p&gt;
+   <content type="html">&lt;p&gt;A little bit about my new program-frankenstein. Now it is an endless &lt;code class=&quot;highlighter-rouge&quot;&gt;Paginator&lt;/code&gt; for Django. It sounds crazy, isn’t?&lt;/p&gt;
 
-&lt;p&gt;Standart Django &lt;code&gt;Paginator&lt;/code&gt; uses the &lt;code&gt;count()&lt;/code&gt; function for the verification of page number. It is converted to the &lt;code&gt;SELECT COUNT(*) ...&lt;/code&gt; query, of course. But as I was explained (I really don&#39;t know, maybe it&#39;s just an exaggeration - you can post your opinion in the commentaries), this is not a such lightweight query, as we want for the paginated rest api, because of the &lt;a href=&quot;http://wiki.postgresql.org/wiki/MVCC&quot;&gt;MVCC&lt;/a&gt; in PostgreSQL.&lt;/p&gt;
+&lt;p&gt;Standart Django &lt;code class=&quot;highlighter-rouge&quot;&gt;Paginator&lt;/code&gt; uses the &lt;code class=&quot;highlighter-rouge&quot;&gt;count()&lt;/code&gt; function for the verification of page number. It is converted to the &lt;code class=&quot;highlighter-rouge&quot;&gt;SELECT COUNT(*) ...&lt;/code&gt; query, of course. But as I was explained (I really don’t know, maybe it’s just an exaggeration - you can post your opinion in the commentaries), this is not a such lightweight query, as we want for the paginated rest api, because of the &lt;a href=&quot;http://wiki.postgresql.org/wiki/MVCC&quot;&gt;MVCC&lt;/a&gt; in PostgreSQL.&lt;/p&gt;
 
-&lt;p&gt;How we can avoid the extra &lt;code&gt;COUNT(*)&lt;/code&gt; query? Don&#39;t panic, we can trick the Django.&lt;/p&gt;
+&lt;p&gt;How we can avoid the extra &lt;code class=&quot;highlighter-rouge&quot;&gt;COUNT(*)&lt;/code&gt; query? Don’t panic, we can trick the Django.&lt;/p&gt;
 
-&lt;p&gt;First of all we need to disable &lt;code&gt;count&lt;/code&gt; parameter from the api response. We can introduce a custom pagination serializer:&lt;/p&gt;
+&lt;p&gt;First of all we need to disable &lt;code class=&quot;highlighter-rouge&quot;&gt;count&lt;/code&gt; parameter from the api response. We can introduce a custom pagination serializer:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# serializers.py&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# serializers.py&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CustomPaginationSerializer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BasePaginationSerializer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NextPageField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;source&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;*&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;previous&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PreviousPageField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;source&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;*&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;NextPageField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;source&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;*&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;previous&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PreviousPageField&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;source&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;*&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
 &lt;span class=&quot;c&quot;&gt;# api.py&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SomeListView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;generics&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ListAPIView&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SomeModel&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;serializer_class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SomeSerializerClass&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;pagination_serializer_class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomPaginationSerializer&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
+    &lt;span class=&quot;n&quot;&gt;pagination_serializer_class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomPaginationSerializer&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;The next our move - disable the page number verification. This can be done by the custom paginator class:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CustomPaginator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Paginator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;sd&quot;&gt;&amp;quot;&amp;quot;&amp;quot; HACK: To avoid unneseccary `SELECT COUNT(*) ...`&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt;        paginator has an infinity page number and a count of elements.&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt;    &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CustomPaginator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Paginator&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot; HACK: To avoid unneseccary `SELECT COUNT(*) ...`
+        paginator has an infinity page number and a count of elements.
+    &quot;&quot;&quot;&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;_get_num_pages&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;sd&quot;&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt;        Returns the total number of pages.&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt;        &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;float&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;inf&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
+        Returns the total number of pages.
+        &quot;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;float&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;inf&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
     &lt;span class=&quot;n&quot;&gt;num_pages&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;property&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_get_num_pages&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
     &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;_get_count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;sd&quot;&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt;        Returns the total number of objects, across all pages.&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt;        &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;float&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;inf&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
+        Returns the total number of objects, across all pages.
+        &quot;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;float&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;inf&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
     &lt;span class=&quot;n&quot;&gt;count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;property&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_get_count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
@@ -665,18 +639,17 @@ White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot
     &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SomeModel&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;serializer_class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SomeSerializerClass&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;pagination_serializer_class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomPaginationSerializer&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;paginator_class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomPaginator&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+    &lt;span class=&quot;n&quot;&gt;paginator_class&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomPaginator&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;p&gt;Oh, goodness - we introduced the infinity number of the pages and the infinity number of elements… But we want also the correct next/prev links, so one more detail:&lt;/p&gt;
 
-&lt;p&gt;Oh, goodness - we introduced the infinity number of the pages and the infinity number of elements... But we want also the correct next/prev links, so one more detail:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CustomPage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Page&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CustomPage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Page&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;has_next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;sd&quot;&gt;&amp;quot;&amp;quot;&amp;quot; HACK: Select object_list + 1 element&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt;            to verify next page existense.&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt;        &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;low&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__dict__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;low_mark&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__dict__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;high_mark&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot; HACK: Select object_list + 1 element
+            to verify next page existense.
+        &quot;&quot;&quot;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;low&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__dict__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;low_mark&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__dict__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;high_mark&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
         &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clear_limits&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
         &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_list&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_limits&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;low&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;low&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;high&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;high&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
@@ -688,10 +661,10 @@ White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot
             &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;finally&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
             &lt;span class=&quot;c&quot;&gt;# restore initial object_list count&lt;/span&gt;
-            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;high&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;low&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;object_list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[:(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;high&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;low&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;This solution looks very questionable, but exciting for me. If you have something to say about this - welcome! =)&lt;/p&gt;
+
 </content>
  </entry>
  
@@ -700,73 +673,70 @@ White &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2&lt;span class=&quot;o&quot
    <link href="http://erthalion.info/2014/03/26/xi/"/>
    <updated>2014-03-26T05:11:42+07:00</updated>
    <id>http://erthalion.info/2014/03/26/xi</id>
-   <content type="html">&lt;p&gt;Don&#39;t be confused by the title of this post - I will tell you about my experience in the development of xmpp client &lt;a href=&quot;https://github.com/erthalion/xi&quot;&gt;xi&lt;/a&gt;. The first version of this client was written in Haskell in the shortest time (for me, of cource), and this fact provides the second emotional part of title =)&lt;/p&gt;
+   <content type="html">&lt;p&gt;Don’t be confused by the title of this post - I will tell you about my experience in the development of xmpp client &lt;a href=&quot;https://github.com/erthalion/xi&quot;&gt;xi&lt;/a&gt;. The first version of this client was written in Haskell in the shortest time (for me, of cource), and this fact provides the second emotional part of title =)&lt;/p&gt;
 
-&lt;p&gt;First of all - &lt;code&gt;xi&lt;/code&gt; was inspired by &lt;a href=&quot;http://tools.suckless.org/ii/]&quot;&gt;ii&lt;/a&gt; irc client. It explains the all of its features, design and main idea. In short - after &lt;a href=&quot;http://erthalion.info/2014/02/16/ii/&quot;&gt;this&lt;/a&gt; post I&#39;m a huge fan of this tool and philosophy.&lt;/p&gt;
+&lt;p&gt;First of all - &lt;code class=&quot;highlighter-rouge&quot;&gt;xi&lt;/code&gt; was inspired by &lt;a href=&quot;http://tools.suckless.org/ii/]&quot;&gt;ii&lt;/a&gt; irc client. It explains the all of its features, design and main idea. In short - after &lt;a href=&quot;http://erthalion.info/2014/02/16/ii/&quot;&gt;this&lt;/a&gt; post I’m a huge fan of this tool and philosophy.&lt;/p&gt;
 
-&lt;p&gt;Second - &lt;code&gt;xi&lt;/code&gt; was written in Haskell. I will not explain &lt;a href=&quot;http://stackoverflow.com/a/775759/1423473&quot;&gt;why&lt;/a&gt; =)&lt;/p&gt;
+&lt;p&gt;Second - &lt;code class=&quot;highlighter-rouge&quot;&gt;xi&lt;/code&gt; was written in Haskell. I will not explain &lt;a href=&quot;http://stackoverflow.com/a/775759/1423473&quot;&gt;why&lt;/a&gt; =)&lt;/p&gt;
 
-&lt;p&gt;Now let&#39;s take a look inside. We can see a lot of dependencies of course - &lt;code&gt;xi&lt;/code&gt; uses &lt;a href=&quot;https://github.com/pontarius/pontarius-xmpp/&quot;&gt;pontarius xmpp&lt;/a&gt; for the XMPP interaction. But there is an interesting hidden trick - we must use this library from the github directly yet, because of an unpleasant &lt;a href=&quot;https://github.com/pontarius/pontarius-xmpp/issues/46&quot;&gt;bug&lt;/a&gt;. This can be done by the &lt;code&gt;cabal sandbox add-source&lt;/code&gt; command:&lt;/p&gt;
+&lt;p&gt;Now let’s take a look inside. We can see a lot of dependencies of course - &lt;code class=&quot;highlighter-rouge&quot;&gt;xi&lt;/code&gt; uses &lt;a href=&quot;https://github.com/pontarius/pontarius-xmpp/&quot;&gt;pontarius xmpp&lt;/a&gt; for the XMPP interaction. But there is an interesting hidden trick - we must use this library from the github directly yet, because of an unpleasant &lt;a href=&quot;https://github.com/pontarius/pontarius-xmpp/issues/46&quot;&gt;bug&lt;/a&gt;. This can be done by the &lt;code class=&quot;highlighter-rouge&quot;&gt;cabal sandbox add-source&lt;/code&gt; command:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git clone http://github.com/pontarius/pontarius-xmpp .deps/pontarius-xmpp
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git clone http://github.com/pontarius/pontarius-xmpp .deps/pontarius-xmpp
 cabal sandbox init
-cabal sandbox add-source .deps/pontarius-xmpp&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+cabal sandbox add-source .deps/pontarius-xmpp&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;p&gt;Also, if we want to support &lt;code class=&quot;highlighter-rouge&quot;&gt;gmail.com&lt;/code&gt;, we must use some extra &lt;code class=&quot;highlighter-rouge&quot;&gt;TLS&lt;/code&gt; options:&lt;/p&gt;
 
-&lt;p&gt;Also, if we want to support &lt;code&gt;gmail.com&lt;/code&gt;, we must use some extra &lt;code&gt;TLS&lt;/code&gt; options:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-haskell&quot; data-lang=&quot;haskell&quot;&gt;&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Network.TLS&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-haskell&quot; data-lang=&quot;haskell&quot;&gt;&lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Network.TLS&lt;/span&gt;
 &lt;span class=&quot;kr&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;Network.TLS.Extra&lt;/span&gt;
 
-&lt;span class=&quot;nf&quot;&gt;sess&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;sess&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;session&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;server&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Just&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plain&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Nothing&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]),&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Nothing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sessionStreamConfiguration&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;def&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tlsParams&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultParamsClient&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pConnectVersion&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;TLS10&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pAllowedVersions&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;TLS10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;TLS11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;TLS12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-                &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pCiphers&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ciphersuite_medium&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+      &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Just&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;plain&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Nothing&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]),&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Nothing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sessionStreamConfiguration&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;def&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tlsParams&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;defaultParamsClient&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pConnectVersion&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;TLS10&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pAllowedVersions&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;TLS10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;TLS11&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;TLS12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pCiphers&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ciphersuite_medium&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;p&gt;Other important feature is the listening of the file, which will contain a user input. We will use a &lt;code class=&quot;highlighter-rouge&quot;&gt;fsnotify&lt;/code&gt; library for these purposes. Michael Snoyman &lt;a href=&quot;http://stackoverflow.com/a/22128940/1423473&quot;&gt;shared the implementation&lt;/a&gt; of this feature (he always flying to help, when SO question contains the &lt;code class=&quot;highlighter-rouge&quot;&gt;haskell&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;conduit&lt;/code&gt; keywords =). The main idea is the monitoring file changes by &lt;code class=&quot;highlighter-rouge&quot;&gt;fsnotify&lt;/code&gt;, and save the current position in file. There are several disadvanteges with this approach - e.g. we can’t handle a file truncation. But for our purposes we can use files, that will never be truncated.&lt;/p&gt;
 
-&lt;p&gt;Other important feature is the listening of the file, which will contain a user input. We will use a &lt;code&gt;fsnotify&lt;/code&gt; library for these purposes. Michael Snoyman &lt;a href=&quot;http://stackoverflow.com/a/22128940/1423473&quot;&gt;shared the implementation&lt;/a&gt; of this feature (he always flying to help, when SO question contains the &lt;code&gt;haskell&lt;/code&gt; and &lt;code&gt;conduit&lt;/code&gt; keywords =). The main idea is the monitoring file changes by &lt;code&gt;fsnotify&lt;/code&gt;, and save the current position in file. There are several disadvanteges with this approach - e.g. we can&#39;t handle a file truncation. But for our purposes we can use files, that will never be truncated.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-haskell&quot; data-lang=&quot;haskell&quot;&gt;&lt;span class=&quot;nf&quot;&gt;sourceFileForever&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;MonadResource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;FilePath&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Source&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ByteString&lt;/span&gt;
-&lt;span class=&quot;nf&quot;&gt;sourceFileForever&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fp&amp;#39;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bracketP&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;startManager&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stopManager&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;manager&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;fp&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;canonicalizePath&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;decodeString&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fp&amp;#39;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;baton&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newEmptyMVar&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;watchDir&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;manager&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;directory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tryIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;fpE&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;canonicalizePath&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-haskell&quot; data-lang=&quot;haskell&quot;&gt;&lt;span class=&quot;n&quot;&gt;sourceFileForever&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;MonadResource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;FilePath&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Source&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ByteString&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;sourceFileForever&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fp&#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bracketP&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;startManager&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stopManager&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;manager&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;fp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;canonicalizePath&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;decodeString&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fp&#39;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;baton&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newEmptyMVar&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;watchDir&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;manager&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;directory&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tryIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;fpE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;canonicalizePath&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt;
             &lt;span class=&quot;kr&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;of&lt;/span&gt;
-                &lt;span class=&quot;kt&quot;&gt;Added&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;
-                &lt;span class=&quot;kt&quot;&gt;Modified&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;
-                &lt;span class=&quot;kt&quot;&gt;Removed&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;
+                &lt;span class=&quot;kt&quot;&gt;Added&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;
+                &lt;span class=&quot;kt&quot;&gt;Modified&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;
+                &lt;span class=&quot;kt&quot;&gt;Removed&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;when&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fpE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;putMVar&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;baton&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;consumedRef&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newIORef&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;consumedRef&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newIORef&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;baton&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumedRef&lt;/span&gt;
   &lt;span class=&quot;kr&quot;&gt;where&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;MonadResource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;MVar&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;IORef&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Integer&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Source&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ByteString&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;baton&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumedRef&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;forever&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;consumed&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;readIORef&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumedRef&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;sourceFileRange&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fp&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Just&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Nothing&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;CL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;iterM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;::&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;MonadResource&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;MVar&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;IORef&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Integer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Source&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ByteString&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;loop&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;baton&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumedRef&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;forever&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;do&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;consumed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;readIORef&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumedRef&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sourceFileRange&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fp&#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Just&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Nothing&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$=&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;CL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;iterM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;takeMVar&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;baton&lt;/span&gt;
       &lt;span class=&quot;kr&quot;&gt;where&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;modifyIORef&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumedRef&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fromIntegral&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+        &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;liftIO&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;modifyIORef&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;consumedRef&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fromIntegral&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;bs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-
-&lt;p&gt;&lt;code&gt;xi&lt;/code&gt; uses the  following algorithm:&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;xi&lt;/code&gt; uses the  following algorithm:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;establish connection&lt;/li&gt;
-&lt;li&gt;get a user roster and convert it to the internal representation (the &lt;code&gt;ContactList&lt;/code&gt; type)&lt;/li&gt;
-&lt;li&gt;create an appropriate directory structure (a separate directory for each contact with &lt;code&gt;in&lt;/code&gt;/&lt;code&gt;out&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;for the each input file start a separate thread to monitoring the user input&lt;/li&gt;
-&lt;li&gt;start a thread for monitoring the incoming messages&lt;/li&gt;
+  &lt;li&gt;establish connection&lt;/li&gt;
+  &lt;li&gt;get a user roster and convert it to the internal representation (the &lt;code class=&quot;highlighter-rouge&quot;&gt;ContactList&lt;/code&gt; type)&lt;/li&gt;
+  &lt;li&gt;create an appropriate directory structure (a separate directory for each contact with &lt;code class=&quot;highlighter-rouge&quot;&gt;in&lt;/code&gt;/&lt;code class=&quot;highlighter-rouge&quot;&gt;out&lt;/code&gt;)&lt;/li&gt;
+  &lt;li&gt;for the each input file start a separate thread to monitoring the user input&lt;/li&gt;
+  &lt;li&gt;start a thread for monitoring the incoming messages&lt;/li&gt;
 &lt;/ul&gt;
 
+&lt;p&gt;Little bit about client details. A &lt;code class=&quot;highlighter-rouge&quot;&gt;Session&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;ContactList&lt;/code&gt; objects have been shared through the &lt;code class=&quot;highlighter-rouge&quot;&gt;Reader&lt;/code&gt; monad. For the parsing of configuration file &lt;code class=&quot;highlighter-rouge&quot;&gt;yaml-config&lt;/code&gt; library has been used. Also, there is an ability to see an entire xmpp data flow - this requires only the debug mode in configuration.&lt;/p&gt;
 
-&lt;p&gt;Little bit about client details. A &lt;code&gt;Session&lt;/code&gt; and &lt;code&gt;ContactList&lt;/code&gt; objects have been shared through the &lt;code&gt;Reader&lt;/code&gt; monad. For the parsing of configuration file &lt;code&gt;yaml-config&lt;/code&gt; library has been used. Also, there is an ability to see an entire xmpp data flow - this requires only the debug mode in configuration.&lt;/p&gt;
+&lt;p&gt;Client source code hosted on the &lt;a href=&quot;https://github.com/erthalion/xi&quot;&gt;github&lt;/a&gt;, but you should keep in mind, that it’s more prototype, than a completed project. So if you want to improve something - welcome =)&lt;/p&gt;
 
-&lt;p&gt;Client source code hosted on the &lt;a href=&quot;https://github.com/erthalion/xi&quot;&gt;github&lt;/a&gt;, but you should keep in mind, that it&#39;s more prototype, than a completed project. So if you want to improve something - welcome =)&lt;/p&gt;
 </content>
  </entry>
  
@@ -779,25 +749,24 @@ cabal sandbox add-source .deps/pontarius-xmpp&lt;/code&gt;&lt;/pre&gt;&lt;/div&g
 
 &lt;p&gt;There are a lot of discussion about the implementation of PostgreSQL schemas in Django (for example &lt;a href=&quot;https://code.djangoproject.com/ticket/1051&quot;&gt;one&lt;/a&gt;, &lt;a href=&quot;https://code.djangoproject.com/ticket/6148&quot;&gt;two&lt;/a&gt;). And I want to describe several caveats.&lt;/p&gt;
 
-&lt;p&gt;First of all - you shouldn&#39;t use the &lt;code&gt;options&lt;/code&gt; key to choice a schema like this:&lt;/p&gt;
+&lt;p&gt;First of all - you shouldn’t use the &lt;code class=&quot;highlighter-rouge&quot;&gt;options&lt;/code&gt; key to choice a schema like this:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;DATABASES&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;default&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;OPTIONS&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;&amp;#39;options&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;-c search_path=schema&amp;#39;&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;    &lt;span class=&quot;n&quot;&gt;DATABASES&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;default&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;OPTIONS&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&#39;options&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;-c search_path=schema&#39;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;p&gt;It can be working, until you &lt;a href=&quot;http://lists.pgfoundry.org/pipermail/pgbouncer-general/2011-August/000842.html&quot;&gt;don’t use pgbouncer&lt;/a&gt;. This option hasn’t supported because of the connection pool - when you close a connection with &lt;code class=&quot;highlighter-rouge&quot;&gt;search_path&lt;/code&gt;, it will be returned into the pool, and can be reused with the out of date &lt;code class=&quot;highlighter-rouge&quot;&gt;search_path&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;It can be working, until you &lt;a href=&quot;http://lists.pgfoundry.org/pipermail/pgbouncer-general/2011-August/000842.html&quot;&gt;don&#39;t use pgbouncer&lt;/a&gt;. This option hasn&#39;t supported because of the connection pool - when you close a connection with &lt;code&gt;search_path&lt;/code&gt;, it will be returned into the pool, and can be reused with the out of date &lt;code&gt;search_path&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;So what we gonna do? The only choice is to use &lt;code class=&quot;highlighter-rouge&quot;&gt;connection_create&lt;/code&gt; signal:&lt;/p&gt;
 
-&lt;p&gt;So what we gonna do? The only choice is to use &lt;code&gt;connection_create&lt;/code&gt; signal:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# schema.py&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# schema.py&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;set_search_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sender&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.conf&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;settings&lt;/span&gt;
 
-    &lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;connection&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kwargs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;connection&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;conn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;SET search_path={}&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;cursor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;execute&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;SET search_path={}&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
             &lt;span class=&quot;n&quot;&gt;settings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SEARCH_PATH&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
         &lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
 
@@ -805,29 +774,26 @@ cabal sandbox add-source .deps/pontarius-xmpp&lt;/code&gt;&lt;/pre&gt;&lt;/div&g
 &lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.db.backends.signals&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;connection_created&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;schema&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;set_search_path&lt;/span&gt;
 
-&lt;span class=&quot;n&quot;&gt;connection_created&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;connect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_search_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;n&quot;&gt;connection_created&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;connect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_search_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;p&gt;But where should we place this code? In general case if we want to handle the migrations, the only place is a settings file (a &lt;code class=&quot;highlighter-rouge&quot;&gt;model.py&lt;/code&gt; isn’t suitable for this, when we want to distribute an application models and third-party models over different schemas). And to avoid circular dependencies, we should use three (OMG!) configuration files - &lt;code class=&quot;highlighter-rouge&quot;&gt;default.py&lt;/code&gt; (main configuration), &lt;code class=&quot;highlighter-rouge&quot;&gt;local.py/staging.py/production.py&lt;/code&gt; (depends on the server), &lt;code class=&quot;highlighter-rouge&quot;&gt;migration.py&lt;/code&gt; (used to set a search path). The last configuration is used only for the migration purposes:&lt;/p&gt;
 
-&lt;p&gt;But where should we place this code? In general case if we want to handle the migrations, the only place is a settings file (a &lt;code&gt;model.py&lt;/code&gt; isn&#39;t suitable for this, when we want to distribute an application models and third-party models over different schemas). And to avoid circular dependencies, we should use three (OMG!) configuration files - &lt;code&gt;default.py&lt;/code&gt; (main configuration), &lt;code&gt;local.py/staging.py/production.py&lt;/code&gt; (depends on the server), &lt;code&gt;migration.py&lt;/code&gt; (used to set a search path). The last configuration is used only for the migration purposes:&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;python manage.py migrate app --settings&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;project.migration&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;python manage.py migrate app --settings&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;project.migration&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;For the normal usage we can connect &lt;code class=&quot;highlighter-rouge&quot;&gt;set_search_path&lt;/code&gt; function to the &lt;code class=&quot;highlighter-rouge&quot;&gt;connection_create&lt;/code&gt; signal in the root &lt;code class=&quot;highlighter-rouge&quot;&gt;urls.py&lt;/code&gt; and avoid the &lt;code class=&quot;highlighter-rouge&quot;&gt;migration.py&lt;/code&gt; configuration of course.&lt;/p&gt;
 
+&lt;p&gt;But that’s not all - there is one more trouble with the different schemas, if you using &lt;code class=&quot;highlighter-rouge&quot;&gt;TransactionTestCase&lt;/code&gt; for testing. Sometimes you can see an error at the tests &lt;code class=&quot;highlighter-rouge&quot;&gt;tear_down&lt;/code&gt;:&lt;/p&gt;
 
-&lt;p&gt;For the normal usage we can connect &lt;code&gt;set_search_path&lt;/code&gt; function to the &lt;code&gt;connection_create&lt;/code&gt; signal in the root &lt;code&gt;urls.py&lt;/code&gt; and avoid the &lt;code&gt;migration.py&lt;/code&gt; configuration of course.&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;Error: Database test_store couldn&lt;span class=&quot;s1&quot;&gt;&#39;t be flushed. 
+DETAIL:  Table &quot;some_table&quot; references &quot;some_other_table&quot;.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;But that&#39;s not all - there is one more trouble with the different schemas, if you using &lt;code&gt;TransactionTestCase&lt;/code&gt; for testing. Sometimes you can see an error at the tests &lt;code&gt;tear_down&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;To avoid this error you can define &lt;code class=&quot;highlighter-rouge&quot;&gt;available_apps&lt;/code&gt; field, which must contain the minimum of apps required for testing:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;Error: Database test_store couldn&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;t be flushed. 
-DETAIL:  Table &lt;span class=&quot;s2&quot;&gt;&amp;quot;some_table&amp;quot;&lt;/span&gt; references &lt;span class=&quot;s2&quot;&gt;&amp;quot;some_other_table&amp;quot;&lt;/span&gt;.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;To avoid this error you can define &lt;code&gt;available_apps&lt;/code&gt; field, which must contain the minimum of apps required for testing:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;class SomeTests&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;TransactionTestCase&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;:
-    &lt;span class=&quot;nv&quot;&gt;available_apps&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;one_app&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;another_app&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;class SomeTests&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;TransactionTestCase&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;:
+    available_apps &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;one_app&#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&#39;another_app&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;So we finished. I hope I have described the all possibe issues =)&lt;/p&gt;
+
 </content>
  </entry>
  
@@ -836,66 +802,66 @@ DETAIL:  Table &lt;span class=&quot;s2&quot;&gt;&amp;quot;some_table&amp;quot;&l
    <link href="http://erthalion.info/2014/02/17/ii/"/>
    <updated>2014-02-17T03:41:00+07:00</updated>
    <id>http://erthalion.info/2014/02/17/ii</id>
-   <content type="html">&lt;blockquote&gt;&lt;p&gt;Write programs that do one thing and do it well. Write programs to work together. Write programs to handle text streams, because that is a universal interface.&lt;/p&gt;&lt;/blockquote&gt;
+   <content type="html">&lt;blockquote&gt;
+  &lt;p&gt;Write programs that do one thing and do it well. Write programs to work together. Write programs to handle text streams, because that is a universal interface.&lt;/p&gt;
+&lt;/blockquote&gt;
 
 &lt;p&gt;It seems like there is no good IRC plugin for vim - I found none of them at least. But there is a brilliant geeky alternative - &lt;a href=&quot;http://tools.suckless.org/ii/&quot;&gt;ii&lt;/a&gt;. Here is a quote from its site:&lt;/p&gt;
 
-&lt;blockquote&gt;&lt;p&gt;ii is a minimalist FIFO and filesystem-based IRC client. It creates an irc directory tree with server, channel and nick name directories. In every directory a FIFO in file and a normal out file is created.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;ii is a minimalist FIFO and filesystem-based IRC client. It creates an irc directory tree with server, channel and nick name directories. In every directory a FIFO in file and a normal out file is created.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-&lt;p&gt;The in file is used to communicate with the servers and the out files contain the server messages. For every channel and every nick name there are related in and out files created. This allows IRC communication from command line and adheres to the Unix philosophy.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;The in file is used to communicate with the servers and the out files contain the server messages. For every channel and every nick name there are related in and out files created. This allows IRC communication from command line and adheres to the Unix philosophy.&lt;/p&gt;
+&lt;/blockquote&gt;
 
 &lt;p&gt;To configure the IRC workflow (join, identify, read/write) you can use &lt;a href=&quot;http://nion.modprobe.de/blog/archives/440-Using-the-ii-irc-client.html&quot;&gt;these&lt;/a&gt; &lt;a href=&quot;http://userbound.com/blog/ii-a-better-way-to-irc/&quot;&gt;posts&lt;/a&gt;. Here I want to help you avoid several caveats.&lt;/p&gt;
 
-&lt;p&gt;First of all, there is the final result you&#39;ll get:
-&lt;img src=&quot;/public/img/ii.png&quot; border=&quot;0&quot; width=&quot;100%&quot;&gt;&lt;/p&gt;
+&lt;p&gt;First of all, there is the final result you’ll get:
+&lt;img src=&quot;/public/img/ii.png&quot; border=&quot;0&quot; width=&quot;100%&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;I&#39;ll use &lt;a href=&quot;http://tmux.sourceforge.net/&quot;&gt;tmux&lt;/a&gt; + &lt;a href=&quot;http://www.vanheusden.com/multitail/&quot;&gt;multitail&lt;/a&gt; + vim.&lt;/p&gt;
+&lt;p&gt;I’ll use &lt;a href=&quot;http://tmux.sourceforge.net/&quot;&gt;tmux&lt;/a&gt; + &lt;a href=&quot;http://www.vanheusden.com/multitail/&quot;&gt;multitail&lt;/a&gt; + vim.&lt;/p&gt;
 
-&lt;p&gt;First we need to connect to an IRC server (&lt;code&gt;freenode.net&lt;/code&gt; in my case):&lt;/p&gt;
+&lt;p&gt;First we need to connect to an IRC server (&lt;code class=&quot;highlighter-rouge&quot;&gt;freenode.net&lt;/code&gt; in my case):&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
-ii -s irc.freenode.net -n nick -f &lt;span class=&quot;s2&quot;&gt;&amp;quot;UserName&amp;quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;amp;&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
+ii -s irc.freenode.net -n nick -f &lt;span class=&quot;s2&quot;&gt;&quot;UserName&quot;&lt;/span&gt; &amp;amp;
 sleep 10
-&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;identify password&amp;quot;&lt;/span&gt;&amp;gt; ~/irc/irc.freenode.net/nickserv/in
-&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;/j #channel1&amp;quot;&lt;/span&gt;&amp;gt; ~/irc/irc.freenode.net/in
-&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;/j #channel2&amp;quot;&lt;/span&gt;&amp;gt; ~/irc/irc.freenode.net/in
-&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;/j #channel3&amp;quot;&lt;/span&gt;&amp;gt; ~/irc/irc.freenode.net/in&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;identify password&quot;&lt;/span&gt;&amp;gt; ~/irc/irc.freenode.net/nickserv/in
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/j #channel1&quot;&lt;/span&gt;&amp;gt; ~/irc/irc.freenode.net/in
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/j #channel2&quot;&lt;/span&gt;&amp;gt; ~/irc/irc.freenode.net/in
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/j #channel3&quot;&lt;/span&gt;&amp;gt; ~/irc/irc.freenode.net/in&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;p&gt;Next step is to create handy console-based environment to use it. A small bash script can be used for this purpose (I’ve split the implementation):&lt;/p&gt;
 
-&lt;p&gt;Next step is to create handy console-based environment to use it. A small bash script can be used for this purpose (I&#39;ve split the implementation):&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# tmux_open.sh&lt;/span&gt;
-tmux -2 new-session -s session_name &lt;span class=&quot;s2&quot;&gt;&amp;quot;ii_open.sh $1&amp;quot;&lt;/span&gt;
+tmux -2 new-session -s session_name &lt;span class=&quot;s2&quot;&gt;&quot;ii_open.sh &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
 
 &lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# tmux_open.sh&lt;/span&gt;
-tmux splitw -v -p &lt;span class=&quot;m&quot;&gt;30&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;vim&amp;#39;&lt;/span&gt;
-multitail -cS ii ~/irc/irc.freenode.net/#&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;/out&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+tmux splitw -v -p 30 &lt;span class=&quot;s1&quot;&gt;&#39;vim&#39;&lt;/span&gt;
+multitail -cS ii ~/irc/irc.freenode.net/#&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;/out&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;p&gt;We should use &lt;code class=&quot;highlighter-rouge&quot;&gt;-2&lt;/code&gt; option for &lt;code class=&quot;highlighter-rouge&quot;&gt;tmux&lt;/code&gt; to force 256 colors, and &lt;code class=&quot;highlighter-rouge&quot;&gt;-cS ii&lt;/code&gt; option for &lt;code class=&quot;highlighter-rouge&quot;&gt;multitail&lt;/code&gt; to ii syntax highlighting. After all this we can execute &lt;code class=&quot;highlighter-rouge&quot;&gt;./tmux_open.sh channel&lt;/code&gt; command to open a two pane, that will contain IRC channel log and vim ifself.&lt;/p&gt;
 
-&lt;p&gt;We should use &lt;code&gt;-2&lt;/code&gt; option for &lt;code&gt;tmux&lt;/code&gt; to force 256 colors, and &lt;code&gt;-cS ii&lt;/code&gt; option for &lt;code&gt;multitail&lt;/code&gt; to ii syntax highlighting. After all this we can execute &lt;code&gt;./tmux_open.sh channel&lt;/code&gt; command to open a two pane, that will contain IRC channel log and vim ifself.&lt;/p&gt;
+&lt;p&gt;To type in IRC session we will use &lt;code class=&quot;highlighter-rouge&quot;&gt;vim&lt;/code&gt; with the following mappings:&lt;/p&gt;
 
-&lt;p&gt;To type in IRC session we will use &lt;code&gt;vim&lt;/code&gt; with the following mappings:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-vim&quot; data-lang=&quot;vim&quot;&gt;map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;ii :.&lt;span class=&quot;k&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/irc/&lt;/span&gt;irc.freenode.net/&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;cr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;dd
-map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;i1 :.&lt;span class=&quot;k&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/irc/&lt;/span&gt;irc.freenode.net&lt;span class=&quot;sr&quot;&gt;/\#channel1/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;cr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;dd
-map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;i2 :.&lt;span class=&quot;k&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/irc/&lt;/span&gt;irc.freenode.net&lt;span class=&quot;sr&quot;&gt;/\#channel2/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;cr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;dd
-map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;i3 :.&lt;span class=&quot;k&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/irc/&lt;/span&gt;irc.freenode.net&lt;span class=&quot;sr&quot;&gt;/\#channel3/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;cr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;dd&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-vim&quot; data-lang=&quot;vim&quot;&gt;map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;ii &lt;span class=&quot;p&quot;&gt;:.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/irc/&lt;/span&gt;irc&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;freenode&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;net/&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;cr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;dd
+map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;i1 &lt;span class=&quot;p&quot;&gt;:.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/irc/&lt;/span&gt;irc&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;freenode&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;net&lt;span class=&quot;sr&quot;&gt;/\#channel1/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;cr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;dd
+map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;i2 &lt;span class=&quot;p&quot;&gt;:.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/irc/&lt;/span&gt;irc&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;freenode&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;net&lt;span class=&quot;sr&quot;&gt;/\#channel2/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;cr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;dd
+map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;i3 &lt;span class=&quot;p&quot;&gt;:.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;~&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/irc/&lt;/span&gt;irc&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;freenode&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;net&lt;span class=&quot;sr&quot;&gt;/\#channel3/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;cr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;dd&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;Also, we can hide tmux status line globally (I prefer a vim status line) to achieve an ideal:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# .tmux.conf&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;-option -g status off&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# .tmux.conf&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;-option -g status off&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;or hide it only with the vim&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-vim&quot; data-lang=&quot;vim&quot;&gt;; .vimrc
-&lt;span class=&quot;k&quot;&gt;autocmd&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;VimEnter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;VimLeave&lt;/span&gt; * &lt;span class=&quot;k&quot;&gt;silent&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;!&lt;/span&gt;tmux &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt; status&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-vim&quot; data-lang=&quot;vim&quot;&gt;; &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;vimrc
+autocmd &lt;span class=&quot;nb&quot;&gt;VimEnter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;VimLeave&lt;/span&gt; * &lt;span class=&quot;k&quot;&gt;silent&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;!&lt;/span&gt;tmux &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt; status&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 </content>
  </entry>
@@ -905,24 +871,26 @@ map &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;leader&lt;span class=&q
    <link href="http://erthalion.info/2014/02/14/django-sharding/"/>
    <updated>2014-02-14T04:14:42+07:00</updated>
    <id>http://erthalion.info/2014/02/14/django-sharding</id>
-   <content type="html">&lt;p&gt;Some time ago I was faced with the need to implement the sharding in Django 1.6 . It was an attempt to make step beyond the standart features of this framework and I felt the resistance of Django =) I&#39;ll talk a bit about this challenge and its results.&lt;/p&gt;
+   <content type="html">&lt;p&gt;Some time ago I was faced with the need to implement the sharding in Django 1.6 . It was an attempt to make step beyond the standart features of this framework and I felt the resistance of Django =) I’ll talk a bit about this challenge and its results.&lt;/p&gt;
 
-&lt;p&gt;Let&#39;s start with definitions. Wikipedia says that:&lt;/p&gt;
+&lt;p&gt;Let’s start with definitions. Wikipedia says that:&lt;/p&gt;
 
-&lt;blockquote&gt;&lt;p&gt;A database shard is a horizontal partition in a database.
-Horizontal partitioning is a database design principle whereby rows of a database table are held separately, rather than being split into columns (which is what normalization and vertical partitioning do, to differing extents). Each partition forms part of a shard, which may in turn be located on a separate database server or physical location.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;A database shard is a horizontal partition in a database.
+Horizontal partitioning is a database design principle whereby rows of a database table are held separately, rather than being split into columns (which is what normalization and vertical partitioning do, to differing extents). Each partition forms part of a shard, which may in turn be located on a separate database server or physical location.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-&lt;p&gt;We wanted split our database entities by the different PostgreSQL schemas and used something like &lt;a href=&quot;http://instagram-engineering.tumblr.com/post/10853187575/sharding-ids-at-instagram&quot;&gt;this&lt;/a&gt; for the &lt;code&gt;id&lt;/code&gt; generation. The sharding model was clear, but how to implement it in the Django application?&lt;/p&gt;
+&lt;p&gt;We wanted split our database entities by the different PostgreSQL schemas and used something like &lt;a href=&quot;http://instagram-engineering.tumblr.com/post/10853187575/sharding-ids-at-instagram&quot;&gt;this&lt;/a&gt; for the &lt;code class=&quot;highlighter-rouge&quot;&gt;id&lt;/code&gt; generation. The sharding model was clear, but how to implement it in the Django application?&lt;/p&gt;
 
-&lt;p&gt;My solution of this problem was a custom database backend, that contains a custom sql compilers. Maybe it was a dirty hack, but I hope it wasn&#39;t =)&lt;/p&gt;
+&lt;p&gt;My solution of this problem was a custom database backend, that contains a custom sql compilers. Maybe it was a dirty hack, but I hope it wasn’t =)&lt;/p&gt;
 
-&lt;p&gt;To create your own custom database backend, you can copy structure from one of the existing backends from &lt;code&gt;django.db.backends&lt;/code&gt; (&lt;code&gt;postgresql_psycopg2&lt;/code&gt; for our case) and override &lt;code&gt;DatabaseOperations&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;To create your own custom database backend, you can copy structure from one of the existing backends from &lt;code class=&quot;highlighter-rouge&quot;&gt;django.db.backends&lt;/code&gt; (&lt;code class=&quot;highlighter-rouge&quot;&gt;postgresql_psycopg2&lt;/code&gt; for our case) and override &lt;code class=&quot;highlighter-rouge&quot;&gt;DatabaseOperations&lt;/code&gt;:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# operations.py&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# operations.py&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.db.backends.postgresql_psycopg2.operations&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CustomDatabaseOperations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DatabaseOperations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;compiler_module&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;path.to.the.compiler.module&amp;quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;compiler_module&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;path.to.the.compiler.module&quot;&lt;/span&gt;
 
 &lt;span class=&quot;c&quot;&gt;# base.py&lt;/span&gt;
 &lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;django.db.backends.postgresql_psycopg2.base&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;
@@ -934,12 +902,11 @@ Horizontal partitioning is a database design principle whereby rows of a databas
 
         &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ops&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomDatabaseOperations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
-&lt;span class=&quot;n&quot;&gt;DatabaseWrapper&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomDatabaseWrapper&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
+&lt;span class=&quot;n&quot;&gt;DatabaseWrapper&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomDatabaseWrapper&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;A custom sql compilers will be adding a corresponding schema name into the sql request based on the entity id:&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# compilers.py&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# compilers.py&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;CustomSQLCompiler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SQLCompiler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;as_sql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
@@ -949,53 +916,52 @@ Horizontal partitioning is a database design principle whereby rows of a databas
         &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
             &lt;span class=&quot;n&quot;&gt;sql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CustomSQLCompiler&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;as_sql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
 
-            &lt;span class=&quot;sd&quot;&gt;&amp;quot;&amp;quot;&amp;quot; The first item of the params tuple must be entity id&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt;            &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+            &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot; The first item of the params tuple must be entity id
+            &quot;&quot;&quot;&lt;/span&gt;
             &lt;span class=&quot;n&quot;&gt;schema&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get_shard_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
 
-            &lt;span class=&quot;n&quot;&gt;old&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;&amp;quot;{}&amp;quot;&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;{}.&amp;quot;{}&amp;quot;&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;schema&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;old&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;&quot;{}&quot;&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;{}.&quot;{}&quot;&#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;schema&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
             &lt;span class=&quot;n&quot;&gt;sql&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;old&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sql&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;
 
 
-&lt;span class=&quot;n&quot;&gt;SQLCompiler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomSQLCompiler&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;n&quot;&gt;SQLCompiler&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomSQLCompiler&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;p&gt;That’s all! Oh, okay, that’s not all =) Now you must create a custom &lt;code class=&quot;highlighter-rouge&quot;&gt;QuerySet&lt;/code&gt; (with the two overrided methods - &lt;code class=&quot;highlighter-rouge&quot;&gt;get&lt;/code&gt; &amp;amp; &lt;code class=&quot;highlighter-rouge&quot;&gt;create&lt;/code&gt;) to provide a correct sharded id for an all entities.&lt;/p&gt;
 
-&lt;p&gt;That&#39;s all! Oh, okay, that&#39;s not all =) Now you must create a custom &lt;code&gt;QuerySet&lt;/code&gt; (with the two overrided methods - &lt;code&gt;get&lt;/code&gt; &amp;amp; &lt;code&gt;create&lt;/code&gt;) to provide a correct sharded id for an all entities.&lt;/p&gt;
+&lt;p&gt;But there is one problem - migrations. You can’t migrate correctly your sharded models and it’s sad. To avoid this we inctoruced the some more complex database configuration dictionary. We used the special method, that converted this complex config into the standard with a lot of database connections - a one for each shard. All connections have the &lt;code class=&quot;highlighter-rouge&quot;&gt;search_path&lt;/code&gt; option. In the &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.py&lt;/code&gt; we must take in account a type of action:&lt;/p&gt;
 
-&lt;p&gt;But there is one problem - migrations. You can&#39;t migrate correctly your sharded models and it&#39;s sad. To avoid this we inctoruced the some more complex database configuration dictionary. We used the special method, that converted this complex config into the standard with a lot of database connections - a one for each shard. All connections have the &lt;code&gt;search_path&lt;/code&gt; option. In the &lt;code&gt;settings.py&lt;/code&gt; we must take in account a type of action:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# settings.py&lt;/span&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;c&quot;&gt;# settings.py&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get_shard_settings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shard_migrate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shard_sync&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;sd&quot;&gt;&amp;quot;&amp;quot;&amp;quot; Not an all apps must be sharded.&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt;    &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;installed_apps&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;some_sharded_app1&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;some_sharder_app2&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,)&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot; Not an all apps must be sharded.
+    &quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;installed_apps&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&#39;some_sharded_app1&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;some_sharder_app2&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,)&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;databases&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DB_CONFIGURATOR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DB_CONFIG&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shard_migrate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shard_migrate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shard_sync&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shard_sync&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;installed_apps&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;databases&lt;/span&gt;
 
-&lt;span class=&quot;sd&quot;&gt;&amp;quot;&amp;quot;&amp;quot; We must separate&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt;    - normal usage,&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt;    - sharded models synchronization&lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt;    - sharded models migration &lt;/span&gt;
-&lt;span class=&quot;sd&quot;&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;shard_migrate&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+&lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot; We must separate
+    - normal usage,
+    - sharded models synchronization
+    - sharded models migration 
+&quot;&quot;&quot;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;shard_migrate&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;del&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;INSTALLED_APPS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DATABASES&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get_shard_settings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shard_migrate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
-&lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;shard_sync&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&#39;shard_sync&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;del&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;INSTALLED_APPS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DATABASES&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get_shard_settings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shard_sync&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;DATABASES&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DB_CONFIGURATOR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DB_CONFIG&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+    &lt;span class=&quot;n&quot;&gt;DATABASES&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DB_CONFIGURATOR&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DB_CONFIG&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
+&lt;p&gt;Now we can manage sharded migrations by &lt;code class=&quot;highlighter-rouge&quot;&gt;--database&lt;/code&gt; options. For convenience you can write a fab script of course.&lt;/p&gt;
 
-&lt;p&gt;Now we can manage sharded migrations by &lt;code&gt;--database&lt;/code&gt; options. For convenience you can write a fab script of course.&lt;/p&gt;
+&lt;p&gt;And one more and last caveat - you must create &lt;code class=&quot;highlighter-rouge&quot;&gt;SOUTH_DATABASE_ADAPTERS&lt;/code&gt; variable, that will be pointing to original postgres adapter &lt;code class=&quot;highlighter-rouge&quot;&gt;south.db.postgresql_psycopg2&lt;/code&gt; - south can’t create a correct migration otherwise.&lt;/p&gt;
 
-&lt;p&gt;And one more and last caveat - you must create &lt;code&gt;SOUTH_DATABASE_ADAPTERS&lt;/code&gt; variable, that will be pointing to original postgres adapter &lt;code&gt;south.db.postgresql_psycopg2&lt;/code&gt; - south can&#39;t create a correct migration otherwise.&lt;/p&gt;
 </content>
  </entry>
  

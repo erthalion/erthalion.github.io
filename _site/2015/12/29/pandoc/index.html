@@ -62,68 +62,61 @@
       <div class="post">
   <h1>The Knife</h1>
   <span class="post-date">29 Dec 2015</span>
-  <p>I really don't know how I lived before without pandoc. It's an amazing tool, that saved me from a terrible pain of
-latex -> MS Word convertion. If you're writing many scientific documents in <code>latex</code> format, and faced with
-the demand to convert it into MS Word, you can understand me. It's like a tiresome point-and-click game, which can
+  <p>I really don’t know how I lived before without pandoc. It’s an amazing tool, that saved me from a terrible pain of
+latex -&gt; MS Word convertion. If you’re writing many scientific documents in <code class="highlighter-rouge">latex</code> format, and faced with
+the demand to convert it into MS Word, you can understand me. It’s like a tiresome point-and-click game, which can
 consume unbelievable amount of time.</p>
 
-<p>Pandoc can do it, and I'm not kidding. All you need is to create a source file in <code>markdown</code> format and
+<p>Pandoc can do it, and I’m not kidding. All you need is to create a source file in <code class="highlighter-rouge">markdown</code> format and
 copy all latex formulas. In this post you can find several details.</p>
 
-<p>What do we need to install pandoc? I'll advise <a href="https://github.com/commercialhaskell/stack">stack</a>:</p>
+<p>What do we need to install pandoc? I’ll advise <a href="https://github.com/commercialhaskell/stack">stack</a>:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>stack install pandoc pandoc-citeproc pandoc-crossref</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>stack install pandoc pandoc-citeproc pandoc-crossref</code></pre></figure>
 
-
-<p><code>pandoc-citeproc</code> and <code>pandoc-crossref</code> will be used to generate nice bibliography and references.</p>
+<p><code class="highlighter-rouge">pandoc-citeproc</code> and <code class="highlighter-rouge">pandoc-crossref</code> will be used to generate nice bibliography and references.</p>
 
 <p>Now we can do something like this:</p>
 
-<div class="highlight"><pre><code class="language-latex" data-lang="latex"><span class="sb">$$</span><span class="nv">\frac</span><span class="nb">{</span><span class="nv">\partial</span><span class="nb"> </span><span class="nv">\vec</span><span class="nb">{u}}{</span><span class="nv">\partial</span><span class="nb"> t} </span><span class="o">+</span><span class="nb"> </span><span class="o">(</span><span class="nv">\vec</span><span class="nb">{u} </span><span class="nv">\cdot</span><span class="nb"> </span><span class="nv">\nabla</span><span class="o">)</span><span class="nb"> </span><span class="nv">\vec</span><span class="nb">{u} </span><span class="o">=</span><span class="nb"> </span><span class="o">-</span><span class="nb"> </span><span class="nv">\frac</span><span class="nb">{</span><span class="m">1</span><span class="nb">}{</span><span class="nv">\rho</span><span class="nb">} </span><span class="nv">\nabla</span><span class="nb"> p </span><span class="o">+</span><span class="nb"> </span><span class="nv">\nabla</span><span class="nb"> </span><span class="nv">\sigma</span><span class="nb"> </span><span class="o">+</span><span class="nb"> </span><span class="nv">\vec</span><span class="nb">{f}</span><span class="s">$$</span> <span class="nb">{</span>#eq:navier<span class="nb">_</span>stokes:motion<span class="nb">}</span>
+<figure class="highlight"><pre><code class="language-latex" data-lang="latex"><span class="p">$$</span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\partial</span><span class="nb"> </span><span class="nv">\vec</span><span class="p">{</span><span class="nb">u</span><span class="p">}}{</span><span class="nv">\partial</span><span class="nb"> t</span><span class="p">}</span><span class="nb"> </span><span class="o">+</span><span class="nb"> </span><span class="o">(</span><span class="nv">\vec</span><span class="p">{</span><span class="nb">u</span><span class="p">}</span><span class="nb"> </span><span class="nv">\cdot</span><span class="nb"> </span><span class="nv">\nabla</span><span class="o">)</span><span class="nb"> </span><span class="nv">\vec</span><span class="p">{</span><span class="nb">u</span><span class="p">}</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="o">-</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="m">1</span><span class="p">}{</span><span class="nv">\rho</span><span class="p">}</span><span class="nb"> </span><span class="nv">\nabla</span><span class="nb"> p </span><span class="o">+</span><span class="nb"> </span><span class="nv">\nabla</span><span class="nb"> </span><span class="nv">\sigma</span><span class="nb"> </span><span class="o">+</span><span class="nb"> </span><span class="nv">\vec</span><span class="p">{</span><span class="nb">f</span><span class="p">}$$</span> <span class="p">{</span>#eq:navier<span class="p">_</span>stokes:motion<span class="p">}</span>
 
-<span class="sb">$$</span><span class="nv">\frac</span><span class="nb">{</span><span class="nv">\partial</span><span class="nb"> </span><span class="nv">\rho</span><span class="nb">}{</span><span class="nv">\partial</span><span class="nb"> t} </span><span class="o">+</span><span class="nb"> </span><span class="nv">\nabla</span><span class="nb"> </span><span class="nv">\cdot</span><span class="nb"> </span><span class="o">(</span><span class="nv">\rho</span><span class="nb"> </span><span class="nv">\vec</span><span class="nb">{u}</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="m">0</span><span class="s">$$</span> <span class="nb">{</span>#eq:navier<span class="nb">_</span>stokes:continuity<span class="nb">}</span></code></pre></div>
-
+<span class="p">$$</span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\partial</span><span class="nb"> </span><span class="nv">\rho</span><span class="p">}{</span><span class="nv">\partial</span><span class="nb"> t</span><span class="p">}</span><span class="nb"> </span><span class="o">+</span><span class="nb"> </span><span class="nv">\nabla</span><span class="nb"> </span><span class="nv">\cdot</span><span class="nb"> </span><span class="o">(</span><span class="nv">\rho</span><span class="nb"> </span><span class="nv">\vec</span><span class="p">{</span><span class="nb">u</span><span class="p">}</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="m">0</span><span class="p">$$</span> <span class="p">{</span>#eq:navier<span class="p">_</span>stokes:continuity<span class="p">}</span></code></pre></figure>
 
 <p>ang get a nice result (e.g. from Word Online):
-<img src="/public/img/navier.png" border="0" width="41%" style="margin: auto"></p>
+<img src="/public/img/navier.png" border="0" width="41%" style="margin: auto" /></p>
 
-<p>Here you can see a label <code>eq:navier_stokes:motion</code> for corresponding equation. General template for references is:</p>
+<p>Here you can see a label <code class="highlighter-rouge">eq:navier_stokes:motion</code> for corresponding equation. General template for references is:</p>
 
-<div class="highlight"><pre><code class="language-latex" data-lang="latex">some<span class="nb">_</span>content <span class="nb">{</span>#type:label<span class="nb">}</span>
+<figure class="highlight"><pre><code class="language-latex" data-lang="latex">some<span class="p">_</span>content <span class="p">{</span>#type:label<span class="p">}</span>
 
-label will be used here [@type:label]</code></pre></div>
-
+label will be used here [@type:label]</code></pre></figure>
 
 <p>More documentation about types and usage is <a href="https://github.com/lierdakil/pandoc-crossref">here</a>.
-You can enable <code>pandoc-crossref</code> using command line argument <code>--filter</code>:</p>
+You can enable <code class="highlighter-rouge">pandoc-crossref</code> using command line argument <code class="highlighter-rouge">--filter</code>:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>pandoc --filter pandoc-crossref -o result.docx source.md</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>pandoc --filter pandoc-crossref -o result.docx source.md </code></pre></figure>
 
+<p>Note, that if we will use <code class="highlighter-rouge">begin/end</code> environment or “\\” for multiple equations, pandoc couldn’t generate MS Word
+formula. Also, you shouldn’t forget about empy line between equations.</p>
 
-<p>Note, that if we will use <code>begin/end</code> environment or "\\" for multiple equations, pandoc couldn't generate MS Word
-formula. Also, you shouldn't forget about empy line between equations.</p>
+<p>To use bibliography we can create a regular <code class="highlighter-rouge">bib</code> file and enable <code class="highlighter-rouge">pandoc-cireproc</code> like this:</p>
 
-<p>To use bibliography we can create a regular <code>bib</code> file and enable <code>pandoc-cireproc</code> like this:</p>
-
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>pandoc --filter pandoc-crossref --bibliography report.bib -o result.docx source.md</code></pre></div>
-
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>pandoc --filter pandoc-crossref --bibliography report.bib -o result.docx source.md</code></pre></figure>
 
 <p>The default citation style in Pandoc is Chicago author-date, but you can change
-it. E.g. if you're writing an academic paper in Russian, I bet you would like
-to use <code>GOST</code> standard. You can get a corresponding <code>csl</code> file
+it. E.g. if you’re writing an academic paper in Russian, I bet you would like
+to use <code class="highlighter-rouge">GOST</code> standard. You can get a corresponding <code class="highlighter-rouge">csl</code> file 
 <a href="http://editor.citationstyles.org/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fgost-r-7-0-5-2008-numeric-alphabetical">here</a>,
 and use it like this:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>pandoc --filter pandoc-crossref --bibliography report.bib --csl<span class="o">=</span>gost.csl -o result.docx source.md</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>pandoc --filter pandoc-crossref --bibliography report.bib --csl<span class="o">=</span>gost.csl -o result.docx source.md</code></pre></figure>
 
-
-<p>The last one thing is a language. If you're writing in Russian, you can suffer from encoding issues - to avoid
+<p>The last one thing is a language. If you’re writing in Russian, you can suffer from encoding issues - to avoid
 this you need to specify language:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>pandoc --filter pandoc-crossref --bibliography report.bib --csl<span class="o">=</span>gost.csl -o result.docx source.md -V lang:russian</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>pandoc --filter pandoc-crossref --bibliography report.bib --csl<span class="o">=</span>gost.csl -o result.docx source.md -V lang:russian</code></pre></figure>
 
-
-<p>That's it, you will get a well-formed MS Word file with nice formulas.</p>
+<p>That’s it, you will get a well-formed MS Word file with nice formulas.</p>
 
 </div>
 

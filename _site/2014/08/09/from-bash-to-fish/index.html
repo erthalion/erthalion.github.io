@@ -62,56 +62,54 @@
       <div class="post">
   <h1>From bash to fish</h1>
   <span class="post-date">09 Aug 2014</span>
-  <p>I'm doing a small revolution in my environment from time to time. I think "hey, a cool stuff", take a deep breath and doing something new. And this is story about my migration from the bash to the fish shell.</p>
+  <p>I’m doing a small revolution in my environment from time to time. I think “hey, a cool stuff”, take a deep breath and doing something new. And this is story about my migration from the bash to the fish shell.</p>
 
-<p>Let's see, what says the official tutorial:</p>
+<p>Let’s see, what says the official tutorial:</p>
 
-<blockquote><p>fish is a fully-equipped command line shell (like bash or zsh) that is smart and user-friendly. fish supports powerful features like syntax highlighting, autosuggestions, and tab completions that just work, with nothing to learn or configure.
-If you want to make your command line more productive, more useful, and more fun, without learning a bunch of arcane syntax and configuration options, then fish might be just what you're looking for!</p></blockquote>
+<blockquote>
+  <p>fish is a fully-equipped command line shell (like bash or zsh) that is smart and user-friendly. fish supports powerful features like syntax highlighting, autosuggestions, and tab completions that just work, with nothing to learn or configure.
+If you want to make your command line more productive, more useful, and more fun, without learning a bunch of arcane syntax and configuration options, then fish might be just what you’re looking for! </p>
+</blockquote>
 
 <p>And this is almost true =) But there is another concrete reason, why I like fish shell:</p>
 
 <ul>
-<li>Search by history (as an autocomplete by tab)</li>
-<li>More intuitive and clean configuration files</li>
-<li>Vim mode <a href="https://github.com/fish-shell/fish-shell/issues/65">support</a></li>
+  <li>Search by history (as an autocomplete by tab)</li>
+  <li>More intuitive and clean configuration files</li>
+  <li>Vim mode <a href="https://github.com/fish-shell/fish-shell/issues/65">support</a></li>
 </ul>
-
 
 <p>I would to avoid unnecessary lyrics, and pay more attention to the configuration and gotchas (from the bash point of view).</p>
 
-<p>First of all - use <code>.</code> command instead <code>source</code> for the inclusion of the script.</p>
+<p>First of all - use <code class="highlighter-rouge">.</code> command instead <code class="highlighter-rouge">source</code> for the inclusion of the script.</p>
 
-<div class="highlight"><pre><code class="language-sh" data-lang="sh">. /some-install-path/fish-shell/share/fish/functions/fish_vi_mode.fish
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh">. /some-install-path/fish-shell/share/fish/functions/fish_vi_mode.fish
 . /some-install-path/.config/fish/themes/fish_right_prompt.fish
 . /some-install-path/.config/fish/themes/fish_prompt.fish
 . /etc/profile.d/autojump.fish
-fish_vi_key_bindings</code></pre></div>
+fish_vi_key_bindings</code></pre></figure>
 
+<p>I’ve used <code class="highlighter-rouge">some-install-path</code> because I’m a Vim hacker (~~an extra pathos~~), and I want a fresh version for the Vim support, so the manual compilation from github is my way. Then I’ve turned on Vim mode (<code class="highlighter-rouge">fish_vi_mode.fish</code> is necessary for this). <code class="highlighter-rouge">fish_prompt.fish</code> and <code class="highlighter-rouge">fish_right_prompt.fish</code> contain a description for the shell prompt and will be discussed later. If you use <code class="highlighter-rouge">autojump</code>, you should also include <code class="highlighter-rouge">autojump.fish</code> (if this file doesn’t exist, download it from repo).</p>
 
-<p>I've used <code>some-install-path</code> because I'm a Vim hacker (<del>an extra pathos</del>), and I want a fresh version for the Vim support, so the manual compilation from github is my way. Then I've turned on Vim mode (<code>fish_vi_mode.fish</code> is necessary for this). <code>fish_prompt.fish</code> and <code>fish_right_prompt.fish</code> contain a description for the shell prompt and will be discussed later. If you use <code>autojump</code>, you should also include <code>autojump.fish</code> (if this file doesn't exist, download it from repo).</p>
-
-<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">set </span>fish_greeting <span class="s2">&quot;&quot;</span></code></pre></div>
-
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">set </span>fish_greeting <span class="s2">""</span></code></pre></figure>
 
 <p>This greeting is very distracting, so disable it. No comments =)</p>
 
-<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">set</span> -x EDITOR vim
-<span class="nb">set </span>PATH /home/erthalion/.local/bin /usr/local/bin /opt/bin <span class="nv">$PATH</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">set</span> -x EDITOR vim
+<span class="nb">set </span>PATH /home/erthalion/.local/bin /usr/local/bin /opt/bin <span class="nv">$PATH</span></code></pre></figure>
 
+<p>We should set environment variables in this format. Pay attention to the <code class="highlighter-rouge">PATH</code> variable - don’t forget about <code class="highlighter-rouge">/usr/local/bin</code> and <code class="highlighter-rouge">/opt/bin</code> (looks like fish shell doesn’t include them by default).</p>
 
-<p>We should set environment variables in this format. Pay attention to the <code>PATH</code> variable - don't forget about <code>/usr/local/bin</code> and <code>/opt/bin</code> (looks like fish shell doesn't include them by default).</p>
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">alias </span><span class="nv">goutshow</span><span class="o">=</span><span class="s1">'git fetch; git show origin/master..'</span></code></pre></figure>
 
-<div class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">alias </span><span class="nv">goutshow</span><span class="o">=</span><span class="s1">&#39;git fetch; git show origin/master..&#39;</span></code></pre></div>
+<p>One more observation - we should replace <code class="highlighter-rouge">&amp;&amp;</code> by the <code class="highlighter-rouge">;</code> or <code class="highlighter-rouge">and</code> commands.</p>
 
+<p>Now get closer to the prompt. It described by the two functions - <code class="highlighter-rouge">fish_prompt</code> and <code class="highlighter-rouge">fish_right_prompt</code> (your C.O.). I have no advices for this section. Really. You can use your imagination and do what you want =) There are my examples - <a href="https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_prompt.fish">left</a> and <a href="https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_right_prompt.fish">right</a>. Only one comment - you may want to show <code class="highlighter-rouge">virtualenv</code> name in the prompt. In that case you should disable original by the variable <code class="highlighter-rouge">set -x VIRTUAL_ENV_DISABLE_PROMPT 1</code>.</p>
 
-<p>One more observation - we should replace <code>&amp;&amp;</code> by the <code>;</code> or <code>and</code> commands.</p>
-
-<p>Now get closer to the prompt. It described by the two functions - <code>fish_prompt</code> and <code>fish_right_prompt</code> (your C.O.). I have no advices for this section. Really. You can use your imagination and do what you want =) There are my examples - <a href="https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_prompt.fish">left</a> and <a href="https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_right_prompt.fish">right</a>. Only one comment - you may want to show <code>virtualenv</code> name in the prompt. In that case you should disable original by the variable <code>set -x VIRTUAL_ENV_DISABLE_PROMPT 1</code>.</p>
-
-<p>But unfortunately, Vim support isn't very well in the fish shell. For example, there is no <code>replace (r)</code> command, or <code>undo (u)</code>. Actually it's a horrible problem for me, especially the first one =) And here is my <a href="https://github.com/fish-shell/fish-shell/pull/1595">solution</a> of this problem.</p>
+<p>But unfortunately, Vim support isn’t very well in the fish shell. For example, there is no <code class="highlighter-rouge">replace (r)</code> command, or <code class="highlighter-rouge">undo (u)</code>. Actually it’s a horrible problem for me, especially the first one =) And here is my <a href="https://github.com/fish-shell/fish-shell/pull/1595">solution</a> of this problem.</p>
 
 <p>I think, fish shell is available for a lot of improvements. All, that described above, is only a base for a convenient environment, and I hope, it will be useful.</p>
+
 
 </div>
 

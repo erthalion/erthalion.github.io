@@ -74,25 +74,24 @@
 
 <p>There are a lot of discussion about the implementation of PostgreSQL schemas in Django (for example <a href="https://code.djangoproject.com/ticket/1051">one</a>, <a href="https://code.djangoproject.com/ticket/6148">two</a>). And I want to describe several caveats.</p>
 
-<p>First of all - you shouldn't use the <code>options</code> key to choice a schema like this:</p>
+<p>First of all - you shouldn’t use the <code class="highlighter-rouge">options</code> key to choice a schema like this:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">DATABASES</span><span class="p">[</span><span class="s">&#39;default&#39;</span><span class="p">][</span><span class="s">&#39;OPTIONS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&#39;options&#39;</span><span class="p">:</span> <span class="s">&#39;-c search_path=schema&#39;</span>
-    <span class="p">}</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-python" data-lang="python">    <span class="n">DATABASES</span><span class="p">[</span><span class="s">'default'</span><span class="p">][</span><span class="s">'OPTIONS'</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'options'</span><span class="p">:</span> <span class="s">'-c search_path=schema'</span>
+    <span class="p">}</span></code></pre></figure>
 
+<p>It can be working, until you <a href="http://lists.pgfoundry.org/pipermail/pgbouncer-general/2011-August/000842.html">don’t use pgbouncer</a>. This option hasn’t supported because of the connection pool - when you close a connection with <code class="highlighter-rouge">search_path</code>, it will be returned into the pool, and can be reused with the out of date <code class="highlighter-rouge">search_path</code>.</p>
 
-<p>It can be working, until you <a href="http://lists.pgfoundry.org/pipermail/pgbouncer-general/2011-August/000842.html">don't use pgbouncer</a>. This option hasn't supported because of the connection pool - when you close a connection with <code>search_path</code>, it will be returned into the pool, and can be reused with the out of date <code>search_path</code>.</p>
+<p>So what we gonna do? The only choice is to use <code class="highlighter-rouge">connection_create</code> signal:</p>
 
-<p>So what we gonna do? The only choice is to use <code>connection_create</code> signal:</p>
-
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># schema.py</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># schema.py</span>
 <span class="k">def</span> <span class="nf">set_search_path</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
 
-    <span class="n">conn</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;connection&#39;</span><span class="p">)</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'connection'</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">conn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
         <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
-        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SET search_path={}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">"SET search_path={}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">settings</span><span class="o">.</span><span class="n">SEARCH_PATH</span><span class="p">,</span>
         <span class="p">))</span>
 
@@ -100,29 +99,26 @@
 <span class="kn">from</span> <span class="nn">django.db.backends.signals</span> <span class="kn">import</span> <span class="n">connection_created</span>
 <span class="kn">from</span> <span class="nn">schema</span> <span class="kn">import</span> <span class="n">set_search_path</span>
 
-<span class="n">connection_created</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">set_search_path</span><span class="p">)</span></code></pre></div>
+<span class="n">connection_created</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">set_search_path</span><span class="p">)</span></code></pre></figure>
 
+<p>But where should we place this code? In general case if we want to handle the migrations, the only place is a settings file (a <code class="highlighter-rouge">model.py</code> isn’t suitable for this, when we want to distribute an application models and third-party models over different schemas). And to avoid circular dependencies, we should use three (OMG!) configuration files - <code class="highlighter-rouge">default.py</code> (main configuration), <code class="highlighter-rouge">local.py/staging.py/production.py</code> (depends on the server), <code class="highlighter-rouge">migration.py</code> (used to set a search path). The last configuration is used only for the migration purposes:</p>
 
-<p>But where should we place this code? In general case if we want to handle the migrations, the only place is a settings file (a <code>model.py</code> isn't suitable for this, when we want to distribute an application models and third-party models over different schemas). And to avoid circular dependencies, we should use three (OMG!) configuration files - <code>default.py</code> (main configuration), <code>local.py/staging.py/production.py</code> (depends on the server), <code>migration.py</code> (used to set a search path). The last configuration is used only for the migration purposes:</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py migrate app --settings<span class="o">=</span>project.migration</code></pre></figure>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py migrate app --settings<span class="o">=</span>project.migration</code></pre></div>
+<p>For the normal usage we can connect <code class="highlighter-rouge">set_search_path</code> function to the <code class="highlighter-rouge">connection_create</code> signal in the root <code class="highlighter-rouge">urls.py</code> and avoid the <code class="highlighter-rouge">migration.py</code> configuration of course.</p>
 
+<p>But that’s not all - there is one more trouble with the different schemas, if you using <code class="highlighter-rouge">TransactionTestCase</code> for testing. Sometimes you can see an error at the tests <code class="highlighter-rouge">tear_down</code>:</p>
 
-<p>For the normal usage we can connect <code>set_search_path</code> function to the <code>connection_create</code> signal in the root <code>urls.py</code> and avoid the <code>migration.py</code> configuration of course.</p>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">Error: Database test_store couldn<span class="s1">'t be flushed. 
+DETAIL:  Table "some_table" references "some_other_table".</span></code></pre></figure>
 
-<p>But that's not all - there is one more trouble with the different schemas, if you using <code>TransactionTestCase</code> for testing. Sometimes you can see an error at the tests <code>tear_down</code>:</p>
+<p>To avoid this error you can define <code class="highlighter-rouge">available_apps</code> field, which must contain the minimum of apps required for testing:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">Error: Database test_store couldn<span class="err">&#39;</span>t be flushed. 
-DETAIL:  Table <span class="s2">&quot;some_table&quot;</span> references <span class="s2">&quot;some_other_table&quot;</span>.</code></pre></div>
-
-
-<p>To avoid this error you can define <code>available_apps</code> field, which must contain the minimum of apps required for testing:</p>
-
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">class SomeTests<span class="o">(</span>TransactionTestCase<span class="o">)</span>:
-    <span class="nv">available_apps</span> <span class="o">=</span> <span class="o">(</span><span class="s1">&#39;one_app&#39;</span>, <span class="s1">&#39;another_app&#39;</span><span class="o">)</span></code></pre></div>
-
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">class SomeTests<span class="o">(</span>TransactionTestCase<span class="o">)</span>:
+    available_apps <span class="o">=</span> <span class="o">(</span><span class="s1">'one_app'</span>, <span class="s1">'another_app'</span><span class="o">)</span></code></pre></figure>
 
 <p>So we finished. I hope I have described the all possibe issues =)</p>
+
 
   </div>
   
@@ -135,66 +131,66 @@ DETAIL:  Table <span class="s2">&quot;some_table&quot;</span> references <span c
 
     <span class="post-date">17 Feb 2014</span>
 
-    <blockquote><p>Write programs that do one thing and do it well. Write programs to work together. Write programs to handle text streams, because that is a universal interface.</p></blockquote>
+    <blockquote>
+  <p>Write programs that do one thing and do it well. Write programs to work together. Write programs to handle text streams, because that is a universal interface.</p>
+</blockquote>
 
 <p>It seems like there is no good IRC plugin for vim - I found none of them at least. But there is a brilliant geeky alternative - <a href="http://tools.suckless.org/ii/">ii</a>. Here is a quote from its site:</p>
 
-<blockquote><p>ii is a minimalist FIFO and filesystem-based IRC client. It creates an irc directory tree with server, channel and nick name directories. In every directory a FIFO in file and a normal out file is created.</p>
+<blockquote>
+  <p>ii is a minimalist FIFO and filesystem-based IRC client. It creates an irc directory tree with server, channel and nick name directories. In every directory a FIFO in file and a normal out file is created.</p>
+</blockquote>
 
-<p>The in file is used to communicate with the servers and the out files contain the server messages. For every channel and every nick name there are related in and out files created. This allows IRC communication from command line and adheres to the Unix philosophy.</p></blockquote>
+<blockquote>
+  <p>The in file is used to communicate with the servers and the out files contain the server messages. For every channel and every nick name there are related in and out files created. This allows IRC communication from command line and adheres to the Unix philosophy.</p>
+</blockquote>
 
 <p>To configure the IRC workflow (join, identify, read/write) you can use <a href="http://nion.modprobe.de/blog/archives/440-Using-the-ii-irc-client.html">these</a> <a href="http://userbound.com/blog/ii-a-better-way-to-irc/">posts</a>. Here I want to help you avoid several caveats.</p>
 
-<p>First of all, there is the final result you'll get:
-<img src="/public/img/ii.png" border="0" width="100%"></p>
+<p>First of all, there is the final result you’ll get:
+<img src="/public/img/ii.png" border="0" width="100%" /></p>
 
-<p>I'll use <a href="http://tmux.sourceforge.net/">tmux</a> + <a href="http://www.vanheusden.com/multitail/">multitail</a> + vim.</p>
+<p>I’ll use <a href="http://tmux.sourceforge.net/">tmux</a> + <a href="http://www.vanheusden.com/multitail/">multitail</a> + vim.</p>
 
-<p>First we need to connect to an IRC server (<code>freenode.net</code> in my case):</p>
+<p>First we need to connect to an IRC server (<code class="highlighter-rouge">freenode.net</code> in my case):</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/sh</span>
-ii -s irc.freenode.net -n nick -f <span class="s2">&quot;UserName&quot;</span> <span class="p">&amp;</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/sh</span>
+ii -s irc.freenode.net -n nick -f <span class="s2">"UserName"</span> &amp;
 sleep 10
-<span class="nb">echo</span> <span class="s2">&quot;identify password&quot;</span>&gt; ~/irc/irc.freenode.net/nickserv/in
-<span class="nb">echo</span> <span class="s2">&quot;/j #channel1&quot;</span>&gt; ~/irc/irc.freenode.net/in
-<span class="nb">echo</span> <span class="s2">&quot;/j #channel2&quot;</span>&gt; ~/irc/irc.freenode.net/in
-<span class="nb">echo</span> <span class="s2">&quot;/j #channel3&quot;</span>&gt; ~/irc/irc.freenode.net/in</code></pre></div>
+<span class="nb">echo</span> <span class="s2">"identify password"</span>&gt; ~/irc/irc.freenode.net/nickserv/in
+<span class="nb">echo</span> <span class="s2">"/j #channel1"</span>&gt; ~/irc/irc.freenode.net/in
+<span class="nb">echo</span> <span class="s2">"/j #channel2"</span>&gt; ~/irc/irc.freenode.net/in
+<span class="nb">echo</span> <span class="s2">"/j #channel3"</span>&gt; ~/irc/irc.freenode.net/in</code></pre></figure>
 
+<p>Next step is to create handy console-based environment to use it. A small bash script can be used for this purpose (I’ve split the implementation):</p>
 
-<p>Next step is to create handy console-based environment to use it. A small bash script can be used for this purpose (I've split the implementation):</p>
-
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/sh</span>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/sh</span>
 <span class="c"># tmux_open.sh</span>
-tmux -2 new-session -s session_name <span class="s2">&quot;ii_open.sh $1&quot;</span>
+tmux -2 new-session -s session_name <span class="s2">"ii_open.sh </span><span class="nv">$1</span><span class="s2">"</span>
 
 <span class="c">#!/bin/sh</span>
 <span class="c"># tmux_open.sh</span>
-tmux splitw -v -p <span class="m">30</span> <span class="s1">&#39;vim&#39;</span>
-multitail -cS ii ~/irc/irc.freenode.net/#<span class="nv">$1</span>/out</code></pre></div>
+tmux splitw -v -p 30 <span class="s1">'vim'</span>
+multitail -cS ii ~/irc/irc.freenode.net/#<span class="nv">$1</span>/out</code></pre></figure>
 
+<p>We should use <code class="highlighter-rouge">-2</code> option for <code class="highlighter-rouge">tmux</code> to force 256 colors, and <code class="highlighter-rouge">-cS ii</code> option for <code class="highlighter-rouge">multitail</code> to ii syntax highlighting. After all this we can execute <code class="highlighter-rouge">./tmux_open.sh channel</code> command to open a two pane, that will contain IRC channel log and vim ifself.</p>
 
-<p>We should use <code>-2</code> option for <code>tmux</code> to force 256 colors, and <code>-cS ii</code> option for <code>multitail</code> to ii syntax highlighting. After all this we can execute <code>./tmux_open.sh channel</code> command to open a two pane, that will contain IRC channel log and vim ifself.</p>
+<p>To type in IRC session we will use <code class="highlighter-rouge">vim</code> with the following mappings:</p>
 
-<p>To type in IRC session we will use <code>vim</code> with the following mappings:</p>
-
-<div class="highlight"><pre><code class="language-vim" data-lang="vim">map <span class="p">&lt;</span>leader<span class="p">&gt;</span>ii :.<span class="k">w</span> <span class="p">&gt;&gt;</span> <span class="p">~</span><span class="sr">/irc/</span>irc.freenode.net/<span class="k">in</span><span class="p">&lt;</span><span class="k">cr</span><span class="p">&gt;</span>dd
-map <span class="p">&lt;</span>leader<span class="p">&gt;</span>i1 :.<span class="k">w</span> <span class="p">&gt;&gt;</span> <span class="p">~</span><span class="sr">/irc/</span>irc.freenode.net<span class="sr">/\#channel1/</span><span class="k">in</span><span class="p">&lt;</span><span class="k">cr</span><span class="p">&gt;</span>dd
-map <span class="p">&lt;</span>leader<span class="p">&gt;</span>i2 :.<span class="k">w</span> <span class="p">&gt;&gt;</span> <span class="p">~</span><span class="sr">/irc/</span>irc.freenode.net<span class="sr">/\#channel2/</span><span class="k">in</span><span class="p">&lt;</span><span class="k">cr</span><span class="p">&gt;</span>dd
-map <span class="p">&lt;</span>leader<span class="p">&gt;</span>i3 :.<span class="k">w</span> <span class="p">&gt;&gt;</span> <span class="p">~</span><span class="sr">/irc/</span>irc.freenode.net<span class="sr">/\#channel3/</span><span class="k">in</span><span class="p">&lt;</span><span class="k">cr</span><span class="p">&gt;</span>dd</code></pre></div>
-
+<figure class="highlight"><pre><code class="language-vim" data-lang="vim">map <span class="p">&lt;</span>leader<span class="p">&gt;</span>ii <span class="p">:.</span><span class="k">w</span> <span class="p">&gt;&gt;</span> <span class="p">~</span><span class="sr">/irc/</span>irc<span class="p">.</span>freenode<span class="p">.</span>net/<span class="k">in</span><span class="p">&lt;</span><span class="k">cr</span><span class="p">&gt;</span>dd
+map <span class="p">&lt;</span>leader<span class="p">&gt;</span>i1 <span class="p">:.</span><span class="k">w</span> <span class="p">&gt;&gt;</span> <span class="p">~</span><span class="sr">/irc/</span>irc<span class="p">.</span>freenode<span class="p">.</span>net<span class="sr">/\#channel1/</span><span class="k">in</span><span class="p">&lt;</span><span class="k">cr</span><span class="p">&gt;</span>dd
+map <span class="p">&lt;</span>leader<span class="p">&gt;</span>i2 <span class="p">:.</span><span class="k">w</span> <span class="p">&gt;&gt;</span> <span class="p">~</span><span class="sr">/irc/</span>irc<span class="p">.</span>freenode<span class="p">.</span>net<span class="sr">/\#channel2/</span><span class="k">in</span><span class="p">&lt;</span><span class="k">cr</span><span class="p">&gt;</span>dd
+map <span class="p">&lt;</span>leader<span class="p">&gt;</span>i3 <span class="p">:.</span><span class="k">w</span> <span class="p">&gt;&gt;</span> <span class="p">~</span><span class="sr">/irc/</span>irc<span class="p">.</span>freenode<span class="p">.</span>net<span class="sr">/\#channel3/</span><span class="k">in</span><span class="p">&lt;</span><span class="k">cr</span><span class="p">&gt;</span>dd</code></pre></figure>
 
 <p>Also, we can hide tmux status line globally (I prefer a vim status line) to achieve an ideal:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># .tmux.conf</span>
-<span class="nb">set</span>-option -g status off</code></pre></div>
-
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># .tmux.conf</span>
+<span class="nb">set</span>-option -g status off</code></pre></figure>
 
 <p>or hide it only with the vim</p>
 
-<div class="highlight"><pre><code class="language-vim" data-lang="vim">; .vimrc
-<span class="k">autocmd</span> <span class="nb">VimEnter</span><span class="p">,</span><span class="nb">VimLeave</span> * <span class="k">silent</span> <span class="p">!</span>tmux <span class="k">set</span> status</code></pre></div>
-
-
+<figure class="highlight"><pre><code class="language-vim" data-lang="vim">; <span class="p">.</span>vimrc
+autocmd <span class="nb">VimEnter</span><span class="p">,</span><span class="nb">VimLeave</span> * <span class="k">silent</span> <span class="p">!</span>tmux <span class="k">set</span> status</code></pre></figure>
 
 
   </div>
@@ -208,24 +204,26 @@ map <span class="p">&lt;</span>leader<span class="p">&gt;</span>i3 :.<span class
 
     <span class="post-date">14 Feb 2014</span>
 
-    <p>Some time ago I was faced with the need to implement the sharding in Django 1.6 . It was an attempt to make step beyond the standart features of this framework and I felt the resistance of Django =) I'll talk a bit about this challenge and its results.</p>
+    <p>Some time ago I was faced with the need to implement the sharding in Django 1.6 . It was an attempt to make step beyond the standart features of this framework and I felt the resistance of Django =) I’ll talk a bit about this challenge and its results.</p>
 
-<p>Let's start with definitions. Wikipedia says that:</p>
+<p>Let’s start with definitions. Wikipedia says that:</p>
 
-<blockquote><p>A database shard is a horizontal partition in a database.
-Horizontal partitioning is a database design principle whereby rows of a database table are held separately, rather than being split into columns (which is what normalization and vertical partitioning do, to differing extents). Each partition forms part of a shard, which may in turn be located on a separate database server or physical location.</p></blockquote>
+<blockquote>
+  <p>A database shard is a horizontal partition in a database.
+Horizontal partitioning is a database design principle whereby rows of a database table are held separately, rather than being split into columns (which is what normalization and vertical partitioning do, to differing extents). Each partition forms part of a shard, which may in turn be located on a separate database server or physical location.</p>
+</blockquote>
 
-<p>We wanted split our database entities by the different PostgreSQL schemas and used something like <a href="http://instagram-engineering.tumblr.com/post/10853187575/sharding-ids-at-instagram">this</a> for the <code>id</code> generation. The sharding model was clear, but how to implement it in the Django application?</p>
+<p>We wanted split our database entities by the different PostgreSQL schemas and used something like <a href="http://instagram-engineering.tumblr.com/post/10853187575/sharding-ids-at-instagram">this</a> for the <code class="highlighter-rouge">id</code> generation. The sharding model was clear, but how to implement it in the Django application?</p>
 
-<p>My solution of this problem was a custom database backend, that contains a custom sql compilers. Maybe it was a dirty hack, but I hope it wasn't =)</p>
+<p>My solution of this problem was a custom database backend, that contains a custom sql compilers. Maybe it was a dirty hack, but I hope it wasn’t =)</p>
 
-<p>To create your own custom database backend, you can copy structure from one of the existing backends from <code>django.db.backends</code> (<code>postgresql_psycopg2</code> for our case) and override <code>DatabaseOperations</code>:</p>
+<p>To create your own custom database backend, you can copy structure from one of the existing backends from <code class="highlighter-rouge">django.db.backends</code> (<code class="highlighter-rouge">postgresql_psycopg2</code> for our case) and override <code class="highlighter-rouge">DatabaseOperations</code>:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># operations.py</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># operations.py</span>
 <span class="kn">from</span> <span class="nn">django.db.backends.postgresql_psycopg2.operations</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="k">class</span> <span class="nc">CustomDatabaseOperations</span><span class="p">(</span><span class="n">DatabaseOperations</span><span class="p">):</span>
-    <span class="n">compiler_module</span> <span class="o">=</span> <span class="s">&quot;path.to.the.compiler.module&quot;</span>
+    <span class="n">compiler_module</span> <span class="o">=</span> <span class="s">"path.to.the.compiler.module"</span>
 
 <span class="c"># base.py</span>
 <span class="kn">from</span> <span class="nn">django.db.backends.postgresql_psycopg2.base</span> <span class="kn">import</span> <span class="o">*</span>
@@ -237,12 +235,11 @@ Horizontal partitioning is a database design principle whereby rows of a databas
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ops</span> <span class="o">=</span> <span class="n">CustomDatabaseOperations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
-<span class="n">DatabaseWrapper</span> <span class="o">=</span> <span class="n">CustomDatabaseWrapper</span></code></pre></div>
-
+<span class="n">DatabaseWrapper</span> <span class="o">=</span> <span class="n">CustomDatabaseWrapper</span></code></pre></figure>
 
 <p>A custom sql compilers will be adding a corresponding schema name into the sql request based on the entity id:</p>
 
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># compilers.py</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># compilers.py</span>
 
 <span class="k">class</span> <span class="nc">CustomSQLCompiler</span><span class="p">(</span><span class="n">SQLCompiler</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">as_sql</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -252,53 +249,52 @@ Horizontal partitioning is a database design principle whereby rows of a databas
         <span class="k">else</span><span class="p">:</span>
             <span class="n">sql</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">CustomSQLCompiler</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">as_sql</span><span class="p">()</span>
 
-            <span class="sd">&quot;&quot;&quot; The first item of the params tuple must be entity id</span>
-<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="s">""" The first item of the params tuple must be entity id
+            """</span>
             <span class="n">schema</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_shard_name</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-            <span class="n">old</span> <span class="o">=</span> <span class="s">&#39;&quot;{}&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
-            <span class="n">new</span> <span class="o">=</span> <span class="s">&#39;{}.&quot;{}&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">table</span><span class="p">)</span>
+            <span class="n">old</span> <span class="o">=</span> <span class="s">'"{}"'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+            <span class="n">new</span> <span class="o">=</span> <span class="s">'{}."{}"'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">table</span><span class="p">)</span>
             <span class="n">sql</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">sql</span><span class="p">,</span> <span class="n">params</span>
 
 
-<span class="n">SQLCompiler</span> <span class="o">=</span> <span class="n">CustomSQLCompiler</span></code></pre></div>
+<span class="n">SQLCompiler</span> <span class="o">=</span> <span class="n">CustomSQLCompiler</span></code></pre></figure>
 
+<p>That’s all! Oh, okay, that’s not all =) Now you must create a custom <code class="highlighter-rouge">QuerySet</code> (with the two overrided methods - <code class="highlighter-rouge">get</code> &amp; <code class="highlighter-rouge">create</code>) to provide a correct sharded id for an all entities.</p>
 
-<p>That's all! Oh, okay, that's not all =) Now you must create a custom <code>QuerySet</code> (with the two overrided methods - <code>get</code> &amp; <code>create</code>) to provide a correct sharded id for an all entities.</p>
+<p>But there is one problem - migrations. You can’t migrate correctly your sharded models and it’s sad. To avoid this we inctoruced the some more complex database configuration dictionary. We used the special method, that converted this complex config into the standard with a lot of database connections - a one for each shard. All connections have the <code class="highlighter-rouge">search_path</code> option. In the <code class="highlighter-rouge">settings.py</code> we must take in account a type of action:</p>
 
-<p>But there is one problem - migrations. You can't migrate correctly your sharded models and it's sad. To avoid this we inctoruced the some more complex database configuration dictionary. We used the special method, that converted this complex config into the standard with a lot of database connections - a one for each shard. All connections have the <code>search_path</code> option. In the <code>settings.py</code> we must take in account a type of action:</p>
-
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># settings.py</span>
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># settings.py</span>
 
 <span class="k">def</span> <span class="nf">get_shard_settings</span><span class="p">(</span><span class="n">shard_migrate</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">shard_sync</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Not an all apps must be sharded.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">installed_apps</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;some_sharded_app1&#39;</span><span class="p">,</span> <span class="s">&#39;some_sharder_app2&#39;</span><span class="p">,)</span>
+    <span class="s">""" Not an all apps must be sharded.
+    """</span>
+    <span class="n">installed_apps</span> <span class="o">=</span> <span class="p">(</span><span class="s">'some_sharded_app1'</span><span class="p">,</span> <span class="s">'some_sharder_app2'</span><span class="p">,)</span>
     <span class="n">databases</span> <span class="o">=</span> <span class="n">DB_CONFIGURATOR</span><span class="p">(</span><span class="n">DB_CONFIG</span><span class="p">,</span> <span class="n">shard_migrate</span><span class="o">=</span><span class="n">shard_migrate</span><span class="p">,</span> <span class="n">shard_sync</span><span class="o">=</span><span class="n">shard_sync</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">installed_apps</span><span class="p">,</span> <span class="n">databases</span>
 
-<span class="sd">&quot;&quot;&quot; We must separate</span>
-<span class="sd">    - normal usage,</span>
-<span class="sd">    - sharded models synchronization</span>
-<span class="sd">    - sharded models migration </span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;shard_migrate&#39;</span><span class="p">:</span>
+<span class="s">""" We must separate
+    - normal usage,
+    - sharded models synchronization
+    - sharded models migration 
+"""</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">'shard_migrate'</span><span class="p">:</span>
     <span class="k">del</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">INSTALLED_APPS</span><span class="p">,</span> <span class="n">DATABASES</span> <span class="o">=</span> <span class="n">get_shard_settings</span><span class="p">(</span><span class="n">shard_migrate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-<span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;shard_sync&#39;</span><span class="p">:</span>
+<span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">'shard_sync'</span><span class="p">:</span>
     <span class="k">del</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">INSTALLED_APPS</span><span class="p">,</span> <span class="n">DATABASES</span> <span class="o">=</span> <span class="n">get_shard_settings</span><span class="p">(</span><span class="n">shard_sync</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">DATABASES</span> <span class="o">=</span> <span class="n">DB_CONFIGURATOR</span><span class="p">(</span><span class="n">DB_CONFIG</span><span class="p">)</span></code></pre></div>
+    <span class="n">DATABASES</span> <span class="o">=</span> <span class="n">DB_CONFIGURATOR</span><span class="p">(</span><span class="n">DB_CONFIG</span><span class="p">)</span></code></pre></figure>
 
+<p>Now we can manage sharded migrations by <code class="highlighter-rouge">--database</code> options. For convenience you can write a fab script of course.</p>
 
-<p>Now we can manage sharded migrations by <code>--database</code> options. For convenience you can write a fab script of course.</p>
+<p>And one more and last caveat - you must create <code class="highlighter-rouge">SOUTH_DATABASE_ADAPTERS</code> variable, that will be pointing to original postgres adapter <code class="highlighter-rouge">south.db.postgresql_psycopg2</code> - south can’t create a correct migration otherwise.</p>
 
-<p>And one more and last caveat - you must create <code>SOUTH_DATABASE_ADAPTERS</code> variable, that will be pointing to original postgres adapter <code>south.db.postgresql_psycopg2</code> - south can't create a correct migration otherwise.</p>
 
   </div>
   

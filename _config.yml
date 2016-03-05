@@ -6,12 +6,14 @@ version:      0.0.1
 author:
   name:       'Dmitry Dolgov'
   email:      '9erthalion6@gmail.com'
-markdown:     rdiscount
+markdown:     kramdown
 permalink:    pretty
-pygments:     true
 paginate:     4
 paginate_path: "blog/page:num"
 comments:
     provider: disqus
     disqus:
         short_name: erthalion
+gems: [
+    "jekyll-paginate"
+]
