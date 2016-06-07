@@ -2,6 +2,15 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
     <url>
+      <loc>http://erthalion.info/2016/06/05/convert-into-jsonb/</loc>
+      
+        <lastmod>2016-06-05T06:16:21+06:00</lastmod>
+      
+      <changefreq>weekly</changefreq>
+      <priority>1.0</priority>
+    </url>
+  
+    <url>
       <loc>http://erthalion.info/2015/12/29/pandoc/</loc>
       
         <lastmod>2015-12-29T07:14:21+06:00</lastmod>

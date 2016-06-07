@@ -63,6 +63,54 @@
   
   <div class="post">
     <h1>
+      <a href="/2014/08/16/fenv-exceptions/">
+        Use an exception instead of the NaN
+      </a>
+    </h1>
+
+    <span class="post-date">16 Aug 2014</span>
+
+    <p>This is a small notice about a very useful trick. I often have to deal with computations, because the CFD is the part of my activity. And one of the annoying problem in this kind of research is when after many hours of computations you got a <code class="highlighter-rouge">Not A Number</code> result, caused by a stupid mistake. It would be nice, if a computation was interrupted by the NaN.</p>
+
+<p>And there is the <a href="http://stackoverflow.com/a/2949452">solution</a>:</p>
+
+<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#define _GNU_SOURCE
+#include &lt;fenv.h&gt;
+#include &lt;stdio.h&gt;
+</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">;</span>
+    <span class="n">feenableexcept</span><span class="p">(</span><span class="n">FE_DIVBYZERO</span> <span class="o">|</span> <span class="n">FE_INVALID</span> <span class="o">|</span> <span class="n">FE_OVERFLOW</span><span class="p">);</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="n">y</span><span class="p">;</span> <span class="cm">/* should cause an FPE */</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">"result is %f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">z</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>The <code class="highlighter-rouge">fenv.h</code> header declares a set of functions and macros to access the floating-point environment, along with specific types.
+According to man:</p>
+
+<blockquote>
+  <p>The  feenableexcept() function enable traps for each of the exceptions represented by excepts and return the previous set of enabled exceptions when successful, and -1 otherwise. </p>
+</blockquote>
+
+<p>Now, what we have without <code class="highlighter-rouge">feenableexcept</code>:</p>
+
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="gp">$ </span>./test_no_fenv 
+<span class="gp">&gt; </span>result is -nan</code></pre></figure>
+
+<p>And with:</p>
+
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="gp">$ </span>./test_fenv 
+<span class="gp">&gt; </span>fish: Job 1, <span class="s1">'./test'</span> terminated by signal SIGFPE <span class="o">(</span>Floating point exception<span class="o">)</span></code></pre></figure>
+
+
+  </div>
+  
+  <div class="post">
+    <h1>
       <a href="/2014/08/09/from-bash-to-fish/">
         From bash to fish
       </a>
@@ -350,82 +398,6 @@ White <span class="o">(</span>2<span class="o">)</span> : </code></pre></figure>
             <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="p">[:(</span><span class="n">high</span><span class="o">-</span><span class="n">low</span><span class="p">)]</span></code></pre></figure>
 
 <p>This solution looks very questionable, but exciting for me. If you have something to say about this - welcome! =)</p>
-
-
-  </div>
-  
-  <div class="post">
-    <h1>
-      <a href="/2014/03/26/xi/">
-        xi or the fast and furious Haskell
-      </a>
-    </h1>
-
-    <span class="post-date">26 Mar 2014</span>
-
-    <p>Don’t be confused by the title of this post - I will tell you about my experience in the development of xmpp client <a href="https://github.com/erthalion/xi">xi</a>. The first version of this client was written in Haskell in the shortest time (for me, of cource), and this fact provides the second emotional part of title =)</p>
-
-<p>First of all - <code class="highlighter-rouge">xi</code> was inspired by <a href="http://tools.suckless.org/ii/]">ii</a> irc client. It explains the all of its features, design and main idea. In short - after <a href="http://erthalion.info/2014/02/16/ii/">this</a> post I’m a huge fan of this tool and philosophy.</p>
-
-<p>Second - <code class="highlighter-rouge">xi</code> was written in Haskell. I will not explain <a href="http://stackoverflow.com/a/775759/1423473">why</a> =)</p>
-
-<p>Now let’s take a look inside. We can see a lot of dependencies of course - <code class="highlighter-rouge">xi</code> uses <a href="https://github.com/pontarius/pontarius-xmpp/">pontarius xmpp</a> for the XMPP interaction. But there is an interesting hidden trick - we must use this library from the github directly yet, because of an unpleasant <a href="https://github.com/pontarius/pontarius-xmpp/issues/46">bug</a>. This can be done by the <code class="highlighter-rouge">cabal sandbox add-source</code> command:</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">git clone http://github.com/pontarius/pontarius-xmpp .deps/pontarius-xmpp
-cabal sandbox init
-cabal sandbox add-source .deps/pontarius-xmpp</code></pre></figure>
-
-<p>Also, if we want to support <code class="highlighter-rouge">gmail.com</code>, we must use some extra <code class="highlighter-rouge">TLS</code> options:</p>
-
-<figure class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kr">import</span> <span class="nn">Network.TLS</span>
-<span class="kr">import</span> <span class="nn">Network.TLS.Extra</span>
-
-<span class="n">sess</span> <span class="o">&lt;-</span> <span class="n">session</span>
-    <span class="n">server</span>
-      <span class="p">(</span><span class="kt">Just</span> <span class="p">(</span><span class="nf">\</span><span class="kr">_</span> <span class="o">-&gt;</span> <span class="p">(</span> <span class="p">[</span><span class="n">plain</span> <span class="n">user</span> <span class="kt">Nothing</span> <span class="n">password</span><span class="p">]),</span> <span class="kt">Nothing</span><span class="p">))</span>
-    <span class="n">def</span> <span class="p">{</span> <span class="n">sessionStreamConfiguration</span> <span class="o">=</span> <span class="n">def</span>
-            <span class="p">{</span> <span class="n">tlsParams</span> <span class="o">=</span> <span class="n">defaultParamsClient</span>
-                <span class="p">{</span> <span class="n">pConnectVersion</span> <span class="o">=</span> <span class="kt">TLS10</span>
-                <span class="p">,</span> <span class="n">pAllowedVersions</span> <span class="o">=</span> <span class="p">[</span><span class="kt">TLS10</span><span class="p">,</span> <span class="kt">TLS11</span><span class="p">,</span> <span class="kt">TLS12</span><span class="p">]</span>
-                <span class="p">,</span> <span class="n">pCiphers</span> <span class="o">=</span> <span class="n">ciphersuite_medium</span> <span class="p">}</span> <span class="p">}</span> <span class="p">}</span></code></pre></figure>
-
-<p>Other important feature is the listening of the file, which will contain a user input. We will use a <code class="highlighter-rouge">fsnotify</code> library for these purposes. Michael Snoyman <a href="http://stackoverflow.com/a/22128940/1423473">shared the implementation</a> of this feature (he always flying to help, when SO question contains the <code class="highlighter-rouge">haskell</code> and <code class="highlighter-rouge">conduit</code> keywords =). The main idea is the monitoring file changes by <code class="highlighter-rouge">fsnotify</code>, and save the current position in file. There are several disadvanteges with this approach - e.g. we can’t handle a file truncation. But for our purposes we can use files, that will never be truncated.</p>
-
-<figure class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="n">sourceFileForever</span> <span class="o">::</span> <span class="kt">MonadResource</span> <span class="n">m</span> <span class="o">=&gt;</span> <span class="kt">FilePath</span> <span class="o">-&gt;</span> <span class="kt">Source</span> <span class="n">m</span> <span class="kt">ByteString</span>
-<span class="n">sourceFileForever</span> <span class="n">fp'</span> <span class="o">=</span> <span class="n">bracketP</span> <span class="n">startManager</span> <span class="n">stopManager</span> <span class="o">$</span> <span class="nf">\</span><span class="n">manager</span> <span class="o">-&gt;</span> <span class="kr">do</span>
-    <span class="n">fp</span> <span class="o">&lt;-</span> <span class="n">liftIO</span> <span class="o">$</span> <span class="n">canonicalizePath</span> <span class="o">$</span> <span class="n">decodeString</span> <span class="n">fp'</span>
-    <span class="n">baton</span> <span class="o">&lt;-</span> <span class="n">liftIO</span> <span class="n">newEmptyMVar</span>
-    <span class="n">liftIO</span> <span class="o">$</span> <span class="n">watchDir</span> <span class="n">manager</span> <span class="p">(</span><span class="n">directory</span> <span class="n">fp</span><span class="p">)</span> <span class="p">(</span><span class="n">const</span> <span class="kt">True</span><span class="p">)</span> <span class="o">$</span> <span class="nf">\</span><span class="n">event</span> <span class="o">-&gt;</span> <span class="n">void</span> <span class="o">$</span> <span class="n">tryIO</span> <span class="o">$</span> <span class="kr">do</span>
-        <span class="n">fpE</span> <span class="o">&lt;-</span> <span class="n">canonicalizePath</span> <span class="o">$</span>
-            <span class="kr">case</span> <span class="n">event</span> <span class="kr">of</span>
-                <span class="kt">Added</span> <span class="n">x</span> <span class="kr">_</span> <span class="o">-&gt;</span> <span class="n">x</span>
-                <span class="kt">Modified</span> <span class="n">x</span> <span class="kr">_</span> <span class="o">-&gt;</span> <span class="n">x</span>
-                <span class="kt">Removed</span> <span class="n">x</span> <span class="kr">_</span> <span class="o">-&gt;</span> <span class="n">x</span>
-        <span class="n">when</span> <span class="p">(</span><span class="n">fpE</span> <span class="o">==</span> <span class="n">fp</span><span class="p">)</span> <span class="o">$</span> <span class="n">putMVar</span> <span class="n">baton</span> <span class="nb">()</span>
-    <span class="n">consumedRef</span> <span class="o">&lt;-</span> <span class="n">liftIO</span> <span class="o">$</span> <span class="n">newIORef</span> <span class="mi">0</span>
-    <span class="n">loop</span> <span class="n">baton</span> <span class="n">consumedRef</span>
-  <span class="kr">where</span>
-    <span class="n">loop</span> <span class="o">::</span> <span class="kt">MonadResource</span> <span class="n">m</span> <span class="o">=&gt;</span> <span class="kt">MVar</span> <span class="nb">()</span> <span class="o">-&gt;</span> <span class="kt">IORef</span> <span class="kt">Integer</span> <span class="o">-&gt;</span> <span class="kt">Source</span> <span class="n">m</span> <span class="kt">ByteString</span>
-    <span class="n">loop</span> <span class="n">baton</span> <span class="n">consumedRef</span> <span class="o">=</span> <span class="n">forever</span> <span class="o">$</span> <span class="kr">do</span>
-        <span class="n">consumed</span> <span class="o">&lt;-</span> <span class="n">liftIO</span> <span class="o">$</span> <span class="n">readIORef</span> <span class="n">consumedRef</span>
-        <span class="n">sourceFileRange</span> <span class="n">fp'</span> <span class="p">(</span><span class="kt">Just</span> <span class="n">consumed</span><span class="p">)</span> <span class="kt">Nothing</span> <span class="o">$=</span> <span class="kt">CL</span><span class="o">.</span><span class="n">iterM</span> <span class="n">counter</span>
-        <span class="n">liftIO</span> <span class="o">$</span> <span class="n">takeMVar</span> <span class="n">baton</span>
-      <span class="kr">where</span>
-        <span class="n">counter</span> <span class="n">bs</span> <span class="o">=</span> <span class="n">liftIO</span> <span class="o">$</span> <span class="n">modifyIORef</span> <span class="n">consumedRef</span> <span class="p">(</span><span class="o">+</span> <span class="n">fromIntegral</span> <span class="p">(</span><span class="kt">S</span><span class="o">.</span><span class="n">length</span> <span class="n">bs</span><span class="p">))</span></code></pre></figure>
-
-<p><code class="highlighter-rouge">xi</code> uses the  following algorithm:</p>
-
-<ul>
-  <li>establish connection</li>
-  <li>get a user roster and convert it to the internal representation (the <code class="highlighter-rouge">ContactList</code> type)</li>
-  <li>create an appropriate directory structure (a separate directory for each contact with <code class="highlighter-rouge">in</code>/<code class="highlighter-rouge">out</code>)</li>
-  <li>for the each input file start a separate thread to monitoring the user input</li>
-  <li>start a thread for monitoring the incoming messages</li>
-</ul>
-
-<p>Little bit about client details. A <code class="highlighter-rouge">Session</code> and <code class="highlighter-rouge">ContactList</code> objects have been shared through the <code class="highlighter-rouge">Reader</code> monad. For the parsing of configuration file <code class="highlighter-rouge">yaml-config</code> library has been used. Also, there is an ability to see an entire xmpp data flow - this requires only the debug mode in configuration.</p>
-
-<p>Client source code hosted on the <a href="https://github.com/erthalion/xi">github</a>, but you should keep in mind, that it’s more prototype, than a completed project. So if you want to improve something - welcome =)</p>
 
 
   </div>

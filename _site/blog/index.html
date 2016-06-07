@@ -63,6 +63,245 @@
   
   <div class="post">
     <h1>
+      <a href="/2016/06/05/convert-into-jsonb/">
+        How to convert your data to jsonb?
+      </a>
+    </h1>
+
+    <span class="post-date">05 Jun 2016</span>
+
+    <p>“How to start” is always a difficult question, and <code class="highlighter-rouge">jsonb</code> isn’t an exception.
+Here are few notes about converting different types of data into <code class="highlighter-rouge">jsonb</code>, that
+someone can find useful.</p>
+
+<p>Basically there are three possible cases of data conversion:</p>
+
+<ul>
+  <li>Convert data from inside PostgreSQL</li>
+  <li>Convert data from other database</li>
+  <li>Convert plain data outside database</li>
+</ul>
+
+<h2 id="from-inside-postgresql">From inside PostgreSQL</h2>
+
+<p>First of all we shouldn’t forget we can build data in <code class="highlighter-rouge">jsonb</code> format manually:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">select</span> <span class="s1">'{"id": 1, "data": "aaa"}'</span><span class="p">::</span><span class="n">jsonb</span><span class="p">;</span>
+</code></pre>
+</div>
+<div class="highlighter-rouge"><pre class="highlight"><code>          jsonb           
+--------------------------
+ <span class="o">{</span><span class="s2">"id"</span>: 1, <span class="s2">"data"</span>: <span class="s2">"aaa"</span><span class="o">}</span>
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">select</span> <span class="n">jsonb_build_object</span><span class="p">(</span><span class="s1">'id'</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'data'</span><span class="p">,</span> <span class="s1">'aaa'</span><span class="p">);</span>
+</code></pre>
+</div>
+<div class="highlighter-rouge"><pre class="highlight"><code>    jsonb_build_object    
+--------------------------
+ <span class="o">{</span><span class="s2">"id"</span>: 1, <span class="s2">"data"</span>: <span class="s2">"aaa"</span><span class="o">}</span>
+</code></pre>
+</div>
+
+<p>If we already have some relational data we can easy perform one-to-one
+conversion for both complex and simple data types:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">select</span> <span class="n">to_jsonb</span><span class="p">(</span><span class="k">timestamp</span> <span class="s1">'2016-06-05'</span><span class="p">);</span>
+</code></pre>
+</div>
+<div class="highlighter-rouge"><pre class="highlight"><code>       to_jsonb        
+-----------------------
+ <span class="s2">"2016-06-05T00:00:00"</span>
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">select</span> <span class="n">to_jsonb</span><span class="p">(</span><span class="n">ARRAY</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]);</span>
+</code></pre>
+</div>
+<div class="highlighter-rouge"><pre class="highlight"><code> to_jsonb  
+-----------
+ <span class="o">[</span>1, 2, 3]
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">select</span> <span class="n">to_jsonb</span><span class="p">(</span><span class="s1">'id=&gt;1, data=&gt;"aaa"'</span><span class="p">::</span><span class="n">hstore</span><span class="p">);</span>
+</code></pre>
+</div>
+<div class="highlighter-rouge"><pre class="highlight"><code>          to_jsonb          
+----------------------------
+ <span class="o">{</span><span class="s2">"id"</span>: <span class="s2">"1"</span>, <span class="s2">"data"</span>: <span class="s2">"aaa"</span><span class="o">}</span>
+</code></pre>
+</div>
+
+<p>Don’t forget that <code class="highlighter-rouge">jsonb</code> is just a valid textual json, so all values will be
+converted to number, string, boolean or null.</p>
+
+<p>And if we want to produce a really complex and well-structured <code class="highlighter-rouge">jsonb</code> document
+from large amount of relational data, <code class="highlighter-rouge">jsonb_agg</code> is our friend. This
+function can transform a recordset into the format <code class="highlighter-rouge">column_name: record_value</code>:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">select</span> <span class="n">jsonb_agg</span><span class="p">(</span><span class="n">query</span><span class="p">)</span> <span class="k">from</span> <span class="p">(</span>
+    <span class="k">select</span> <span class="n">id</span><span class="p">,</span> <span class="k">data</span>
+    <span class="k">from</span> <span class="n">jsonb_table</span>
+<span class="p">)</span> <span class="n">query</span><span class="p">;</span>
+</code></pre>
+</div>
+<div class="highlighter-rouge"><pre class="highlight"><code>                      jsonb_agg                       
+------------------------------------------------------
+ <span class="o">[{</span><span class="s2">"id"</span>: 1, <span class="s2">"data"</span>: <span class="s2">"aaa"</span><span class="o">}</span>, <span class="o">{</span><span class="s2">"id"</span>: 2, <span class="s2">"data"</span>: <span class="s2">"bbb"</span><span class="o">}]</span>
+</code></pre>
+</div>
+
+<h2 id="from-other-database">From other database</h2>
+
+<p>Again there are two options how to import data from another database:</p>
+
+<ul>
+  <li>Import right in the json format as plain data (see following section)</li>
+  <li>Import as relational data and then convert from inside PostgreSQL as in
+previous section</li>
+</ul>
+
+<p>And in any case you should create all indices and make sure they’re correct.
+Let’s see few examples:</p>
+
+<h3 id="mongodb">MongoDB</h3>
+
+<p>We can easily create a json dump of MongoDB database and then load it with minimal
+modifications:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mongoexport                       <span class="se">\</span>
+    --db database_name              <span class="se">\</span>
+    --collection collection_name    <span class="se">\</span>
+    --jsonArray                     <span class="se">\</span>
+    -out dump.json
+</code></pre>
+</div>
+
+<p>But you should be aware of specific data types, since BSON isn’t 100%
+compatible with textual json. To be more precise I’m talking about
+<code class="highlighter-rouge">data_binary</code>, <code class="highlighter-rouge">data_date</code>, <code class="highlighter-rouge">data_timestamp</code>, <code class="highlighter-rouge">data_regex</code>, <code class="highlighter-rouge">data_oid</code> etc, see
+<a href="https://docs.mongodb.com/manual/reference/mongodb-extended-json/">documentation</a>). E.g. when you’ll create a dump of collection
+with <code class="highlighter-rouge">data_date</code> field, you’ll get something like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="s">"created_at"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s">"$date"</span><span class="p">:</span> <span class="mi">1445510017229</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>and you may decide to move this value one level up or keep this structure.</p>
+
+<p>There is also another interesting option, which is related to the <a href="https://github.com/torodb/torodb">ToroDB</a>.</p>
+
+<blockquote>
+  <p>ToroDB is an open source project that turns your RDBMS into a
+MongoDB-compatible server, supporting the MongoDB query API and MongoDB’s
+replication, but storing your data into a reliable and trusted ACID database.</p>
+</blockquote>
+
+<p>So it’s like NoSQL over RDBMS. You can setup ToroDB as a hidden read-only
+replica of a MondoDB replica set. Then when you’ll be ready you can examine
+ToroDB data structure and convert it into <code class="highlighter-rouge">jsonb</code> as in previous section.</p>
+
+<p>Speaking about indices - it’s possible to cover good amount of queries using
+GIN index for <code class="highlighter-rouge">jsonb</code> column, but since it available only for small list of
+operators, you should probably add separate indices for range queries.</p>
+
+<h3 id="mysql">MySQL</h3>
+
+<p><code class="highlighter-rouge">JSON</code> data type format in MySQL is pretty close to PostgreSQL, we can even use
+<code class="highlighter-rouge">mysqldump</code> to convert one into another:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>mysqldump                                     <span class="se">\</span>
+    --compact                                   <span class="se">\</span>
+    --compatible<span class="o">=</span>postgresql                     <span class="se">\</span>
+    database_name                               <span class="se">\</span>
+    table_name | sed -e <span class="s1">'s/\\\"/"/g'</span> &gt; dump.sql
+
+<span class="gp">$ </span>cat ./dump.sql
+</code></pre>
+</div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="cm">/*!40101 SET @saved_cs_client     = @@character_set_client */</span><span class="p">;</span>
+<span class="cm">/*!40101 SET character_set_client = utf8 */</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="nv">"table_name"</span> <span class="p">(</span>
+  <span class="nv">"data"</span> <span class="n">json</span> <span class="k">DEFAULT</span> <span class="k">NULL</span>
+<span class="p">);</span>
+<span class="cm">/*!40101 SET character_set_client = @saved_cs_client */</span><span class="p">;</span>
+<span class="k">INSERT</span> <span class="k">INTO</span> <span class="nv">"table_name"</span> <span class="k">VALUES</span> <span class="p">(</span><span class="s1">'{"aaa": 1, "bbb": 2}'</span><span class="p">),(</span><span class="s1">'{"aaa": 3, "bbb": 4}'</span><span class="p">),(</span><span class="s1">'{"aaa": 5, "bbb": 6}'</span><span class="p">);</span>
+</code></pre>
+</div>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>psql &lt; dump.sql
+</code></pre>
+</div>
+
+<p>Just be careful about double quotes escaping and that’s it.</p>
+
+<h2 id="from-plain-data">From plain data</h2>
+
+<p>And finally we have an option to import plain json data into PostgreSQL. But
+imagine a situation, when we need to process not so well formatted data. Since
+<code class="highlighter-rouge">jsonb</code> should strictly follow the json format, what can we do in that case?</p>
+
+<p>It depends on how badly our document is broken. If document structure is
+preserved, but there are some issues with formatting (one quote instead of
+double or even without quotes, no commas and so on), it’s possible to fix it
+using (oh my gosh) <code class="highlighter-rouge">node.js</code> and more precisely the <a href="http://json5.org/">json5</a> extension and
+the corresponding library:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c1">// format.js</span>
+
+<span class="kd">var</span> <span class="nx">JSON5</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'json5'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">stdin</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">stdin</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">stdout</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">stdout</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">inputChunks</span> <span class="o">=</span> <span class="p">[];</span>
+
+<span class="nx">stdin</span><span class="p">.</span><span class="nx">resume</span><span class="p">();</span>
+<span class="nx">stdin</span><span class="p">.</span><span class="nx">setEncoding</span><span class="p">(</span><span class="s1">'utf8'</span><span class="p">);</span>
+
+<span class="nx">stdin</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">inputChunks</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">chunk</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">stdin</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'end'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">inputData</span> <span class="o">=</span> <span class="nx">inputChunks</span><span class="p">.</span><span class="nx">join</span><span class="p">();</span>
+
+    <span class="kd">var</span> <span class="nx">outputData</span> <span class="o">=</span> <span class="nx">inputData</span>
+        <span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">'\n'</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">input</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">input</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">})</span>
+        <span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">input</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">parsed</span> <span class="o">=</span> <span class="nx">JSON5</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">input</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">output</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">parsed</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nx">output</span><span class="p">;</span>
+        <span class="p">}).</span><span class="nx">join</span><span class="p">(</span><span class="s1">'\n'</span><span class="p">);</span>
+
+    <span class="nx">stdout</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">outputData</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>cat data.json | node format.js &gt; data_formatted.json
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">=#</span> <span class="k">COPY</span> <span class="k">table_name</span><span class="p">(</span><span class="n">jsonb_column_name</span><span class="p">)</span> <span class="k">from</span> <span class="s1">'data_formatted.json'</span>
+</code></pre>
+</div>
+
+<p>But if document structure is broken too - nothing can help, we need to fix it
+manually using one of json linters.</p>
+
+
+  </div>
+  
+  <div class="post">
+    <h1>
       <a href="/2015/12/29/pandoc/">
         The Knife
       </a>
@@ -401,54 +640,6 @@ Bus 001 Device 002: ID 046d:c52b Logitech, Inc. Unifying Receiver
 <p>It was interesting journey to the world of bugs, strange configurations and default options. I hope this shortlist can be useful, at least for me in the future =)</p>
 
 <p><img src="/public/img/futurama.jpg" border="0" width="50%" style="margin: auto" /></p>
-
-  </div>
-  
-  <div class="post">
-    <h1>
-      <a href="/2014/08/16/fenv-exceptions/">
-        Use an exception instead of the NaN
-      </a>
-    </h1>
-
-    <span class="post-date">16 Aug 2014</span>
-
-    <p>This is a small notice about a very useful trick. I often have to deal with computations, because the CFD is the part of my activity. And one of the annoying problem in this kind of research is when after many hours of computations you got a <code class="highlighter-rouge">Not A Number</code> result, caused by a stupid mistake. It would be nice, if a computation was interrupted by the NaN.</p>
-
-<p>And there is the <a href="http://stackoverflow.com/a/2949452">solution</a>:</p>
-
-<figure class="highlight"><pre><code class="language-c" data-lang="c"><span class="cp">#define _GNU_SOURCE
-#include &lt;fenv.h&gt;
-#include &lt;stdio.h&gt;
-</span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">;</span>
-    <span class="n">feenableexcept</span><span class="p">(</span><span class="n">FE_DIVBYZERO</span> <span class="o">|</span> <span class="n">FE_INVALID</span> <span class="o">|</span> <span class="n">FE_OVERFLOW</span><span class="p">);</span>
-
-    <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">.</span><span class="mi">0</span><span class="p">;</span>
-    <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="n">y</span><span class="p">;</span> <span class="cm">/* should cause an FPE */</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">"result is %f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">z</span><span class="p">);</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span></code></pre></figure>
-
-<p>The <code class="highlighter-rouge">fenv.h</code> header declares a set of functions and macros to access the floating-point environment, along with specific types.
-According to man:</p>
-
-<blockquote>
-  <p>The  feenableexcept() function enable traps for each of the exceptions represented by excepts and return the previous set of enabled exceptions when successful, and -1 otherwise. </p>
-</blockquote>
-
-<p>Now, what we have without <code class="highlighter-rouge">feenableexcept</code>:</p>
-
-<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="gp">$ </span>./test_no_fenv 
-<span class="gp">&gt; </span>result is -nan</code></pre></figure>
-
-<p>And with:</p>
-
-<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="gp">$ </span>./test_fenv 
-<span class="gp">&gt; </span>fish: Job 1, <span class="s1">'./test'</span> terminated by signal SIGFPE <span class="o">(</span>Floating point exception<span class="o">)</span></code></pre></figure>
-
 
   </div>
   

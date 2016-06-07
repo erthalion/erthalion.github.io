@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "How to convert your data to jsonb?"
-date:   2016-06-08 00:16:21
+date:   2016-06-05 00:16:21
 comments: true
 tags: [PostgreSQL]
 ---

@@ -4,13 +4,248 @@
  <title>Blog</title>
  <link href="http://erthalion.info/atom.xml" rel="self"/>
  <link href="http://erthalion.info/"/>
- <updated>2016-06-08T00:16:24+06:00</updated>
+ <updated>2016-06-08T00:30:05+06:00</updated>
  <id>http://erthalion.info</id>
  <author>
    <name>Dmitry Dolgov</name>
    <email>9erthalion6@gmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>How to convert your data to jsonb?</title>
+   <link href="http://erthalion.info/2016/06/05/convert-into-jsonb/"/>
+   <updated>2016-06-05T06:16:21+06:00</updated>
+   <id>http://erthalion.info/2016/06/05/convert-into-jsonb</id>
+   <content type="html">&lt;p&gt;“How to start” is always a difficult question, and &lt;code class=&quot;highlighter-rouge&quot;&gt;jsonb&lt;/code&gt; isn’t an exception.
+Here are few notes about converting different types of data into &lt;code class=&quot;highlighter-rouge&quot;&gt;jsonb&lt;/code&gt;, that
+someone can find useful.&lt;/p&gt;
+
+&lt;p&gt;Basically there are three possible cases of data conversion:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Convert data from inside PostgreSQL&lt;/li&gt;
+  &lt;li&gt;Convert data from other database&lt;/li&gt;
+  &lt;li&gt;Convert plain data outside database&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;from-inside-postgresql&quot;&gt;From inside PostgreSQL&lt;/h2&gt;
+
+&lt;p&gt;First of all we shouldn’t forget we can build data in &lt;code class=&quot;highlighter-rouge&quot;&gt;jsonb&lt;/code&gt; format manually:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;{&quot;id&quot;: 1, &quot;data&quot;: &quot;aaa&quot;}&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jsonb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;          jsonb           
+--------------------------
+ &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;id&quot;&lt;/span&gt;: 1, &lt;span class=&quot;s2&quot;&gt;&quot;data&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;aaa&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;jsonb_build_object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;id&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;data&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;aaa&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    jsonb_build_object    
+--------------------------
+ &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;id&quot;&lt;/span&gt;: 1, &lt;span class=&quot;s2&quot;&gt;&quot;data&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;aaa&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;If we already have some relational data we can easy perform one-to-one
+conversion for both complex and simple data types:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;to_jsonb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;timestamp&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;2016-06-05&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;       to_jsonb        
+-----------------------
+ &lt;span class=&quot;s2&quot;&gt;&quot;2016-06-05T00:00:00&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;to_jsonb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ARRAY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; to_jsonb  
+-----------
+ &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1, 2, 3]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;to_jsonb&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;id=&amp;gt;1, data=&amp;gt;&quot;aaa&quot;&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hstore&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;          to_jsonb          
+----------------------------
+ &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;id&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt;, &lt;span class=&quot;s2&quot;&gt;&quot;data&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;aaa&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Don’t forget that &lt;code class=&quot;highlighter-rouge&quot;&gt;jsonb&lt;/code&gt; is just a valid textual json, so all values will be
+converted to number, string, boolean or null.&lt;/p&gt;
+
+&lt;p&gt;And if we want to produce a really complex and well-structured &lt;code class=&quot;highlighter-rouge&quot;&gt;jsonb&lt;/code&gt; document
+from large amount of relational data, &lt;code class=&quot;highlighter-rouge&quot;&gt;jsonb_agg&lt;/code&gt; is our friend. This
+function can transform a recordset into the format &lt;code class=&quot;highlighter-rouge&quot;&gt;column_name: record_value&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;jsonb_agg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;data&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;jsonb_table&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;                      jsonb_agg                       
+------------------------------------------------------
+ &lt;span class=&quot;o&quot;&gt;[{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;id&quot;&lt;/span&gt;: 1, &lt;span class=&quot;s2&quot;&gt;&quot;data&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;aaa&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;, &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;id&quot;&lt;/span&gt;: 2, &lt;span class=&quot;s2&quot;&gt;&quot;data&quot;&lt;/span&gt;: &lt;span class=&quot;s2&quot;&gt;&quot;bbb&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;from-other-database&quot;&gt;From other database&lt;/h2&gt;
+
+&lt;p&gt;Again there are two options how to import data from another database:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Import right in the json format as plain data (see following section)&lt;/li&gt;
+  &lt;li&gt;Import as relational data and then convert from inside PostgreSQL as in
+previous section&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;And in any case you should create all indices and make sure they’re correct.
+Let’s see few examples:&lt;/p&gt;
+
+&lt;h3 id=&quot;mongodb&quot;&gt;MongoDB&lt;/h3&gt;
+
+&lt;p&gt;We can easily create a json dump of MongoDB database and then load it with minimal
+modifications:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;mongoexport                       &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    --db database_name              &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    --collection collection_name    &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    --jsonArray                     &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    -out dump.json
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;But you should be aware of specific data types, since BSON isn’t 100%
+compatible with textual json. To be more precise I’m talking about
+&lt;code class=&quot;highlighter-rouge&quot;&gt;data_binary&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;data_date&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;data_timestamp&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;data_regex&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;data_oid&lt;/code&gt; etc, see
+&lt;a href=&quot;https://docs.mongodb.com/manual/reference/mongodb-extended-json/&quot;&gt;documentation&lt;/a&gt;). E.g. when you’ll create a dump of collection
+with &lt;code class=&quot;highlighter-rouge&quot;&gt;data_date&lt;/code&gt; field, you’ll get something like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;s&quot;&gt;&quot;created_at&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;$date&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1445510017229&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;and you may decide to move this value one level up or keep this structure.&lt;/p&gt;
+
+&lt;p&gt;There is also another interesting option, which is related to the &lt;a href=&quot;https://github.com/torodb/torodb&quot;&gt;ToroDB&lt;/a&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;ToroDB is an open source project that turns your RDBMS into a
+MongoDB-compatible server, supporting the MongoDB query API and MongoDB’s
+replication, but storing your data into a reliable and trusted ACID database.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;So it’s like NoSQL over RDBMS. You can setup ToroDB as a hidden read-only
+replica of a MondoDB replica set. Then when you’ll be ready you can examine
+ToroDB data structure and convert it into &lt;code class=&quot;highlighter-rouge&quot;&gt;jsonb&lt;/code&gt; as in previous section.&lt;/p&gt;
+
+&lt;p&gt;Speaking about indices - it’s possible to cover good amount of queries using
+GIN index for &lt;code class=&quot;highlighter-rouge&quot;&gt;jsonb&lt;/code&gt; column, but since it available only for small list of
+operators, you should probably add separate indices for range queries.&lt;/p&gt;
+
+&lt;h3 id=&quot;mysql&quot;&gt;MySQL&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;JSON&lt;/code&gt; data type format in MySQL is pretty close to PostgreSQL, we can even use
+&lt;code class=&quot;highlighter-rouge&quot;&gt;mysqldump&lt;/code&gt; to convert one into another:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;mysqldump                                     &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    --compact                                   &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    --compatible&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;postgresql                     &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    database_name                               &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    table_name | sed -e &lt;span class=&quot;s1&quot;&gt;&#39;s/\\\&quot;/&quot;/g&#39;&lt;/span&gt; &amp;gt; dump.sql
+
+&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;cat ./dump.sql
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cm&quot;&gt;/*!40101 SET @saved_cs_client     = @@character_set_client */&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;/*!40101 SET character_set_client = utf8 */&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CREATE&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;TABLE&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;&quot;table_name&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;&quot;data&quot;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;json&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;NULL&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;/*!40101 SET character_set_client = @saved_cs_client */&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;INSERT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;INTO&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;&quot;table_name&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;VALUES&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;{&quot;aaa&quot;: 1, &quot;bbb&quot;: 2}&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;{&quot;aaa&quot;: 3, &quot;bbb&quot;: 4}&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;{&quot;aaa&quot;: 5, &quot;bbb&quot;: 6}&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;psql &amp;lt; dump.sql
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Just be careful about double quotes escaping and that’s it.&lt;/p&gt;
+
+&lt;h2 id=&quot;from-plain-data&quot;&gt;From plain data&lt;/h2&gt;
+
+&lt;p&gt;And finally we have an option to import plain json data into PostgreSQL. But
+imagine a situation, when we need to process not so well formatted data. Since
+&lt;code class=&quot;highlighter-rouge&quot;&gt;jsonb&lt;/code&gt; should strictly follow the json format, what can we do in that case?&lt;/p&gt;
+
+&lt;p&gt;It depends on how badly our document is broken. If document structure is
+preserved, but there are some issues with formatting (one quote instead of
+double or even without quotes, no commas and so on), it’s possible to fix it
+using (oh my gosh) &lt;code class=&quot;highlighter-rouge&quot;&gt;node.js&lt;/code&gt; and more precisely the &lt;a href=&quot;http://json5.org/&quot;&gt;json5&lt;/a&gt; extension and
+the corresponding library:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// format.js&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JSON5&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;json5&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;stdin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;process&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stdin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;stdout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;process&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stdout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;inputChunks&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[];&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;stdin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;resume&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;stdin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;setEncoding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;utf8&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;stdin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;data&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;chunk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;inputChunks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;chunk&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+
+&lt;span class=&quot;nx&quot;&gt;stdin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;end&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;inputData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;inputChunks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;outputData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;inputData&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;\n&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;parsed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JSON5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;parse&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;output&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;JSON&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stringify&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;parsed&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&#39;\n&#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;nx&quot;&gt;stdout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;write&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;outputData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$ &lt;/span&gt;cat data.json | node format.js &amp;gt; data_formatted.json
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;=#&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;COPY&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;table_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jsonb_column_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&#39;data_formatted.json&#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;But if document structure is broken too - nothing can help, we need to fix it
+manually using one of json linters.&lt;/p&gt;
+
+</content>
+ </entry>
  
  <entry>
    <title>The Knife</title>
