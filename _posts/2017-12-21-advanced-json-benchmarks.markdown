@@ -900,9 +900,9 @@ without any fear of significant performance degradation.
 
 # Acknowledgement
 
-Big thanks to Alexey Kopytov, who helped me a lot with MySQL setup, and to Wei
+Big thanks to Alexey Kopytov, who helped me a lot with MySQL setup, to Wei
 Shan Ang, who reviewed this text and shared his experience about MongoDB
-configuration.
+configuration, and to Oleg Bartunov for the original idea.
 
 [henriks_presentation]: http://henrikingo.github.io/presentations/Highload%202017%20-%20Measuring%20performance%20variability%20of%20EC2/index.html#/title
 [ycsb_fork]: https://github.com/erthalion/ycsb
