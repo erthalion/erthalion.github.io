@@ -294,11 +294,11 @@ ycsb_key VARCHAR(255)
 ```
 
 But even with this improvement it has lower throughput in this test. My
-colleagues from MySQL side claim that it's happened mostly because
-`information_schema` collects more data and involves more actions than similar
-mechanisms in other databases, which obviously leads to a bigger overhead. But
-at the same time no one really disables it in production environment, and so
-far I decided to do the same for my performance tests.
+colleagues from MySQL side claim that it's happened mostly because `performance
+schema` collects more data and involves more actions than similar mechanisms in
+other databases, which obviously leads to a bigger overhead. But at the same
+time no one really disables it in production environment, and so far I decided
+to do the same for my performance tests.
 
 ## PostgreSQL vs MongoDB
 
@@ -316,7 +316,7 @@ throughput for PostgreSQL and MongoDB now is almost the same before the
 spinlock performance degradation hits MongoDB. There is still a gap between
 PostgreSQL and MySQL though, and there are two factors contribute to this:
 
-* `information_schema` as mentioned before
+* `performance schema` as mentioned before
 
 * prepared statements, since in MySQL they cache less information than in
 PostgreSQL, and consequently they are not that effective
