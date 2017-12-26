@@ -136,7 +136,7 @@ In my tests I used some variety of database versions:
 
 * MongoDB 3.2.5/3.4.4
 
-* MySQL 5.7.9/8.0.3
+* MySQL 5.7.19/8.0.3
 
 To make it simple, you can assume that we're using the latest stable version,
 and I'm going to mention a particular version only if it makes some performance
