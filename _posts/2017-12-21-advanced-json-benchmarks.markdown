@@ -819,6 +819,12 @@ Unfortunately I don't have yet any benchmarks for that, but from manual
 experiments I can see that, with huge pages 2048kB and simple document type,
 updates are saved as diff most of the time.
 
+Note: as Bruce mentioned in the commentaries, actually huge pages have no
+effect on the size of heap page. Looks like I've got this result on my laptop
+because of some side effect of huge pages being enabled. But anyway, you still
+can change the PostgreSQL heap page size by compiling it with
+`--with-blocksize`.
+
 Another thing worth mentioning is that this problem also was addressed in the
 recent development versions of MySQL, namely 8.0.3. This version has a
 [feature][mysql_partial_update] called "Partial Updates of JSON Values", but I
