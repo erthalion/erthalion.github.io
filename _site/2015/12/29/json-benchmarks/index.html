@@ -53,7 +53,7 @@
             </li>
           </ul>
 
-          <p>&copy; 2016. Dmitry Dolgov All rights reserved.</p>
+          <p>&copy; 2019. Dmitry Dolgov All rights reserved.</p>
         </div>
       </div>
     </header>
@@ -78,8 +78,8 @@ json in Mysql and bson in Mongodb.</p>
 <p>Breaking news:</p>
 
 <ul>
-  <li><a href="http://www.postgresql.org/docs/9.4/static/datatype-json.html">PostgreSQL 9.4</a> - a new data type <code class="highlighter-rouge">jsonb</code> with slightly extended support in the upcoming release PostgreSQL 9.5</li>
-  <li><a href="https://dev.mysql.com/doc/refman/5.7/en/json.html">Mysql 5.7.7</a> - a new data type <code class="highlighter-rouge">json</code></li>
+  <li><a href="http://www.postgresql.org/docs/9.4/static/datatype-json.html">PostgreSQL 9.4</a> - a new data type <code class="language-plaintext highlighter-rouge">jsonb</code> with slightly extended support in the upcoming release PostgreSQL 9.5</li>
+  <li><a href="https://dev.mysql.com/doc/refman/5.7/en/json.html">Mysql 5.7.7</a> - a new data type <code class="language-plaintext highlighter-rouge">json</code></li>
 </ul>
 
 <p>and several other examples (I’ll talk about them later). Of course these data types supposed to be binary, which means great performance.
@@ -88,14 +88,14 @@ Right, performance benchmarks! PostgreSQL and Mysql were choosen because they ha
 
 <h2 id="some-details-and-configurations">Some details and configurations</h2>
 
-<p>The <code class="highlighter-rouge">pg_nosql_benchmark</code> from EnterpriseDB suggests an obvious approach - first of all the required amount of records must be generated using different kinds of
+<p>The <code class="language-plaintext highlighter-rouge">pg_nosql_benchmark</code> from EnterpriseDB suggests an obvious approach - first of all the required amount of records must be generated using different kinds of
 data and some random fluctuations. This amount of data will be saved into the database, and we will perform several kinds of queries over it.
-<code class="highlighter-rouge">pg_nosql_benchmark</code> doesn’t have any functional to work with Mysql, so I had to implement it similar to PostgreSQL.
+<code class="language-plaintext highlighter-rouge">pg_nosql_benchmark</code> doesn’t have any functional to work with Mysql, so I had to implement it similar to PostgreSQL.
 There is only one tricky thing with Mysql - it doesn’t <a href="https://dev.mysql.com/doc/refman/5.7/en/create-table.html#create-table-secondary-indexes-virtual-columns">support json indexing</a> directly, it’s required to create virtual columns and create index on them.</p>
 
-<p>Speaking of details, there was one strange thing in <code class="highlighter-rouge">pg_nosql_benchmark</code>. I figured out that few types of generated records
+<p>Speaking of details, there was one strange thing in <code class="language-plaintext highlighter-rouge">pg_nosql_benchmark</code>. I figured out that few types of generated records
 were beyond the 4096 bytes limit for <a href="http://stackoverflow.com/a/13189298/1423473">mongo shell</a>, which means these records were
-just dropped out. As a dirty hack for that we can perform the inserts from a <code class="highlighter-rouge">js</code> file (and btw, that file must be splitted into the series of chunks
+just dropped out. As a dirty hack for that we can perform the inserts from a <code class="language-plaintext highlighter-rouge">js</code> file (and btw, that file must be splitted into the series of chunks
 less than 2GB).
 Besides, there are some unnecessary time expenses, related to shell client, authentication and so on. To estimate and exclude them I have to perform corresponding amount of “no-op” queries for all databases (but they’re actually pretty small).</p>
 
@@ -110,9 +110,9 @@ Besides, there are some unnecessary time expenses, related to shell client, auth
   <li>Mongodb 3.2.0 storage engie MMAPv1</li>
 </ul>
 
-<p>Each of them was tested on a separate <code class="highlighter-rouge">m4.xlarge</code> amazon instance with the <code class="highlighter-rouge">ubuntu 14.04 x64</code> and default configurations,
-all tests were performed for 1000000 records. And you shouldn’t forget about the instructions for the <code class="highlighter-rouge">jsquery</code> -
-<code class="highlighter-rouge">bison</code>, <code class="highlighter-rouge">flex</code>, <code class="highlighter-rouge">libpq-dev</code> and <code class="highlighter-rouge">postgresql-server-dev-9.5</code> must be installed. All results were saved in json file,
+<p>Each of them was tested on a separate <code class="language-plaintext highlighter-rouge">m4.xlarge</code> amazon instance with the <code class="language-plaintext highlighter-rouge">ubuntu 14.04 x64</code> and default configurations,
+all tests were performed for 1000000 records. And you shouldn’t forget about the instructions for the <code class="language-plaintext highlighter-rouge">jsquery</code> -
+<code class="language-plaintext highlighter-rouge">bison</code>, <code class="language-plaintext highlighter-rouge">flex</code>, <code class="language-plaintext highlighter-rouge">libpq-dev</code> and <code class="language-plaintext highlighter-rouge">postgresql-server-dev-9.5</code> must be installed. All results were saved in json file,
 we can visualize them easily using matplotlib (see <a href="https://github.com/erthalion/pg_nosql_benchmark">here</a>).</p>
 
 <p>Besides that there was a concern about durability. To take this into account I made few specific configurations
@@ -146,7 +146,7 @@ Thus, for all charts the smaller value is better.</p>
 
 <p><img src="/public/img/update2.png" border="0" width="80%" style="margin: auto" /></p>
 
-<p>Update is another difference between my benchmarks and <code class="highlighter-rouge">pg_nosql_benchmark</code>. It can bee seen, that Mongodb is an obvious
+<p>Update is another difference between my benchmarks and <code class="language-plaintext highlighter-rouge">pg_nosql_benchmark</code>. It can bee seen, that Mongodb is an obvious
 leader here - mostly because of PostgreSQL and Mysql restrictions, I guess, when to update one value you must override an entire field.</p>
 
 <h3 id="update-with-configurations">Update with configurations</h3>
@@ -154,9 +154,9 @@ leader here - mostly because of PostgreSQL and Mysql restrictions, I guess, when
 <p><img src="/public/img/update_configured.png" border="0" width="80%" style="margin: auto" /></p>
 
 <p>As you can guess from documentation and this <a href="http://stackoverflow.com/a/29220739/1423473">answer</a>,
-<code class="highlighter-rouge">writeConcern j:true</code> is the highest possible transaction durability level (on a single server),
-that should be equal to configuration with <code class="highlighter-rouge">fsync</code>.
-I’m not sure about durability, but <code class="highlighter-rouge">fsync</code> is definitely slower for update operations here.</p>
+<code class="language-plaintext highlighter-rouge">writeConcern j:true</code> is the highest possible transaction durability level (on a single server),
+that should be equal to configuration with <code class="language-plaintext highlighter-rouge">fsync</code>.
+I’m not sure about durability, but <code class="language-plaintext highlighter-rouge">fsync</code> is definitely slower for update operations here.</p>
 
 <h3 id="tableindex-size">Table/index size</h3>
 
@@ -182,27 +182,27 @@ in this subject - welcome.</p>
     
       <li>
         <h3>
+          <a href="/2019/11/01/postgresql-stay-curious/">
+            PostgreSQL at low level: stay curious!
+            <small>01 Nov 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2017/12/21/advanced-json-benchmarks/">
+            Jsonb: few more stories about the performance
+            <small>21 Dec 2017</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/2016/06/05/convert-into-jsonb/">
             How to convert your data to jsonb?
             <small>05 Jun 2016</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2015/12/29/pandoc/">
-            The Knife
-            <small>29 Dec 2015</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2015/02/22/gentoo-lenovo/">
-            Gentoo and Lenovo u430p - the sad story
-            <small>22 Feb 2015</small>
           </a>
         </h3>
       </li>

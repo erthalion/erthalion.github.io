@@ -53,7 +53,7 @@
             </li>
           </ul>
 
-          <p>&copy; 2016. Dmitry Dolgov All rights reserved.</p>
+          <p>&copy; 2019. Dmitry Dolgov All rights reserved.</p>
         </div>
       </div>
     </header>
@@ -63,18 +63,18 @@
   <h1>The Knife</h1>
   <span class="post-date">29 Dec 2015</span>
   <p>I really don’t know how I lived before without pandoc. It’s an amazing tool, that saved me from a terrible pain of
-latex -&gt; MS Word convertion. If you’re writing many scientific documents in <code class="highlighter-rouge">latex</code> format, and faced with
+latex -&gt; MS Word convertion. If you’re writing many scientific documents in <code class="language-plaintext highlighter-rouge">latex</code> format, and faced with
 the demand to convert it into MS Word, you can understand me. It’s like a tiresome point-and-click game, which can
 consume unbelievable amount of time.</p>
 
-<p>Pandoc can do it, and I’m not kidding. All you need is to create a source file in <code class="highlighter-rouge">markdown</code> format and
+<p>Pandoc can do it, and I’m not kidding. All you need is to create a source file in <code class="language-plaintext highlighter-rouge">markdown</code> format and
 copy all latex formulas. In this post you can find several details.</p>
 
 <p>What do we need to install pandoc? I’ll advise <a href="https://github.com/commercialhaskell/stack">stack</a>:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>stack install pandoc pandoc-citeproc pandoc-crossref</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>stack <span class="nb">install </span>pandoc pandoc-citeproc pandoc-crossref</code></pre></figure>
 
-<p><code class="highlighter-rouge">pandoc-citeproc</code> and <code class="highlighter-rouge">pandoc-crossref</code> will be used to generate nice bibliography and references.</p>
+<p><code class="language-plaintext highlighter-rouge">pandoc-citeproc</code> and <code class="language-plaintext highlighter-rouge">pandoc-crossref</code> will be used to generate nice bibliography and references.</p>
 
 <p>Now we can do something like this:</p>
 
@@ -85,36 +85,36 @@ copy all latex formulas. In this post you can find several details.</p>
 <p>ang get a nice result (e.g. from Word Online):
 <img src="/public/img/navier.png" border="0" width="41%" style="margin: auto" /></p>
 
-<p>Here you can see a label <code class="highlighter-rouge">eq:navier_stokes:motion</code> for corresponding equation. General template for references is:</p>
+<p>Here you can see a label <code class="language-plaintext highlighter-rouge">eq:navier_stokes:motion</code> for corresponding equation. General template for references is:</p>
 
 <figure class="highlight"><pre><code class="language-latex" data-lang="latex">some<span class="p">_</span>content <span class="p">{</span>#type:label<span class="p">}</span>
 
 label will be used here [@type:label]</code></pre></figure>
 
 <p>More documentation about types and usage is <a href="https://github.com/lierdakil/pandoc-crossref">here</a>.
-You can enable <code class="highlighter-rouge">pandoc-crossref</code> using command line argument <code class="highlighter-rouge">--filter</code>:</p>
+You can enable <code class="language-plaintext highlighter-rouge">pandoc-crossref</code> using command line argument <code class="language-plaintext highlighter-rouge">--filter</code>:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>pandoc --filter pandoc-crossref -o result.docx source.md </code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>pandoc <span class="nt">--filter</span> pandoc-crossref <span class="nt">-o</span> result.docx source.md </code></pre></figure>
 
-<p>Note, that if we will use <code class="highlighter-rouge">begin/end</code> environment or “\\” for multiple equations, pandoc couldn’t generate MS Word
+<p>Note, that if we will use <code class="language-plaintext highlighter-rouge">begin/end</code> environment or “\\” for multiple equations, pandoc couldn’t generate MS Word
 formula. Also, you shouldn’t forget about empy line between equations.</p>
 
-<p>To use bibliography we can create a regular <code class="highlighter-rouge">bib</code> file and enable <code class="highlighter-rouge">pandoc-cireproc</code> like this:</p>
+<p>To use bibliography we can create a regular <code class="language-plaintext highlighter-rouge">bib</code> file and enable <code class="language-plaintext highlighter-rouge">pandoc-cireproc</code> like this:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>pandoc --filter pandoc-crossref --bibliography report.bib -o result.docx source.md</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>pandoc <span class="nt">--filter</span> pandoc-crossref <span class="nt">--bibliography</span> report.bib <span class="nt">-o</span> result.docx source.md</code></pre></figure>
 
 <p>The default citation style in Pandoc is Chicago author-date, but you can change
 it. E.g. if you’re writing an academic paper in Russian, I bet you would like
-to use <code class="highlighter-rouge">GOST</code> standard. You can get a corresponding <code class="highlighter-rouge">csl</code> file 
+to use <code class="language-plaintext highlighter-rouge">GOST</code> standard. You can get a corresponding <code class="language-plaintext highlighter-rouge">csl</code> file 
 <a href="http://editor.citationstyles.org/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fgost-r-7-0-5-2008-numeric-alphabetical">here</a>,
 and use it like this:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>pandoc --filter pandoc-crossref --bibliography report.bib --csl<span class="o">=</span>gost.csl -o result.docx source.md</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>pandoc <span class="nt">--filter</span> pandoc-crossref <span class="nt">--bibliography</span> report.bib <span class="nt">--csl</span><span class="o">=</span>gost.csl <span class="nt">-o</span> result.docx source.md</code></pre></figure>
 
 <p>The last one thing is a language. If you’re writing in Russian, you can suffer from encoding issues - to avoid
 this you need to specify language:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>pandoc --filter pandoc-crossref --bibliography report.bib --csl<span class="o">=</span>gost.csl -o result.docx source.md -V lang:russian</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>pandoc <span class="nt">--filter</span> pandoc-crossref <span class="nt">--bibliography</span> report.bib <span class="nt">--csl</span><span class="o">=</span>gost.csl <span class="nt">-o</span> result.docx source.md <span class="nt">-V</span> lang:russian</code></pre></figure>
 
 <p>That’s it, you will get a well-formed MS Word file with nice formulas.</p>
 
@@ -126,27 +126,27 @@ this you need to specify language:</p>
     
       <li>
         <h3>
+          <a href="/2019/11/01/postgresql-stay-curious/">
+            PostgreSQL at low level: stay curious!
+            <small>01 Nov 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2017/12/21/advanced-json-benchmarks/">
+            Jsonb: few more stories about the performance
+            <small>21 Dec 2017</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/2016/06/05/convert-into-jsonb/">
             How to convert your data to jsonb?
             <small>05 Jun 2016</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2015/12/29/json-benchmarks/">
-            Compare incomparable: PostgreSQL vs Mysql vs Mongodb
-            <small>29 Dec 2015</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2015/02/22/gentoo-lenovo/">
-            Gentoo and Lenovo u430p - the sad story
-            <small>22 Feb 2015</small>
           </a>
         </h3>
       </li>

@@ -53,13 +53,37 @@
             </li>
           </ul>
 
-          <p>&copy; 2016. Dmitry Dolgov All rights reserved.</p>
+          <p>&copy; 2019. Dmitry Dolgov All rights reserved.</p>
         </div>
       </div>
     </header>
 
     <div class="content container">
       <div class="posts">
+  
+  <div class="post">
+    <h1>
+      <a href="/2015/12/29/json-benchmarks/">
+        Compare incomparable: PostgreSQL vs Mysql vs Mongodb
+      </a>
+    </h1>
+
+    <span class="post-date">29 Dec 2015</span>
+
+    <blockquote> <p>As such, there’s really no “standard” benchmark that will inform you about the best technology to use for your application. Only your requirements, your data, and your infrastructure can tell you what you need to know.</p> </blockquote> <p>NoSql is everywhere and we can’t escape from it (although I can’t say we want to escape). Let’s leave the question about reasons outside this text, and just note one thing - this trend isn’t related only to new or existing NoSql solutions. It has another side, namely the schema-less data support in traditional relational databases. It’s amazing how many possibilities hiding at the edge of the relational model and everything else. But of course there is a balance that you should find for your specific data. It can’t be easy, first of all because it’s required to compare incomparable things, e.g. performance of a NoSql solution and traditional database. Here in this post I’ll make such attempt and show the comparison of jsonb in PostgreSQL, json in Mysql and bson in Mongodb.</p> <h2 id="what-the-hell-is-going-on-here">What the hell is going on here?</h2> <p>Breaking news:</p> <ul> <li><a href="http://www.postgresql.org/docs/9.4/static/datatype-json.html">PostgreSQL 9.4</a> - a new data type <code class="language-plaintext highlighter-rouge">jsonb</code> with slightly extended support in the upcoming release PostgreSQL 9.5</li> <li><a href="https://dev.mysql.com/doc/refman/5.7/en/json.html">Mysql 5.7.7</a> - a new data type <code class="language-plaintext highlighter-rouge">json</code></li> </ul> <p>and several other examples (I’ll talk about them later). Of course these data types supposed to be binary, which means great performance. Base functionality is equal across the implementations because it’s just obvious CRUD. And what is the oldest and almost cave desire in this situation? Right, performance benchmarks! PostgreSQL and Mysql were choosen because they have quite similar implementation of json support, Mongodb - as a veteran of NoSql. An <a href="http://www.enterprisedb.com/postgres-plus-edb-blog/marc-linster/postgres-outperforms-mongodb-and-ushers-new-developer-reality">EnterpriseDB research</a> is slightly outdated, but we can use it as a first step for the road of a thousand li. A final goal is not to display the performance in artificial environment, but to give a neutral evaluation and to get a feedback.</p> <h2 id="some-details-and-configurations">Some details and configurations</h2> <p>The <code class="language-plaintext highlighter-rouge">pg_nosql_benchmark</code> from EnterpriseDB suggests an obvious approach - first of all the required amount of records must be generated using different kinds of data and some random fluctuations. This amount of data will be saved into the database, and we will perform several kinds of queries over it. <code class="language-plaintext highlighter-rouge">pg_nosql_benchmark</code> doesn’t have any functional to work with Mysql, so I...
+  </div>
+  
+  <div class="post">
+    <h1>
+      <a href="/2015/02/22/gentoo-lenovo/">
+        Gentoo and Lenovo u430p - the sad story
+      </a>
+    </h1>
+
+    <span class="post-date">22 Feb 2015</span>
+
+    <p>Finally, I decided to replace my old laptop, and my chose fell on the Lenovo u430p. As I understand now, it was not a good idea in case of Gentoo =) Actually, I was surprised, how many nerves you can lose only because of the adaptation of you hardware to your requirements. And here is the shortlist of what you shouldn’t forget, if you want to do the same more easily.</p> <h2 id="efi-loader">EFI loader</h2> <p>So you’ve successfully passed several steps from Gentoo Handbook. One of the last is Grub2 installation and configuration. You’ve completed this, rebooted and…nothing happened, you see the Windows 8 again.</p> <p><img src="/public/img/farnsworth.jpg" border="0" width="50%" style="margin: auto" /></p> <p>The clue to this problem is the “Secure Boot” option, which enabled by default in BIOS.</p> <h2 id="iwlwifi">iwlwifi</h2> <p>Next big disaster is the <code class="language-plaintext highlighter-rouge">iwlwifi</code> driver for the Intel Wireless 7260. The most of wifi routers are working in the mixed 11bgn mode, and 11n drives <code class="language-plaintext highlighter-rouge">iwlwifi</code> (and you with him) mad. There are an endless disconnections and the terrible instability.</p> <p><img src="/public/img/fry-bender-roar.jpg" border="0" width="50%" style="margin: auto" /></p> <p>The only known solution is cut out the 11n mode:</p> <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># /etc/modprobe.d/iwlwifi.conf</span> options iwlwifi <span class="nv">11n_disable</span><span class="o">=</span>1</code></pre></figure> <p>And you shouldn’t forget to compile <code class="language-plaintext highlighter-rouge">iwlwifi</code> as kernel module (otherwise, obviously, this option will not be applied). The last step is the firmware installation. You can download the <code class="language-plaintext highlighter-rouge">iwlwifi-7260-9.ucode</code>, place it in <code class="language-plaintext highlighter-rouge">/lib/firmware</code>, and configure to load this firmware with kernel:</p> <figure class="highlight"><pre><code class="language-bash" data-lang="bash">Device Driver -&gt; Generic Driver Options -&gt; <span class="o">[</span><span class="k">*</span><span class="o">]</span> Include <span class="k">in</span><span class="nt">-kernel</span> firmware blobs <span class="k">in </span>kernel library <span class="o">(</span>iwlwifi-7260-9.ucode<span class="o">)</span> External firmware blobs to build into kernel library <span class="o">(</span>/lib/firmware<span class="o">)</span> Firmware blobls root directory</code></pre></figure> <p>Btw, one more note - loos like <code class="language-plaintext highlighter-rouge">iwlwifi-7269-9.ucode</code> is working more stable, then <code class="language-plaintext highlighter-rouge">iwlwifi-7260-10.ucode</code>.</p> <h2 id="microphone">Microphone</h2> <p>I don’t know why, but this there was no working configuration for microphone out of box =) I installed alsa and pulseaudio (the last one for the Skype, of course), and issues with the audio capture were really unexpected for me.</p> <p><img src="/public/img/fry-megaphone.jpg" border="0" width="50%" style="margin: auto" /></p> <p>Actually, I though, that everything was unmutes in the alsamixer, but I was wrong:</p> <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>amixer <span class="nt">-c</span> 1 ... Simple mixer control <span class="s1">'Capture'</span>,0 Capabilities: cvolume cswitch Capture channels: Front Left - Front Right...
+  </div>
   
   <div class="post">
     <h1>
@@ -70,7 +94,7 @@
 
     <span class="post-date">16 Aug 2014</span>
 
-    <p>This is a small notice about a very useful trick. I often have to deal with computations, because the CFD is the part of my activity. And one of the annoying problem in this kind of research is when after many hours of computations you got a <code class="highlighter-rouge">Not A Number</code> result, caused by a stupid mistake. It would be nice, if a computation was interrupted by the NaN.</p>
+    <p>This is a small notice about a very useful trick. I often have to deal with computations, because the CFD is the part of my activity. And one of the annoying problem in this kind of research is when after many hours of computations you got a <code class="language-plaintext highlighter-rouge">Not A Number</code> result, caused by a stupid mistake. It would be nice, if a computation was interrupted by the NaN.</p>
 
 <p>And there is the <a href="http://stackoverflow.com/a/2949452">solution</a>:</p>
 
@@ -89,22 +113,22 @@
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>The <code class="highlighter-rouge">fenv.h</code> header declares a set of functions and macros to access the floating-point environment, along with specific types.
+<p>The <code class="language-plaintext highlighter-rouge">fenv.h</code> header declares a set of functions and macros to access the floating-point environment, along with specific types.
 According to man:</p>
 
 <blockquote>
-  <p>The  feenableexcept() function enable traps for each of the exceptions represented by excepts and return the previous set of enabled exceptions when successful, and -1 otherwise. </p>
+  <p>The  feenableexcept() function enable traps for each of the exceptions represented by excepts and return the previous set of enabled exceptions when successful, and -1 otherwise.</p>
 </blockquote>
 
-<p>Now, what we have without <code class="highlighter-rouge">feenableexcept</code>:</p>
+<p>Now, what we have without <code class="language-plaintext highlighter-rouge">feenableexcept</code>:</p>
 
-<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="gp">$ </span>./test_no_fenv 
-<span class="gp">&gt; </span>result is -nan</code></pre></figure>
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>./test_no_fenv 
+<span class="o">&gt;</span> result is <span class="nt">-nan</span></code></pre></figure>
 
 <p>And with:</p>
 
-<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="gp">$ </span>./test_fenv 
-<span class="gp">&gt; </span>fish: Job 1, <span class="s1">'./test'</span> terminated by signal SIGFPE <span class="o">(</span>Floating point exception<span class="o">)</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>./test_fenv 
+<span class="o">&gt;</span> fish: Job 1, <span class="s1">'./test'</span> terminated by signal SIGFPE <span class="o">(</span>Floating point exception<span class="o">)</span></code></pre></figure>
 
 
   </div>
@@ -118,288 +142,7 @@ According to man:</p>
 
     <span class="post-date">09 Aug 2014</span>
 
-    <p>I’m doing a small revolution in my environment from time to time. I think “hey, a cool stuff”, take a deep breath and doing something new. And this is story about my migration from the bash to the fish shell.</p>
-
-<p>Let’s see, what says the official tutorial:</p>
-
-<blockquote>
-  <p>fish is a fully-equipped command line shell (like bash or zsh) that is smart and user-friendly. fish supports powerful features like syntax highlighting, autosuggestions, and tab completions that just work, with nothing to learn or configure.
-If you want to make your command line more productive, more useful, and more fun, without learning a bunch of arcane syntax and configuration options, then fish might be just what you’re looking for! </p>
-</blockquote>
-
-<p>And this is almost true =) But there is another concrete reason, why I like fish shell:</p>
-
-<ul>
-  <li>Search by history (as an autocomplete by tab)</li>
-  <li>More intuitive and clean configuration files</li>
-  <li>Vim mode <a href="https://github.com/fish-shell/fish-shell/issues/65">support</a></li>
-</ul>
-
-<p>I would to avoid unnecessary lyrics, and pay more attention to the configuration and gotchas (from the bash point of view).</p>
-
-<p>First of all - use <code class="highlighter-rouge">.</code> command instead <code class="highlighter-rouge">source</code> for the inclusion of the script.</p>
-
-<figure class="highlight"><pre><code class="language-sh" data-lang="sh">. /some-install-path/fish-shell/share/fish/functions/fish_vi_mode.fish
-. /some-install-path/.config/fish/themes/fish_right_prompt.fish
-. /some-install-path/.config/fish/themes/fish_prompt.fish
-. /etc/profile.d/autojump.fish
-fish_vi_key_bindings</code></pre></figure>
-
-<p>I’ve used <code class="highlighter-rouge">some-install-path</code> because I’m a Vim hacker (~~an extra pathos~~), and I want a fresh version for the Vim support, so the manual compilation from github is my way. Then I’ve turned on Vim mode (<code class="highlighter-rouge">fish_vi_mode.fish</code> is necessary for this). <code class="highlighter-rouge">fish_prompt.fish</code> and <code class="highlighter-rouge">fish_right_prompt.fish</code> contain a description for the shell prompt and will be discussed later. If you use <code class="highlighter-rouge">autojump</code>, you should also include <code class="highlighter-rouge">autojump.fish</code> (if this file doesn’t exist, download it from repo).</p>
-
-<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">set </span>fish_greeting <span class="s2">""</span></code></pre></figure>
-
-<p>This greeting is very distracting, so disable it. No comments =)</p>
-
-<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">set</span> -x EDITOR vim
-<span class="nb">set </span>PATH /home/erthalion/.local/bin /usr/local/bin /opt/bin <span class="nv">$PATH</span></code></pre></figure>
-
-<p>We should set environment variables in this format. Pay attention to the <code class="highlighter-rouge">PATH</code> variable - don’t forget about <code class="highlighter-rouge">/usr/local/bin</code> and <code class="highlighter-rouge">/opt/bin</code> (looks like fish shell doesn’t include them by default).</p>
-
-<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">alias </span><span class="nv">goutshow</span><span class="o">=</span><span class="s1">'git fetch; git show origin/master..'</span></code></pre></figure>
-
-<p>One more observation - we should replace <code class="highlighter-rouge">&amp;&amp;</code> by the <code class="highlighter-rouge">;</code> or <code class="highlighter-rouge">and</code> commands.</p>
-
-<p>Now get closer to the prompt. It described by the two functions - <code class="highlighter-rouge">fish_prompt</code> and <code class="highlighter-rouge">fish_right_prompt</code> (your C.O.). I have no advices for this section. Really. You can use your imagination and do what you want =) There are my examples - <a href="https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_prompt.fish">left</a> and <a href="https://github.com/erthalion/dotfiles/blob/master/fish_themes/fish_right_prompt.fish">right</a>. Only one comment - you may want to show <code class="highlighter-rouge">virtualenv</code> name in the prompt. In that case you should disable original by the variable <code class="highlighter-rouge">set -x VIRTUAL_ENV_DISABLE_PROMPT 1</code>.</p>
-
-<p>But unfortunately, Vim support isn’t very well in the fish shell. For example, there is no <code class="highlighter-rouge">replace (r)</code> command, or <code class="highlighter-rouge">undo (u)</code>. Actually it’s a horrible problem for me, especially the first one =) And here is my <a href="https://github.com/fish-shell/fish-shell/pull/1595">solution</a> of this problem.</p>
-
-<p>I think, fish shell is available for a lot of improvements. All, that described above, is only a base for a convenient environment, and I hope, it will be useful.</p>
-
-
-  </div>
-  
-  <div class="post">
-    <h1>
-      <a href="/2014/05/25/gnuchess/">
-        Little guide about the gnuchess
-      </a>
-    </h1>
-
-    <span class="post-date">25 May 2014</span>
-
-    <p>I’m at the beginning of my journey into the world of gnuchess. Its interface is a slightly tricky, than I’ve expected, but I was interested. So I’ve decided to make some notes about this.</p>
-
-<blockquote>
-  <p>GNU Chess performs at the senior master/weak international master strength of 2500+ on the Elo rating system</p>
-</blockquote>
-
-<p>I don’t know, what does this mean really, but sounds cool =)</p>
-
-<blockquote>
-  <p>It is often used in conjunction with a GUI program such as XBoard or glChess</p>
-</blockquote>
-
-<p>No, it’s not our way. Let’s try to use original teminal-based client (more terminal for the terminal god, mwuahahahaha =).</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>gnuchess
-
-GNU Chess 6.1.1
-Copyright <span class="o">(</span>C<span class="o">)</span> 2013 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
-White <span class="o">(</span>1<span class="o">)</span> : e2e4
-TimeLimit[0] <span class="o">=</span> 0
-TimeLimit[1] <span class="o">=</span> 0
-1. e2e4
-
-black  KQkq  e3
-r n b q k b n r 
-p p p p p p p p 
-. . . . . . . . 
-. . . . . . . . 
-. . . . P . . . 
-. . . . . . . . 
-P P P P . P P P 
-R N B Q K B N R 
- 
-Thinking...
-
-white  KQkq
-r n b q k b . r 
-p p p p p p p p 
-. . . . . n . . 
-. . . . . . . . 
-. . . . P . . . 
-. . . . . . . . 
-P P P P . P P P 
-R N B Q K B N R</code></pre></figure>
-
-<p>Gnuchess uses the standard algebraic notation (SAN) required by FIDE, so we can type something like this to play:</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">Nf3
-g1f3
-O-O
-e1g1</code></pre></figure>
-
-<p>Ok. But what is it? Gnuchess uses the most of the CPU all time, even at the player’s move. It’s super, but it would be more convenient to limit the thinking time for gnuchess engine. In the documentation we can see, that the <code class="highlighter-rouge">--easy</code> options is responsible for this.</p>
-
-<blockquote>
-  <p>–easy, -e:  Disable thinking in opponent’s time.  By default, the program runs in hard mode, i.e.  it thinks opponent’s time to think too.</p>
-</blockquote>
-
-<p>Now better. But how we can pause the game and continue later? There are an obvious commands for this: <code class="highlighter-rouge">save</code> and <code class="highlighter-rouge">load</code>, which save the game position into <code class="highlighter-rouge">EPD</code> format</p>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">White <span class="o">(</span>2<span class="o">)</span> : save game_file
-TimeLimit[0] <span class="o">=</span> 0
-TimeLimit[1] <span class="o">=</span> 0
-White <span class="o">(</span>2<span class="o">)</span> : load game_file
-TimeLimit[0] <span class="o">=</span> 0
-TimeLimit[1] <span class="o">=</span> 0
-
- : Best move <span class="o">=</span> 1
-
-white  KQkq
-r n b q k b . r 
-p p p p p p p p 
-. . . . . n . . 
-. . . . . . . . 
-. . . . P . . . 
-. . . . . . . . 
-P P P P . P P P 
-R N B Q K B N R 
- 
-White <span class="o">(</span>1<span class="o">)</span> : </code></pre></figure>
-
-<p>And little bit about usability - we can use the pseudo graphical mode (a unicode symbols will be used for output), but … it looks ugly. Classical mode provides convenient enouth game, except the board’s coordinates. To avoid this inconvenience, we can use the patch below:</p>
-
-<div style="font-size:14px">
-<script src="https://gist.github.com/erthalion/370a82f17ba95c23e4f5.js"></script>
-</div>
-
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>gnuchess -e
-GNU Chess 6.1.1
-Copyright <span class="o">(</span>C<span class="o">)</span> 2013 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
-White <span class="o">(</span>1<span class="o">)</span> : e2e4
-TimeLimit[0] <span class="o">=</span> 0
-TimeLimit[1] <span class="o">=</span> 0
-1. e2e4
-
-black  KQkq  e3
-
-8  r n b q k b n r 
-7  p p p p p p p p 
-6  . . . . . . . . 
-5  . . . . . . . . 
-4  . . . . P . . . 
-3  . . . . . . . . 
-2  P P P P . P P P 
-1  R N B Q K B N R 
-  
-   a b c d e f g h 
-
-Thinking...
-
-white  KQkq
-
-8  r n b q k b . r 
-7  p p p p p p p p 
-6  . . . . . n . . 
-5  . . . . . . . . 
-4  . . . . P . . . 
-3  . . . . . . . . 
-2  P P P P . P P P 
-1  R N B Q K B N R 
-  
-   a b c d e f g h 
-
-
-My move is : Nf6
-White <span class="o">(</span>2<span class="o">)</span> : </code></pre></figure>
-
-<p>Have a nice game!</p>
-
-  </div>
-  
-  <div class="post">
-    <h1>
-      <a href="/2014/04/22/endless-paginator/">
-        Another strange thing - an endless paginator
-      </a>
-    </h1>
-
-    <span class="post-date">22 Apr 2014</span>
-
-    <p>A little bit about my new program-frankenstein. Now it is an endless <code class="highlighter-rouge">Paginator</code> for Django. It sounds crazy, isn’t?</p>
-
-<p>Standart Django <code class="highlighter-rouge">Paginator</code> uses the <code class="highlighter-rouge">count()</code> function for the verification of page number. It is converted to the <code class="highlighter-rouge">SELECT COUNT(*) ...</code> query, of course. But as I was explained (I really don’t know, maybe it’s just an exaggeration - you can post your opinion in the commentaries), this is not a such lightweight query, as we want for the paginated rest api, because of the <a href="http://wiki.postgresql.org/wiki/MVCC">MVCC</a> in PostgreSQL.</p>
-
-<p>How we can avoid the extra <code class="highlighter-rouge">COUNT(*)</code> query? Don’t panic, we can trick the Django.</p>
-
-<p>First of all we need to disable <code class="highlighter-rouge">count</code> parameter from the api response. We can introduce a custom pagination serializer:</p>
-
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># serializers.py</span>
-<span class="k">class</span> <span class="nc">CustomPaginationSerializer</span><span class="p">(</span><span class="n">BasePaginationSerializer</span><span class="p">):</span>
-    <span class="nb">next</span> <span class="o">=</span> <span class="n">NextPageField</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s">'*'</span><span class="p">)</span>
-    <span class="n">previous</span> <span class="o">=</span> <span class="n">PreviousPageField</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s">'*'</span><span class="p">)</span>
-
-<span class="c"># api.py</span>
-<span class="k">class</span> <span class="nc">SomeListView</span><span class="p">(</span><span class="n">generics</span><span class="o">.</span><span class="n">ListAPIView</span><span class="p">):</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">SomeModel</span>
-    <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">SomeSerializerClass</span>
-    <span class="n">pagination_serializer_class</span> <span class="o">=</span> <span class="n">CustomPaginationSerializer</span></code></pre></figure>
-
-<p>The next our move - disable the page number verification. This can be done by the custom paginator class:</p>
-
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">CustomPaginator</span><span class="p">(</span><span class="n">Paginator</span><span class="p">):</span>
-    <span class="s">""" HACK: To avoid unneseccary `SELECT COUNT(*) ...`
-        paginator has an infinity page number and a count of elements.
-    """</span>
-    <span class="k">def</span> <span class="nf">_get_num_pages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s">"""
-        Returns the total number of pages.
-        """</span>
-        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s">'inf'</span><span class="p">)</span>
-
-    <span class="n">num_pages</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_num_pages</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_get_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s">"""
-        Returns the total number of objects, across all pages.
-        """</span>
-        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s">'inf'</span><span class="p">)</span>
-
-    <span class="n">count</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_count</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">_get_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">CustomPage</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-
-<span class="k">class</span> <span class="nc">SomeListView</span><span class="p">(</span><span class="n">generics</span><span class="o">.</span><span class="n">ListAPIView</span><span class="p">):</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">SomeModel</span>
-    <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">SomeSerializerClass</span>
-    <span class="n">pagination_serializer_class</span> <span class="o">=</span> <span class="n">CustomPaginationSerializer</span>
-    <span class="n">paginator_class</span> <span class="o">=</span> <span class="n">CustomPaginator</span></code></pre></figure>
-
-<p>Oh, goodness - we introduced the infinity number of the pages and the infinity number of elements… But we want also the correct next/prev links, so one more detail:</p>
-
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">CustomPage</span><span class="p">(</span><span class="n">Page</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">has_next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s">""" HACK: Select object_list + 1 element
-            to verify next page existense.
-        """</span>
-        <span class="n">low</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="s">'low_mark'</span><span class="p">]</span>
-        <span class="n">high</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="s">'high_mark'</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">clear_limits</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">set_limits</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">high</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="c"># len is used only for small portions of data (one page)</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">paginator</span><span class="o">.</span><span class="n">per_page</span><span class="p">:</span>
-                <span class="k">return</span> <span class="bp">False</span>
-
-            <span class="k">return</span> <span class="bp">True</span>
-        <span class="k">finally</span><span class="p">:</span>
-            <span class="c"># restore initial object_list count</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="p">[:(</span><span class="n">high</span><span class="o">-</span><span class="n">low</span><span class="p">)]</span></code></pre></figure>
-
-<p>This solution looks very questionable, but exciting for me. If you have something to say about this - welcome! =)</p>
-
-
+    <p>I’m doing a small revolution in my environment from time to time. I think “hey, a cool stuff”, take a deep breath and doing something new. And this is story about my migration from the bash to the fish shell.</p> <p>Let’s see, what says the official tutorial:</p> <blockquote> <p>fish is a fully-equipped command line shell (like bash or zsh) that is smart and user-friendly. fish supports powerful features like syntax highlighting, autosuggestions, and tab completions that just work, with nothing to learn or configure. If you want to make your command line more productive, more useful, and more fun, without learning a bunch of arcane syntax and configuration options, then fish might be just what you’re looking for!</p> </blockquote> <p>And this is almost true =) But there is another concrete reason, why I like fish shell:</p> <ul> <li>Search by history (as an autocomplete by tab)</li> <li>More intuitive and clean configuration files</li> <li>Vim mode <a href="https://github.com/fish-shell/fish-shell/issues/65">support</a></li> </ul> <p>I would to avoid unnecessary lyrics, and pay more attention to the configuration and gotchas (from the bash point of view).</p> <p>First of all - use <code class="language-plaintext highlighter-rouge">.</code> command instead <code class="language-plaintext highlighter-rouge">source</code> for the inclusion of the script.</p> <figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">.</span> /some-install-path/fish-shell/share/fish/functions/fish_vi_mode.fish <span class="nb">.</span> /some-install-path/.config/fish/themes/fish_right_prompt.fish <span class="nb">.</span> /some-install-path/.config/fish/themes/fish_prompt.fish <span class="nb">.</span> /etc/profile.d/autojump.fish fish_vi_key_bindings</code></pre></figure> <p>I’ve used <code class="language-plaintext highlighter-rouge">some-install-path</code> because I’m a Vim hacker (<del>an extra pathos</del>), and I want a fresh version for the Vim support, so the manual compilation from github is my way. Then I’ve turned on Vim mode (<code class="language-plaintext highlighter-rouge">fish_vi_mode.fish</code> is necessary for this). <code class="language-plaintext highlighter-rouge">fish_prompt.fish</code> and <code class="language-plaintext highlighter-rouge">fish_right_prompt.fish</code> contain a description for the shell prompt and will be discussed later. If you use <code class="language-plaintext highlighter-rouge">autojump</code>, you should also include <code class="language-plaintext highlighter-rouge">autojump.fish</code> (if this file doesn’t exist, download it from repo).</p> <figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">set </span>fish_greeting <span class="s2">""</span></code></pre></figure> <p>This greeting is very distracting, so disable it. No comments =)</p> <figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">set</span> <span class="nt">-x</span> EDITOR vim <span class="nb">set </span>PATH /home/erthalion/.local/bin /usr/local/bin /opt/bin <span class="nv">$PATH</span></code></pre></figure> <p>We should set environment variables in this format. Pay attention to the <code class="language-plaintext highlighter-rouge">PATH</code> variable - don’t forget about <code class="language-plaintext highlighter-rouge">/usr/local/bin</code> and <code class="language-plaintext highlighter-rouge">/opt/bin</code> (looks like fish shell doesn’t include them by default).</p> <figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nb">alias </span><span class="nv">goutshow</span><span class="o">=</span><span class="s1">'git fetch; git show origin/master..'</span></code></pre></figure> <p>One more observation - we should replace <code class="language-plaintext highlighter-rouge">&amp;&amp;</code> by the <code class="language-plaintext highlighter-rouge">;</code> or <code...
   </div>
   
 </div>

@@ -53,7 +53,7 @@
             </li>
           </ul>
 
-          <p>&copy; 2016. Dmitry Dolgov All rights reserved.</p>
+          <p>&copy; 2019. Dmitry Dolgov All rights reserved.</p>
         </div>
       </div>
     </header>
@@ -62,7 +62,7 @@
       <div class="post">
   <h1>Use an exception instead of the NaN</h1>
   <span class="post-date">16 Aug 2014</span>
-  <p>This is a small notice about a very useful trick. I often have to deal with computations, because the CFD is the part of my activity. And one of the annoying problem in this kind of research is when after many hours of computations you got a <code class="highlighter-rouge">Not A Number</code> result, caused by a stupid mistake. It would be nice, if a computation was interrupted by the NaN.</p>
+  <p>This is a small notice about a very useful trick. I often have to deal with computations, because the CFD is the part of my activity. And one of the annoying problem in this kind of research is when after many hours of computations you got a <code class="language-plaintext highlighter-rouge">Not A Number</code> result, caused by a stupid mistake. It would be nice, if a computation was interrupted by the NaN.</p>
 
 <p>And there is the <a href="http://stackoverflow.com/a/2949452">solution</a>:</p>
 
@@ -81,22 +81,22 @@
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>The <code class="highlighter-rouge">fenv.h</code> header declares a set of functions and macros to access the floating-point environment, along with specific types.
+<p>The <code class="language-plaintext highlighter-rouge">fenv.h</code> header declares a set of functions and macros to access the floating-point environment, along with specific types.
 According to man:</p>
 
 <blockquote>
-  <p>The  feenableexcept() function enable traps for each of the exceptions represented by excepts and return the previous set of enabled exceptions when successful, and -1 otherwise. </p>
+  <p>The  feenableexcept() function enable traps for each of the exceptions represented by excepts and return the previous set of enabled exceptions when successful, and -1 otherwise.</p>
 </blockquote>
 
-<p>Now, what we have without <code class="highlighter-rouge">feenableexcept</code>:</p>
+<p>Now, what we have without <code class="language-plaintext highlighter-rouge">feenableexcept</code>:</p>
 
-<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="gp">$ </span>./test_no_fenv 
-<span class="gp">&gt; </span>result is -nan</code></pre></figure>
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>./test_no_fenv 
+<span class="o">&gt;</span> result is <span class="nt">-nan</span></code></pre></figure>
 
 <p>And with:</p>
 
-<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="gp">$ </span>./test_fenv 
-<span class="gp">&gt; </span>fish: Job 1, <span class="s1">'./test'</span> terminated by signal SIGFPE <span class="o">(</span>Floating point exception<span class="o">)</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-sh" data-lang="sh"><span class="nv">$ </span>./test_fenv 
+<span class="o">&gt;</span> fish: Job 1, <span class="s1">'./test'</span> terminated by signal SIGFPE <span class="o">(</span>Floating point exception<span class="o">)</span></code></pre></figure>
 
 
 </div>
@@ -107,27 +107,27 @@ According to man:</p>
     
       <li>
         <h3>
+          <a href="/2019/11/01/postgresql-stay-curious/">
+            PostgreSQL at low level: stay curious!
+            <small>01 Nov 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2017/12/21/advanced-json-benchmarks/">
+            Jsonb: few more stories about the performance
+            <small>21 Dec 2017</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/2016/06/05/convert-into-jsonb/">
             How to convert your data to jsonb?
             <small>05 Jun 2016</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2015/12/29/pandoc/">
-            The Knife
-            <small>29 Dec 2015</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2015/12/29/json-benchmarks/">
-            Compare incomparable: PostgreSQL vs Mysql vs Mongodb
-            <small>29 Dec 2015</small>
           </a>
         </h3>
       </li>

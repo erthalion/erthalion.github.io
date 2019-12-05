@@ -53,7 +53,7 @@
             </li>
           </ul>
 
-          <p>&copy; 2016. Dmitry Dolgov All rights reserved.</p>
+          <p>&copy; 2019. Dmitry Dolgov All rights reserved.</p>
         </div>
       </div>
     </header>
@@ -74,7 +74,7 @@
 
 <h2 id="iwlwifi">iwlwifi</h2>
 
-<p>Next big disaster is the <code class="highlighter-rouge">iwlwifi</code> driver for the Intel Wireless 7260. The most of wifi routers are working in the mixed 11bgn mode, and 11n drives <code class="highlighter-rouge">iwlwifi</code> (and you with him) mad. There are an endless disconnections and the terrible instability.</p>
+<p>Next big disaster is the <code class="language-plaintext highlighter-rouge">iwlwifi</code> driver for the Intel Wireless 7260. The most of wifi routers are working in the mixed 11bgn mode, and 11n drives <code class="language-plaintext highlighter-rouge">iwlwifi</code> (and you with him) mad. There are an endless disconnections and the terrible instability.</p>
 
 <p><img src="/public/img/fry-bender-roar.jpg" border="0" width="50%" style="margin: auto" /></p>
 
@@ -84,15 +84,15 @@
 
 options iwlwifi <span class="nv">11n_disable</span><span class="o">=</span>1</code></pre></figure>
 
-<p>And you shouldn’t forget to compile <code class="highlighter-rouge">iwlwifi</code> as kernel module (otherwise, obviously, this option will not be applied). The last step is the firmware installation. You can download the <code class="highlighter-rouge">iwlwifi-7260-9.ucode</code>, place it in <code class="highlighter-rouge">/lib/firmware</code>, and configure to load this firmware with kernel:</p>
+<p>And you shouldn’t forget to compile <code class="language-plaintext highlighter-rouge">iwlwifi</code> as kernel module (otherwise, obviously, this option will not be applied). The last step is the firmware installation. You can download the <code class="language-plaintext highlighter-rouge">iwlwifi-7260-9.ucode</code>, place it in <code class="language-plaintext highlighter-rouge">/lib/firmware</code>, and configure to load this firmware with kernel:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">Device Driver -&gt;
     Generic Driver Options -&gt;
-        <span class="o">[</span><span class="k">*</span><span class="o">]</span> Include <span class="k">in</span>-kernel firmware blobs <span class="k">in </span>kernel library
+        <span class="o">[</span><span class="k">*</span><span class="o">]</span> Include <span class="k">in</span><span class="nt">-kernel</span> firmware blobs <span class="k">in </span>kernel library
         <span class="o">(</span>iwlwifi-7260-9.ucode<span class="o">)</span> External firmware blobs to build into kernel library
         <span class="o">(</span>/lib/firmware<span class="o">)</span> Firmware blobls root directory</code></pre></figure>
 
-<p>Btw, one more note - loos like <code class="highlighter-rouge">iwlwifi-7269-9.ucode</code> is working more stable, then <code class="highlighter-rouge">iwlwifi-7260-10.ucode</code>.</p>
+<p>Btw, one more note - loos like <code class="language-plaintext highlighter-rouge">iwlwifi-7269-9.ucode</code> is working more stable, then <code class="language-plaintext highlighter-rouge">iwlwifi-7260-10.ucode</code>.</p>
 
 <h2 id="microphone">Microphone</h2>
 
@@ -102,7 +102,7 @@ options iwlwifi <span class="nv">11n_disable</span><span class="o">=</span>1</co
 
 <p>Actually, I though, that everything was unmutes in the alsamixer, but I was wrong:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>amixer -c 1
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>amixer <span class="nt">-c</span> 1
 ...
 Simple mixer control <span class="s1">'Capture'</span>,0 
 Capabilities: cvolume cswitch 
@@ -112,9 +112,9 @@ Front Left: Capture 63 <span class="o">[</span>100%] <span class="o">[</span>30.
 Front Right: Capture 63 <span class="o">[</span>100%] <span class="o">[</span>30.00dB] <span class="o">[</span>off]
 ...</code></pre></figure>
 
-<p>You can unmute the <code class="highlighter-rouge">Capture, 0</code> control by this command (<code class="highlighter-rouge">-c 1</code> is the card number):</p>
+<p>You can unmute the <code class="language-plaintext highlighter-rouge">Capture, 0</code> control by this command (<code class="language-plaintext highlighter-rouge">-c 1</code> is the card number):</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>amixer -c 1 Capture, 0 80% 40% unmute cap</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>amixer <span class="nt">-c</span> 1 Capture, 0 80% 40% unmute cap</code></pre></figure>
 
 <p>And btw, don’t forget about the web cam:</p>
 
@@ -122,28 +122,28 @@ Front Right: Capture 63 <span class="o">[</span>100%] <span class="o">[</span>30
     Multimedia support -&gt;
         <span class="o">[</span><span class="k">*</span><span class="o">]</span> Cameras/video grabbers support
         <span class="o">[</span><span class="k">*</span><span class="o">]</span> Media USB Adapters -&gt;
-            &lt;<span class="k">*</span>&gt; USB input event device support</code></pre></figure>
+            &lt;<span class="k">*</span><span class="o">&gt;</span> USB input event device support</code></pre></figure>
 
 <h2 id="windows-8-loading">Windows 8 loading</h2>
 
-<p>Ok, it’s well enough. But if you’ll try to load now from the grub2 menu to Win8, you’ll suprised because of the messages <code class="highlighter-rouge">error: can't find command drivemap</code> and <code class="highlighter-rouge">error: invalid EFI file path</code>.</p>
+<p>Ok, it’s well enough. But if you’ll try to load now from the grub2 menu to Win8, you’ll suprised because of the messages <code class="language-plaintext highlighter-rouge">error: can't find command drivemap</code> and <code class="language-plaintext highlighter-rouge">error: invalid EFI file path</code>.</p>
 
 <p><img src="/public/img/fry-fall.jpg" border="0" width="50%" style="margin: auto" /></p>
 
-<p>To avoid this problem you should create custom menu entry for <code class="highlighter-rouge">grub.cfg</code> with chainloader for Win8:</p>
+<p>To avoid this problem you should create custom menu entry for <code class="language-plaintext highlighter-rouge">grub.cfg</code> with chainloader for Win8:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/sh</span>
 <span class="c"># /etc/grub.d/40_custom</span>
-<span class="nb">exec </span>tail -n +3 <span class="nv">$0</span>
+<span class="nb">exec tail</span> <span class="nt">-n</span> +3 <span class="nv">$0</span>
 <span class="c"># This file provides an easy way to add custom menu entries.  Simply type the</span>
 <span class="c"># menu entries you want to add after this comment.  Be careful not to change</span>
 <span class="c"># the 'exec tail' line above.</span>
-menuentry <span class="s1">'Windows 8 (UEFI loader)'</span> --class windows --class os <span class="nv">$menuentry_id_option</span> <span class="s1">'osprober-chain-02E42074E4206BDB'</span> <span class="o">{</span>
-	search --file --no-floppy --set<span class="o">=</span>root /EFI/Microsoft/Boot/bootmgfw.efi
+menuentry <span class="s1">'Windows 8 (UEFI loader)'</span> <span class="nt">--class</span> windows <span class="nt">--class</span> os <span class="nv">$menuentry_id_option</span> <span class="s1">'osprober-chain-02E42074E4206BDB'</span> <span class="o">{</span>
+	search <span class="nt">--file</span> <span class="nt">--no-floppy</span> <span class="nt">--set</span><span class="o">=</span>root /EFI/Microsoft/Boot/bootmgfw.efi
 	chainloader <span class="o">(</span><span class="k">${</span><span class="nv">root</span><span class="k">}</span><span class="o">)</span>/EFI/Microsoft/Boot/bootmgfw.efi
 <span class="o">}</span></code></pre></figure>
 
-<p>Don’t forget to update <code class="highlighter-rouge">grub.cfg</code>:</p>
+<p>Don’t forget to update <code class="language-plaintext highlighter-rouge">grub.cfg</code>:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># grub2-mkconfig -o /boot/grub/grub.cfg</span></code></pre></figure>
 
@@ -187,9 +187,9 @@ Section <span class="s2">"InputClass"</span>
     Option <span class="s2">"ConstantDeceleration"</span> <span class="s2">"4"</span>
 EndSection</code></pre></figure>
 
-<p>And one more note - if you’re using the <code class="highlighter-rouge">laptop-mode</code> and a wireless keyboard from Logitech, it probably will be better to put this device into blacklist to avoid annoying problems with an unexpectedly frozen keyboard:</p>
+<p>And one more note - if you’re using the <code class="language-plaintext highlighter-rouge">laptop-mode</code> and a wireless keyboard from Logitech, it probably will be better to put this device into blacklist to avoid annoying problems with an unexpectedly frozen keyboard:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>lsusb
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>lsusb
 ......
 Bus 001 Device 002: ID 046d:c52b Logitech, Inc. Unifying Receiver
 ......</code></pre></figure>
@@ -212,27 +212,27 @@ Bus 001 Device 002: ID 046d:c52b Logitech, Inc. Unifying Receiver
     
       <li>
         <h3>
+          <a href="/2019/11/01/postgresql-stay-curious/">
+            PostgreSQL at low level: stay curious!
+            <small>01 Nov 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2017/12/21/advanced-json-benchmarks/">
+            Jsonb: few more stories about the performance
+            <small>21 Dec 2017</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/2016/06/05/convert-into-jsonb/">
             How to convert your data to jsonb?
             <small>05 Jun 2016</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2015/12/29/pandoc/">
-            The Knife
-            <small>29 Dec 2015</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2015/12/29/json-benchmarks/">
-            Compare incomparable: PostgreSQL vs Mysql vs Mongodb
-            <small>29 Dec 2015</small>
           </a>
         </h3>
       </li>

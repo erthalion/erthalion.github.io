@@ -114,3 +114,15 @@ body {
     color: #333;
     cursor: pointer;
 }
+
+.talk > .title {
+    font-weight: bold;
+}
+
+.talk {
+    margin: 5% 0 5% 5%;
+}
+
+.talks {
+    max-width: 600px;
+}
