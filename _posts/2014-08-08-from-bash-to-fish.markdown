@@ -18,6 +18,8 @@ And this is almost true =) But there is another concrete reason, why I like fish
 * More intuitive and clean configuration files
 * Vim mode [support][vim-ticket]
 
+<!--break-->
+
 I would to avoid unnecessary lyrics, and pay more attention to the configuration and gotchas (from the bash point of view).
 
 First of all - use `.` command instead `source` for the inclusion of the script.

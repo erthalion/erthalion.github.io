@@ -7,6 +7,8 @@ comments: true
 
 Finally, I decided to replace my old laptop, and my chose fell on the Lenovo u430p. As I understand now, it was not a good idea in case of Gentoo =) Actually, I was surprised, how many nerves you can lose only because of the adaptation of you hardware to your requirements. And here is the shortlist of what you shouldn't forget, if you want to do the same more easily.
 
+<!--break-->
+
 ## EFI loader
 
 So you've successfully passed several steps from Gentoo Handbook. One of the last is Grub2 installation and configuration. You've completed this, rebooted and...nothing happened, you see the Windows 8 again.

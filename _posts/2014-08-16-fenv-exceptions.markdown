@@ -7,6 +7,8 @@ comments: true
 
 This is a small notice about a very useful trick. I often have to deal with computations, because the CFD is the part of my activity. And one of the annoying problem in this kind of research is when after many hours of computations you got a `Not A Number` result, caused by a stupid mistake. It would be nice, if a computation was interrupted by the NaN.
 
+<!--break-->
+
 And there is the [solution][stackoverflow]:
 
 {% highlight c %}

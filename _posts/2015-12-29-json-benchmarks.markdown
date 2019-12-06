@@ -15,6 +15,8 @@ a balance that you should find for your specific data. It can't be easy, first o
 e.g. performance of a NoSql solution and traditional database. Here in this post I'll make such attempt and show the comparison of jsonb in PostgreSQL,
 json in Mysql and bson in Mongodb.
 
+<!--break-->
+
 ## What the hell is going on here?
 
 Breaking news:

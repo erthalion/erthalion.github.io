@@ -16,6 +16,8 @@ Basically there are three possible cases of data conversion:
 * Convert data from other database
 * Convert plain data outside database
 
+<!--break-->
+
 ## From inside PostgreSQL
 
 First of all we shouldn't forget we can build data in `jsonb` format manually:

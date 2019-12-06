@@ -70,7 +70,106 @@
 
     <span class="post-date">01 Nov 2019</span>
 
-    <h2 id="0-how-to-read-me">0. How to read me?</h2> <p>Yes, I know, it’s a long text, and it was my conscious decision to write it in this way. But fear not! Imagine that you read a book, take a look at the introduction and first few interesting sections, think about it and then find time to read further. I hope I’ve left enough references, so if you don’t get some ideas you’ll be able to read more information about interesting parts. Or you can even skip some sections, since they are relatively independent. This table of contents will guide you:</p> <p><a href="#1-introduction">► Introduction</a> <br /> <a href="#2-shared-memory">► Shared memory</a> <br /> <a href="#3-vdso">► vDSO</a> <br /> <a href="#4-cpu-migrations">► CPU migrations</a> <br /> <a href="#5-mds">► MDS</a> <br /> <a href="#6-lock-holderwaiter-preemption">► Lock holder/waiter preemption</a> <br /> <a href="#7-huge-pages">► Huge pages</a> <br /> <a href="#8-bpf">► BPF</a> <br /> <a href="#9-llc">► LLC</a> <br /> <a href="#10-writeback">► Writeback</a> <br /> <a href="#11-memory-reclaim">► Memory reclaim</a> <br /> <a href="#12-io-scheduler">► IO scheduler</a> <br /> <a href="#13-butbut-isnt-it-slow">► But…but isn’t it slow?</a> <br /> <a href="#14-im-going-to-use-it-in-production-immediately">► I’m going to use it in production immediately!</a> <br /> <a href="#15-conclusions">► Conclusions</a></p> <h2 id="1-introduction">1. Introduction</h2> <blockquote> <p>In mathematics it is too easy to concentrate very hard on one specific problem. If your methods are not good enough to handle the problem, you will eventually grind to a halt, baffled and defeated. Often the key to further progress is to stand back, forget about the special problem, and see if you can spot any general features of the surrounding area which might be of use.</p> <p>Ian Stewart, Concepts of Modern Mathematics.</p> </blockquote> <p>It’s not a secret that databases are damn complicated systems. And they tend to run on top of even more complicated stacks of software. Nowadays you will not surprise anyone (or at least not that much) by running your database on a Kubernetes cluster or inside a virtual machine. It’s probably still questionable whether it’s good and appropriate, but this approach is something we have to face — sometimes it’s at least convenient, sometimes it allows to be more resource efficient and sometimes it’s the only available infrastructure in a company.</p> <p><img src="/public/img/layers.png" border="0" width="100%" style="margin: auto" /></p> <p>And one of the problems in this situation is that reasoning about the performance is not that easy any more. Well, it’s not like it was much easier before, but still. An issue, that could be...
+    <h2 id="0-how-to-read-me">0. How to read me?</h2>
+
+<p>Yes, I know, it’s a long text, and it was my conscious decision to write it in
+this way. But fear not! Imagine that you read a book, take a look at the
+introduction and first few interesting sections, think about it and then find
+time to read further. I hope I’ve left enough references, so if you don’t get
+some ideas you’ll be able to read more information about interesting parts. Or
+you can even skip some sections, since they are relatively independent. This
+table of contents will guide you:</p>
+
+<ul style="width:100%">
+  <li>
+    <a href="#1-introduction">Introduction</a>
+  </li>
+  <li>
+    <a href="#2-shared-memory">Interesting stuff</a>
+    <ul>
+    <li>
+        <a href="#2-shared-memory">Strace</a>
+        <ul>
+            <li>
+                <a href="#2-shared-memory">Shared memory</a>
+            </li>
+            <li>
+                <a href="#4-cpu-migrations">CPU migrations</a>
+            </li>
+            <li>
+                <a href="#3-vdso">vDSO</a>
+            </li>
+        </ul>
+    </li> 
+    <li>
+        <a href="#5-mds">Perf</a>
+        <ul>
+            <li>
+                <a href="#5-mds">MDS</a>
+            </li>
+            <li>
+                <a href="#6-lock-holderwaiter-preemption">Lock holder/waiter preemption</a>
+            </li>
+            <li>
+                <a href="#7-huge-pages">Huge pages</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="#8-bpf">BPF</a>
+        <ul>
+            <li>
+                <a href="#8-bpf">Overview</a>
+            </li>
+            <li>
+                <a href="#9-llc">LLC</a>
+            </li>
+            <li>
+                <a href="#10-writeback">Writeback</a>
+            </li>
+            <li>
+                <a href="#11-memory-reclaim">Memory reclaim</a>
+            </li>
+            <li>
+                <a href="#12-io-scheduler">IO scheduler</a>
+            </li>
+            <li>
+                <a href="#13-butbut-isnt-it-slow">But...but isn't it slow?</a>
+            </li>
+            <li>
+                <a href="#14-im-going-to-use-it-in-production-immediately">I'm going to use it in production immediately!</a>
+            </li>
+        </ul>
+    </li>
+    </ul>
+  </li>
+  <li>
+      <a href="#15-conclusions">Conclusions</a>
+  </li>
+</ul>
+
+<h2 id="1-introduction">1. Introduction</h2>
+
+<blockquote>
+  <p>In mathematics it is too easy to concentrate very hard on one specific
+problem. If your methods are not good enough to handle the problem, you will
+eventually grind to a halt, baffled and defeated. Often the key to further
+progress is to stand back, forget about the special problem, and see if you
+can spot any general features of the surrounding area which might be of use.</p>
+
+  <p>Ian Stewart, Concepts of Modern Mathematics.</p>
+</blockquote>
+
+<p>It’s not a secret that databases are damn complicated systems. And they tend to
+run on top of even more complicated stacks of software. Nowadays you will not
+surprise anyone (or at least not that much) by running your database on a
+Kubernetes cluster or inside a virtual machine. It’s probably still
+questionable whether it’s good and appropriate, but this approach is
+something we have to face — sometimes it’s at least convenient, sometimes it
+allows to be more resource efficient and sometimes it’s the only available
+infrastructure in a company.</p>
+
+
   </div>
   
   <div class="post">
@@ -82,7 +181,25 @@
 
     <span class="post-date">21 Dec 2017</span>
 
-    <blockquote> <p>As such, there’s really no “standard” benchmark that will inform you about the best technology to use for your application. Only your requirements, your data, and your infrastructure can tell you what you need to know.</p> </blockquote> <p>For already some time I can’t stop doing interesting/useful/weird (one at the time) benchmarks to reveal some details on how to apply document-oriented approach in the world of relational databases. Finally, I decided that I have a critical mass of those details to share in the form of blog post. So welcome to The Benchmark Club, where we’re going to discuss what it takes to create a fair performance comparison of different databases. As you may guess, the first rule of The Benchmark Club is to never share a reproducible benchmarks. But we identify ourselves as a badass engineers, so we’re going to break this rule today.</p> <p><img src="/public/img/fight_club.jpg" border="0" width="100%" style="margin: auto" /></p> <h2 id="targets">Targets</h2> <p>It’s not possible to compare all the existing solutions to store and process the data in form of documents (although looks like people usually expect exactly that), so I’ve limited my scope to PostgreSQL, MySQL and MongoDB:</p> <ul> <li> <p>PostgreSQL - just because it’s an enlightened database, which is a part of my very existence.</p> </li> <li> <p>MySQL - also has quite decent implementation of binary json, so it’s interesting to compare PostgreSQL with one of its closest rival.</p> </li> <li> <p>MongoDB - one of the most popular NoSQL databases. Sort of synonym for “document-oriented” approach as for me.</p> </li> </ul> <h2 id="environment">Environment</h2> <p>Unfortunately for me, I don’t have any bare metal servers to test the performance. So all my tests were made using AWS EC2, which has its own pros and cons:</p> <ul> <li>Super easy to reproduce the same results on your own.</li> <li>Many companies use AWS as a main platform to run their infrastructure, so my results maybe even more relevant for them.</li> <li>But there are some implications of using EC2 for performance tests.</li> </ul> <p>My typical benchmark environment had two EC2 instances, one for a workload generator, another for a database. I was using <code class="language-plaintext highlighter-rouge">m4.large</code> instance type with a gp2 ELB volume and the default Ubuntu 16.04 AMI image, so HVM virtualization was available. Both instances were in the same availability zone, VPC and placement group, so we eliminated significant networking issues.</p> <p>But it’s not really enough to be confident in...
+    <blockquote>
+  <p>As such, there’s really no “standard” benchmark that will inform you about
+the best technology to use for your application. Only your requirements, your
+data, and your infrastructure can tell you what you need to know.</p>
+</blockquote>
+
+<p>For already some time I can’t stop doing interesting/useful/weird (one at the
+time) benchmarks to reveal some details on how to apply document-oriented
+approach in the world of relational databases. Finally, I decided that I have a
+critical mass of those details to share in the form of blog post. So welcome to
+The Benchmark Club, where we’re going to discuss what it takes to create a fair
+performance comparison of different databases. As you may guess, the first rule
+of The Benchmark Club is to never share a reproducible benchmarks. But we
+identify ourselves as a badass engineers, so we’re going to break this rule
+today.</p>
+
+<p><img src="/public/img/fight_club.jpg" border="0" width="100%" style="margin: auto" /></p>
+
+
   </div>
   
   <div class="post">
@@ -94,7 +211,19 @@
 
     <span class="post-date">05 Jun 2016</span>
 
-    <p>“How to start” is always a difficult question, and <code class="language-plaintext highlighter-rouge">jsonb</code> isn’t an exception. Here are few notes about converting different types of data into <code class="language-plaintext highlighter-rouge">jsonb</code>, that someone can find useful.</p> <p>Basically there are three possible cases of data conversion:</p> <ul> <li>Convert data from inside PostgreSQL</li> <li>Convert data from other database</li> <li>Convert plain data outside database</li> </ul> <h2 id="from-inside-postgresql">From inside PostgreSQL</h2> <p>First of all we shouldn’t forget we can build data in <code class="language-plaintext highlighter-rouge">jsonb</code> format manually:</p> <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> <span class="s1">'{"id": 1, "data": "aaa"}'</span><span class="p">::</span><span class="n">jsonb</span><span class="p">;</span> </code></pre></div></div> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> jsonb <span class="nt">--------------------------</span> <span class="o">{</span><span class="s2">"id"</span>: 1, <span class="s2">"data"</span>: <span class="s2">"aaa"</span><span class="o">}</span> </code></pre></div></div> <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> <span class="n">jsonb_build_object</span><span class="p">(</span><span class="s1">'id'</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'data'</span><span class="p">,</span> <span class="s1">'aaa'</span><span class="p">);</span> </code></pre></div></div> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> jsonb_build_object <span class="nt">--------------------------</span> <span class="o">{</span><span class="s2">"id"</span>: 1, <span class="s2">"data"</span>: <span class="s2">"aaa"</span><span class="o">}</span> </code></pre></div></div> <p>If we already have some relational data we can easy perform one-to-one conversion for both complex and simple data types:</p> <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> <span class="n">to_jsonb</span><span class="p">(</span><span class="nb">timestamp</span> <span class="s1">'2016-06-05'</span><span class="p">);</span> </code></pre></div></div> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> to_jsonb <span class="nt">-----------------------</span> <span class="s2">"2016-06-05T00:00:00"</span> </code></pre></div></div> <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> <span class="n">to_jsonb</span><span class="p">(</span><span class="n">ARRAY</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]);</span> </code></pre></div></div> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> to_jsonb <span class="nt">-----------</span> <span class="o">[</span>1, 2, 3] </code></pre></div></div> <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> <span class="n">to_jsonb</span><span class="p">(</span><span class="s1">'id=&gt;1, data=&gt;"aaa"'</span><span class="p">::</span><span class="n">hstore</span><span class="p">);</span> </code></pre></div></div> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> to_jsonb <span class="nt">----------------------------</span> <span class="o">{</span><span class="s2">"id"</span>: <span class="s2">"1"</span>, <span class="s2">"data"</span>: <span class="s2">"aaa"</span><span class="o">}</span> </code></pre></div></div> <p>Don’t forget that <code class="language-plaintext highlighter-rouge">jsonb</code> is just a valid textual json, so all values will be converted to number, string, boolean or null.</p> <p>And if we want to produce a really complex and well-structured <code class="language-plaintext highlighter-rouge">jsonb</code> document from large amount of relational data, <code class="language-plaintext highlighter-rouge">jsonb_agg</code> is our friend. This function can transform a recordset into the format <code class="language-plaintext highlighter-rouge">column_name: record_value</code>:</p> <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span> <span class="n">jsonb_agg</span><span class="p">(</span><span class="n">query</span><span class="p">)</span> <span class="k">from</span> <span class="p">(</span> <span class="k">select</span> <span class="n">id</span><span class="p">,</span> <span class="k">data</span> <span class="k">from</span> <span class="n">jsonb_table</span> <span class="p">)</span> <span class="n">query</span><span class="p">;</span> </code></pre></div></div> <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> jsonb_agg <span class="nt">------------------------------------------------------</span> <span class="o">[{</span><span class="s2">"id"</span>: 1, <span class="s2">"data"</span>: <span class="s2">"aaa"</span><span class="o">}</span>, <span class="o">{</span><span class="s2">"id"</span>: 2, <span class="s2">"data"</span>: <span class="s2">"bbb"</span><span class="o">}]</span> </code></pre></div></div> <h2 id="from-other-database">From other database</h2> <p>Again there are two options how to import data...
+    <p>“How to start” is always a difficult question, and <code class="language-plaintext highlighter-rouge">jsonb</code> isn’t an exception.
+Here are few notes about converting different types of data into <code class="language-plaintext highlighter-rouge">jsonb</code>, that
+someone can find useful.</p>
+
+<p>Basically there are three possible cases of data conversion:</p>
+
+<ul>
+  <li>Convert data from inside PostgreSQL</li>
+  <li>Convert data from other database</li>
+  <li>Convert plain data outside database</li>
+</ul>
+
+
   </div>
   
   <div class="post">
@@ -106,7 +235,15 @@
 
     <span class="post-date">29 Dec 2015</span>
 
-    <p>I really don’t know how I lived before without pandoc. It’s an amazing tool, that saved me from a terrible pain of latex -&gt; MS Word convertion. If you’re writing many scientific documents in <code class="language-plaintext highlighter-rouge">latex</code> format, and faced with the demand to convert it into MS Word, you can understand me. It’s like a tiresome point-and-click game, which can consume unbelievable amount of time.</p> <p>Pandoc can do it, and I’m not kidding. All you need is to create a source file in <code class="language-plaintext highlighter-rouge">markdown</code> format and copy all latex formulas. In this post you can find several details.</p> <p>What do we need to install pandoc? I’ll advise <a href="https://github.com/commercialhaskell/stack">stack</a>:</p> <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>stack <span class="nb">install </span>pandoc pandoc-citeproc pandoc-crossref</code></pre></figure> <p><code class="language-plaintext highlighter-rouge">pandoc-citeproc</code> and <code class="language-plaintext highlighter-rouge">pandoc-crossref</code> will be used to generate nice bibliography and references.</p> <p>Now we can do something like this:</p> <figure class="highlight"><pre><code class="language-latex" data-lang="latex"><span class="p">$$</span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\partial</span><span class="nb"> </span><span class="nv">\vec</span><span class="p">{</span><span class="nb">u</span><span class="p">}}{</span><span class="nv">\partial</span><span class="nb"> t</span><span class="p">}</span><span class="nb"> </span><span class="o">+</span><span class="nb"> </span><span class="o">(</span><span class="nv">\vec</span><span class="p">{</span><span class="nb">u</span><span class="p">}</span><span class="nb"> </span><span class="nv">\cdot</span><span class="nb"> </span><span class="nv">\nabla</span><span class="o">)</span><span class="nb"> </span><span class="nv">\vec</span><span class="p">{</span><span class="nb">u</span><span class="p">}</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="o">-</span><span class="nb"> </span><span class="nv">\frac</span><span class="p">{</span><span class="m">1</span><span class="p">}{</span><span class="nv">\rho</span><span class="p">}</span><span class="nb"> </span><span class="nv">\nabla</span><span class="nb"> p </span><span class="o">+</span><span class="nb"> </span><span class="nv">\nabla</span><span class="nb"> </span><span class="nv">\sigma</span><span class="nb"> </span><span class="o">+</span><span class="nb"> </span><span class="nv">\vec</span><span class="p">{</span><span class="nb">f</span><span class="p">}$$</span> <span class="p">{</span>#eq:navier<span class="p">_</span>stokes:motion<span class="p">}</span> <span class="p">$$</span><span class="nv">\frac</span><span class="p">{</span><span class="nv">\partial</span><span class="nb"> </span><span class="nv">\rho</span><span class="p">}{</span><span class="nv">\partial</span><span class="nb"> t</span><span class="p">}</span><span class="nb"> </span><span class="o">+</span><span class="nb"> </span><span class="nv">\nabla</span><span class="nb"> </span><span class="nv">\cdot</span><span class="nb"> </span><span class="o">(</span><span class="nv">\rho</span><span class="nb"> </span><span class="nv">\vec</span><span class="p">{</span><span class="nb">u</span><span class="p">}</span><span class="o">)</span><span class="nb"> </span><span class="o">=</span><span class="nb"> </span><span class="m">0</span><span class="p">$$</span> <span class="p">{</span>#eq:navier<span class="p">_</span>stokes:continuity<span class="p">}</span></code></pre></figure> <p>ang get a nice result (e.g. from Word Online): <img src="/public/img/navier.png" border="0" width="41%" style="margin: auto" /></p> <p>Here you can see a label <code class="language-plaintext highlighter-rouge">eq:navier_stokes:motion</code> for corresponding equation. General template for references is:</p> <figure class="highlight"><pre><code class="language-latex" data-lang="latex">some<span class="p">_</span>content <span class="p">{</span>#type:label<span class="p">}</span> label will be used here [@type:label]</code></pre></figure> <p>More documentation about types and usage is <a href="https://github.com/lierdakil/pandoc-crossref">here</a>. You can enable <code class="language-plaintext highlighter-rouge">pandoc-crossref</code> using command line argument <code class="language-plaintext highlighter-rouge">--filter</code>:</p> <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>pandoc <span class="nt">--filter</span> pandoc-crossref <span class="nt">-o</span> result.docx source.md </code></pre></figure> <p>Note, that if we will use <code class="language-plaintext highlighter-rouge">begin/end</code> environment or “\\” for multiple equations, pandoc couldn’t generate MS Word formula. Also, you shouldn’t forget about empy line between equations.</p> <p>To use bibliography we can create a regular <code class="language-plaintext highlighter-rouge">bib</code> file and enable <code class="language-plaintext...
+    <p>I really don’t know how I lived before without pandoc. It’s an amazing tool, that saved me from a terrible pain of
+latex -&gt; MS Word convertion. If you’re writing many scientific documents in <code class="language-plaintext highlighter-rouge">latex</code> format, and faced with
+the demand to convert it into MS Word, you can understand me. It’s like a tiresome point-and-click game, which can
+consume unbelievable amount of time.</p>
+
+<p>Pandoc can do it, and I’m not kidding. All you need is to create a source file in <code class="language-plaintext highlighter-rouge">markdown</code> format and
+copy all latex formulas. In this post you can find several details.</p>
+
+
   </div>
   
 </div>

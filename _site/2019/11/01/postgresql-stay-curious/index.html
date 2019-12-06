@@ -72,35 +72,73 @@ some ideas you’ll be able to read more information about interesting parts. Or
 you can even skip some sections, since they are relatively independent. This
 table of contents will guide you:</p>
 
-<p><a href="#1-introduction">► Introduction</a>
-<br />
-<a href="#2-shared-memory">► Shared memory</a>
-<br />
-<a href="#3-vdso">► vDSO</a>
-<br />
-<a href="#4-cpu-migrations">► CPU migrations</a>
-<br />
-<a href="#5-mds">► MDS</a>
-<br />
-<a href="#6-lock-holderwaiter-preemption">► Lock holder/waiter preemption</a>
-<br />
-<a href="#7-huge-pages">► Huge pages</a>
-<br />
-<a href="#8-bpf">► BPF</a>
-<br />
-<a href="#9-llc">► LLC</a>
-<br />
-<a href="#10-writeback">► Writeback</a>
-<br />
-<a href="#11-memory-reclaim">► Memory reclaim</a>
-<br />
-<a href="#12-io-scheduler">► IO scheduler</a>
-<br />
-<a href="#13-butbut-isnt-it-slow">► But…but isn’t it slow?</a>
-<br />
-<a href="#14-im-going-to-use-it-in-production-immediately">► I’m going to use it in production immediately!</a>
-<br />
-<a href="#15-conclusions">► Conclusions</a></p>
+<ul style="width:100%">
+  <li>
+    <a href="#1-introduction">Introduction</a>
+  </li>
+  <li>
+    <a href="#2-shared-memory">Interesting stuff</a>
+    <ul>
+    <li>
+        <a href="#2-shared-memory">Strace</a>
+        <ul>
+            <li>
+                <a href="#2-shared-memory">Shared memory</a>
+            </li>
+            <li>
+                <a href="#4-cpu-migrations">CPU migrations</a>
+            </li>
+            <li>
+                <a href="#3-vdso">vDSO</a>
+            </li>
+        </ul>
+    </li> 
+    <li>
+        <a href="#5-mds">Perf</a>
+        <ul>
+            <li>
+                <a href="#5-mds">MDS</a>
+            </li>
+            <li>
+                <a href="#6-lock-holderwaiter-preemption">Lock holder/waiter preemption</a>
+            </li>
+            <li>
+                <a href="#7-huge-pages">Huge pages</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="#8-bpf">BPF</a>
+        <ul>
+            <li>
+                <a href="#8-bpf">Overview</a>
+            </li>
+            <li>
+                <a href="#9-llc">LLC</a>
+            </li>
+            <li>
+                <a href="#10-writeback">Writeback</a>
+            </li>
+            <li>
+                <a href="#11-memory-reclaim">Memory reclaim</a>
+            </li>
+            <li>
+                <a href="#12-io-scheduler">IO scheduler</a>
+            </li>
+            <li>
+                <a href="#13-butbut-isnt-it-slow">But...but isn't it slow?</a>
+            </li>
+            <li>
+                <a href="#14-im-going-to-use-it-in-production-immediately">I'm going to use it in production immediately!</a>
+            </li>
+        </ul>
+    </li>
+    </ul>
+  </li>
+  <li>
+      <a href="#15-conclusions">Conclusions</a>
+  </li>
+</ul>
 
 <h2 id="1-introduction">1. Introduction</h2>
 
@@ -122,6 +160,8 @@ questionable whether it’s good and appropriate, but this approach is
 something we have to face — sometimes it’s at least convenient, sometimes it
 allows to be more resource efficient and sometimes it’s the only available
 infrastructure in a company.</p>
+
+<!--break-->
 
 <p><img src="/public/img/layers.png" border="0" width="100%" style="margin: auto" /></p>
 

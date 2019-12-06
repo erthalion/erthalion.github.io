@@ -22,6 +22,8 @@ today.
 
 <img src="/public/img/fight_club.jpg" border="0" width="100%" style="margin: auto">
 
+<!--break-->
+
 ## Targets
 
 It's not possible to compare all the existing solutions to store and process
