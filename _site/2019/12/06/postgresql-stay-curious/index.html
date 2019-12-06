@@ -61,7 +61,7 @@
     <div class="content container">
       <div class="post">
   <h1>PostgreSQL at low level: stay curious!</h1>
-  <span class="post-date">01 Nov 2019</span>
+  <span class="post-date">06 Dec 2019</span>
   <h2 id="0-how-to-read-me">0. How to read me?</h2>
 
 <p>Yes, I know, it’s a long text, and it was my conscious decision to write it in
@@ -86,16 +86,16 @@ table of contents will guide you:</p>
                 <a href="#2-shared-memory">Shared memory</a>
             </li>
             <li>
-                <a href="#4-cpu-migrations">CPU migrations</a>
-            </li>
-            <li>
                 <a href="#3-vdso">vDSO</a>
             </li>
         </ul>
     </li> 
     <li>
-        <a href="#5-mds">Perf</a>
+        <a href="#4-cpu-migrations">Perf</a>
         <ul>
+            <li>
+                <a href="#4-cpu-migrations">CPU migrations</a>
+            </li>
             <li>
                 <a href="#5-mds">MDS</a>
             </li>
@@ -676,7 +676,7 @@ into the Linux boot cmdline), but nevertheless interesting.</p>
 some python and compile some generated C code into BPF program via LLVM
 backend. Sometimes it’s fine, but sometimes an object of your investigation is
 so overloaded it’s impossible even start python interpreter there. There are
-some interesting initiatives to overcome this issue, e.g. <a href="http://vger.kernel.org/bpfconf2019_talks/bpf-core.pdf">CORE</a>, but
+some interesting initiatives to overcome this issue, e.g. <a href="http://vger.kernel.org/bpfconf2019_talks/bpf-core.pdf#page=2">CORE</a>, but
 as an interesting experiment I’ve decided to do something similar without
 having <code class="language-plaintext highlighter-rouge">BCC</code> in place. What do we need to reproduce the same functionality and
 write a small BPF program to measure latency of a query execution?</p>
@@ -816,12 +816,11 @@ experiment on staging (do I even need to say that?).</p>
 
 <h2 id="15-conclusions">15. Conclusions</h2>
 
-<p>That was the last interesting example I have for today. I hope it was enough to
-make you at least a bit interested in tracing and profiling your databases, and
-look deeper into what happens inside and outside. Don’t get me wrong, it’s not
-like when you run <code class="language-plaintext highlighter-rouge">perf</code> or something BPF based any issues will disappear
-automagically, but you will definitely get more interesting information in your
-hands.</p>
+<p>That was the last example I have for today. I hope it was enough to make you at
+least a bit interested in tracing and profiling your databases, and look deeper
+into what happens inside and outside. Don’t get me wrong, it’s not like when
+you run <code class="language-plaintext highlighter-rouge">perf</code> or something BPF based any issues will disappear automagically,
+but you will definitely get more interesting information in your hands.</p>
 
 <p>The magic of the more holistic approach is that it’s useful not only in
 situations, when your database is wrapped in multiple layers. When you profile

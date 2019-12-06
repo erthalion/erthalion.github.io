@@ -4,7 +4,7 @@
  <title>Blog</title>
  <link href="http://erthalion.info/blog/tags/PostgreSQL/atom.xml" rel="self"/>
  <link href="http://erthalion.info/"/>
- <updated>2019-12-06T11:58:41+01:00</updated>
+ <updated>2019-12-06T13:27:09+01:00</updated>
  <id>http://erthalion.info</id>
  <author>
    <name>Dmitry Dolgov</name>
@@ -16,9 +16,9 @@
      
          <entry>
            <title>PostgreSQL at low level: stay curious!</title>
-           <link href="http://erthalion.info/2019/11/01/postgresql-stay-curious/"/>
-           <updated>2019-11-01T18:34:04+01:00</updated>
-           <id>http://erthalion.info/2019/11/01/postgresql-stay-curious</id>
+           <link href="http://erthalion.info/2019/12/06/postgresql-stay-curious/"/>
+           <updated>2019-12-06T14:21:54+01:00</updated>
+           <id>http://erthalion.info/2019/12/06/postgresql-stay-curious</id>
            
            <content type="html">It's not a secret that databases are damn complicated systems. And they tend to run on top of even more complicated stacks of software. Nowadays you will not surprise anyone (or at least not that much) by running your database on a Kubernetes cluster or inside a virtual machine. It's probably still questionable whether it's good and appropriate, but this approach is something we have to face — sometimes it's at least convenient, sometimes it allows to be more resource efficient and sometimes it's the only available infrastructure in a company. And one of the problems in this situation is that reasoning about the performance is not that easy any more. Well, it's not like it was much easier before, but still. Let's see what can we do about it and how strace, perf and BPF can change the game.</content>
            

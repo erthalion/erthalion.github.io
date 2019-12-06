@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "PostgreSQL at low level: stay curious!"
-date:   2019-11-01 17:34:04
+date:   2019-12-06 13:21:54
 comments: true
 tags: [PostgreSQL, perf, bpf]
 overview: "It's not a secret that databases are damn complicated systems. And
@@ -41,16 +41,16 @@ table of contents will guide you:
                 <a href="#2-shared-memory">Shared memory</a>
             </li>
             <li>
-                <a href="#4-cpu-migrations">CPU migrations</a>
-            </li>
-            <li>
                 <a href="#3-vdso">vDSO</a>
             </li>
         </ul>
     </li> 
     <li>
-        <a href="#5-mds">Perf</a>
+        <a href="#4-cpu-migrations">Perf</a>
         <ul>
+            <li>
+                <a href="#4-cpu-migrations">CPU migrations</a>
+            </li>
             <li>
                 <a href="#5-mds">MDS</a>
             </li>
@@ -855,7 +855,7 @@ improvements, you rock!
 [linux-cow]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/memory.c#n3500
 [blk-mq]: https://www.thomas-krenn.com/en/wiki/Linux_Storage_Stack_Diagram
 [kyber]: https://www.kernel.org/doc/Documentation/block/kyber-iosched.rst
-[bpf-core]: http://vger.kernel.org/bpfconf2019_talks/bpf-core.pdf
+[bpf-core]: http://vger.kernel.org/bpfconf2019_talks/bpf-core.pdf#page=2
 [overlayfs-uprobes]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f0a2aa5a2a406d0a57aa9b320ffaa5538672b6c5
 [bpftool]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/bpf/bpftool
 [ftrace]: https://www.kernel.org/doc/Documentation/trace/ftrace.txt
