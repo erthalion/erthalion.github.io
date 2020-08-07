@@ -42,7 +42,7 @@ And later in the optimizer [readme][optimizer_readme]:
 So, the optimizer prepares an optimal way to execute a query and represent it
 in the form of Path trees. Everything sounds clear and simple. Except that it
 isn't, mostly thanks to [cardinality estimation][unsolved_problem] despite
-yeast of progress. As an example one can find couple of
+years of progress. As an example one can find couple of
 [works][join_order_benchmark] from the past, when a common observation about
 PostgreSQL is that cardinality under-estimates sometimes make optimizer to
 select nested-loop joins even when other join methods could be more efficient
