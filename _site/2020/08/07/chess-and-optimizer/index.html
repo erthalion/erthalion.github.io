@@ -7,7 +7,7 @@
   <link href="http://gmpg.org/xfn/11" rel="profile">
 
   <title>
-    
+    Query optimizer and chess? &middot; 
     Erthalion's blog
   </title>
 
@@ -59,18 +59,10 @@
     </header>
 
     <div class="content container">
-      <div class="posts">
-  
-  <div class="post">
-    <h1>
-      <a href="/2020/08/07/chess-and-optimizer/">
-        Query optimizer and chess?
-      </a>
-    </h1>
-
-    <span class="post-date">07 Aug 2020</span>
-
-    <p>Do not be afraid, this short blog post is about databases and does not contain
+      <div class="post">
+  <h1>Query optimizer and chess?</h1>
+  <span class="post-date">07 Aug 2020</span>
+  <p>Do not be afraid, this short blog post is about databases and does not contain
 any unreasonable metaphysical references. In fact, it’s a result of a journey
 through couple of whitepapers and books with an unexpected intersection of two
 rather different fields. I will try to describe everything step by step, so
@@ -252,184 +244,56 @@ could be applied for completely different set of problems.</p>
 fascinating insights!</p>
 
 
-  </div>
-  
-  <div class="post">
-    <h1>
-      <a href="/2019/12/06/postgresql-stay-curious/">
-        PostgreSQL at low level: stay curious!
-      </a>
-    </h1>
-
-    <span class="post-date">06 Dec 2019</span>
-
-    <h2 id="0-how-to-read-me">0. How to read me?</h2>
-
-<p>Yes, I know, it’s a long text, and it was my conscious decision to write it in
-this way. But fear not! Imagine that you read a book, take a look at the
-introduction and first few interesting sections, think about it and then find
-time to read further. I hope I’ve left enough references, so if you don’t get
-some ideas you’ll be able to read more information about interesting parts. Or
-you can even skip some sections, since they are relatively independent. This
-table of contents will guide you:</p>
-
-<ul style="width:100%">
-  <li>
-    <a href="#1-introduction">Introduction</a>
-  </li>
-  <li>
-    <a href="#2-shared-memory">Interesting stuff</a>
-    <ul>
-    <li>
-        <a href="#2-shared-memory">Strace</a>
-        <ul>
-            <li>
-                <a href="#2-shared-memory">Shared memory</a>
-            </li>
-            <li>
-                <a href="#3-vdso">vDSO</a>
-            </li>
-        </ul>
-    </li> 
-    <li>
-        <a href="#4-cpu-migrations">Perf</a>
-        <ul>
-            <li>
-                <a href="#4-cpu-migrations">CPU migrations</a>
-            </li>
-            <li>
-                <a href="#5-mds">MDS</a>
-            </li>
-            <li>
-                <a href="#6-lock-holderwaiter-preemption">Lock holder/waiter preemption</a>
-            </li>
-            <li>
-                <a href="#7-huge-pages">Huge pages</a>
-            </li>
-        </ul>
-    </li>
-    <li>
-        <a href="#8-bpf">BPF</a>
-        <ul>
-            <li>
-                <a href="#8-bpf">Overview</a>
-            </li>
-            <li>
-                <a href="#9-llc">LLC</a>
-            </li>
-            <li>
-                <a href="#10-writeback">Writeback</a>
-            </li>
-            <li>
-                <a href="#11-memory-reclaim">Memory reclaim</a>
-            </li>
-            <li>
-                <a href="#12-io-scheduler">IO scheduler</a>
-            </li>
-            <li>
-                <a href="#13-butbut-isnt-it-slow">But...but isn't it slow?</a>
-            </li>
-            <li>
-                <a href="#14-im-going-to-use-it-in-production-immediately">I'm going to use it in production immediately!</a>
-            </li>
-        </ul>
-    </li>
-    </ul>
-  </li>
-  <li>
-      <a href="#15-conclusions">Conclusions</a>
-  </li>
-</ul>
-
-<h2 id="1-introduction">1. Introduction</h2>
-
-<blockquote>
-  <p>In mathematics it is too easy to concentrate very hard on one specific
-problem. If your methods are not good enough to handle the problem, you will
-eventually grind to a halt, baffled and defeated. Often the key to further
-progress is to stand back, forget about the special problem, and see if you
-can spot any general features of the surrounding area which might be of use.</p>
-
-  <p>Ian Stewart, Concepts of Modern Mathematics.</p>
-</blockquote>
-
-<p>It’s not a secret that databases are damn complicated systems. And they tend to
-run on top of even more complicated stacks of software. Nowadays you will not
-surprise anyone (or at least not that much) by running your database on a
-Kubernetes cluster or inside a virtual machine. It’s probably still
-questionable whether it’s good and appropriate, but this approach is
-something we have to face — sometimes it’s at least convenient, sometimes it
-allows to be more resource efficient and sometimes it’s the only available
-infrastructure in a company.</p>
-
-
-  </div>
-  
-  <div class="post">
-    <h1>
-      <a href="/2017/12/21/advanced-json-benchmarks/">
-        Jsonb: few more stories about the performance
-      </a>
-    </h1>
-
-    <span class="post-date">21 Dec 2017</span>
-
-    <blockquote>
-  <p>As such, there’s really no “standard” benchmark that will inform you about
-the best technology to use for your application. Only your requirements, your
-data, and your infrastructure can tell you what you need to know.</p>
-</blockquote>
-
-<p>For already some time I can’t stop doing interesting/useful/weird (one at the
-time) benchmarks to reveal some details on how to apply document-oriented
-approach in the world of relational databases. Finally, I decided that I have a
-critical mass of those details to share in the form of blog post. So welcome to
-The Benchmark Club, where we’re going to discuss what it takes to create a fair
-performance comparison of different databases. As you may guess, the first rule
-of The Benchmark Club is to never share a reproducible benchmarks. But we
-identify ourselves as a badass engineers, so we’re going to break this rule
-today.</p>
-
-<p><img src="/public/img/fight_club.jpg" border="0" width="100%" style="margin: auto" /></p>
-
-
-  </div>
-  
-  <div class="post">
-    <h1>
-      <a href="/2016/06/05/convert-into-jsonb/">
-        How to convert your data to jsonb?
-      </a>
-    </h1>
-
-    <span class="post-date">05 Jun 2016</span>
-
-    <p>“How to start” is always a difficult question, and <code class="language-plaintext highlighter-rouge">jsonb</code> isn’t an exception.
-Here are few notes about converting different types of data into <code class="language-plaintext highlighter-rouge">jsonb</code>, that
-someone can find useful.</p>
-
-<p>Basically there are three possible cases of data conversion:</p>
-
-<ul>
-  <li>Convert data from inside PostgreSQL</li>
-  <li>Convert data from other database</li>
-  <li>Convert plain data outside database</li>
-</ul>
-
-
-  </div>
-  
 </div>
 
-<!-- Pagination links -->
-<div class="pagination">
-  
-    <a href="/blog/page2" class="older">Older</a>
-  
-  
-    <span class="previous">Newer</span>
-  
+<div class="related">
+  <h2>Other Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/2019/12/06/postgresql-stay-curious/">
+            PostgreSQL at low level: stay curious!
+            <small>06 Dec 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2017/12/21/advanced-json-benchmarks/">
+            Jsonb: few more stories about the performance
+            <small>21 Dec 2017</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/2016/06/05/convert-into-jsonb/">
+            How to convert your data to jsonb?
+            <small>05 Jun 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'erthalion'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
     </div>
 

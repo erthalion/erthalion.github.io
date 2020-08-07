@@ -4,13 +4,23 @@
  <title>Blog</title>
  <link href="http://erthalion.info/atom.xml" rel="self"/>
  <link href="http://erthalion.info/"/>
- <updated>2019-12-06T13:27:09+01:00</updated>
+ <updated>2020-08-07T10:13:33+02:00</updated>
  <id>http://erthalion.info</id>
  <author>
    <name>Dmitry Dolgov</name>
    <email>9erthalion6@gmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>Query optimizer and chess?</title>
+   <link href="http://erthalion.info/2020/08/07/chess-and-optimizer/"/>
+   <updated>2020-08-07T12:02:10+02:00</updated>
+   <id>http://erthalion.info/2020/08/07/chess-and-optimizer</id>
+   
+   <content type="html">Do not be afraid, this short blog post is about databases and does not contain any unreasonable metaphysical references. In fact, it's a result of a journey through couple of whitepapers and books with an unexpected intersection of two rather different fields. I will try to describe everything step by step, so that we can see if chess has anything in common with database query optimizer.</content>
+   
+ </entry>
  
  <entry>
    <title>PostgreSQL at low level: stay curious!</title>
