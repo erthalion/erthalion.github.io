@@ -18,6 +18,8 @@ through couple of whitepapers and books with an unexpected intersection of two
 rather different fields. I will try to describe everything step by step, so
 that we can see if chess has anything in common with database query optimizer.
 
+<!--break-->
+
 ## Database query optimizer
 
 Let's prepare some background and definitions. PostgreSQL
