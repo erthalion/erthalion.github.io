@@ -129,7 +129,9 @@ a board position and move probabilities to evaluate how good or bad this
 position is. All the values and probabilities are learned by AlphaZero from
 self play, as there is no provided heuristic or any human knowledge except the
 game rules. The resulting neural network is being used to guide the search for
-a next move. Does it sound familiar?
+a next move using Monte-Carlo tree search (interesting enough, it could be also
+improved via [model-free policy-optimization algorithm][mcts]). Does it sound
+familiar?
 
 ## Pulling bits together
 
@@ -190,3 +192,4 @@ fascinating insights!
 [leo]: https://www.csd.uoc.gr/~hy460/pdf/leo-db2.pdf
 [samuel]: https://en.wikipedia.org/wiki/Arthur_Samuel
 [stockfish]: https://github.com/official-stockfish/Stockfish
+[mcts]: https://proceedings.icml.cc/book/2020/file/310cc7ca5a76a446f85c1a0d641ba96d-Paper.pdf
