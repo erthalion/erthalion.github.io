@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Evolution of tree data structures for indexing: more exciting than it sounds"
-date:   2020-12-11 16:40:42
+date:   2020-11-29 16:40:42
 comments: true
 tags: [BTree, Database]
 overview: "What is your first association with the concept of B-tree? Mine is
@@ -201,17 +201,18 @@ insight about this topic:
 > overheads, optimizing in any two areas negatively impacts the third
 
 This essentially states that if an index access method could be specified as a
-point inside "Read", "Write" (in the sense of updating the data), "Memory"
-triangle we can observe an interesting invariant. Every time we modify one
-index access method to have less overhead for reading or memory footprint (i.e.
-shift the corresponding point closer to "Read"/"Memory" corners), we inevitably
-loose on the updating workload (i.e. getting further away from "Write" corner).
+point inside "Read", "Update" (on the Fig. 1 it's called "Write" for
+convenience of drawing), "Memory" space we can observe an interesting
+invariant. Every time we modify one index access method to have less overhead
+for reading or memory footprint (i.e. shift the corresponding point closer to
+"Read"/"Memory" corners), we inevitably loose on the updating workload (i.e.
+getting further away from "Write" corner).
 
 <figure>
 <img src="/public/img/rum.png" border="0" width="50%" style="margin: auto">
 <br/>
 <figcaption style="text-align: center; font-size: 14px; font-style: italic">
-Fig 1. RUM conjection triangle
+Fig 1. RUM space
 </figcaption>
 </figure>
 
@@ -299,7 +300,8 @@ Fig 4. B-tree page split (b)
 </figure>
 
 Curiously enough the new separator key could be chosen freely, it could be any
-value as long as it separates both pages.
+value as long as it separates both pages. We can see what does it change in the
+optimization section.
 
 Locking is obviously an important part of a page split. No one wants to end up
 with concurrency issues when pages get updated while in the middle of a split,
@@ -371,15 +373,16 @@ indeed ubiquitous in database systems. The reason is that with B-tree one can
 address many kinds of workloads with reasonable efficiency, it's not designed
 with only one target in mind. How is that possible? It's thoroughly explained
 in "Modern B-tree techniques", particularly in "B-tree versus Hash Indexes"
-section, so I'll just formulate a summary.
+section, so I'll just formulate the summary.
 
 For one, B-tree can effectively exploit memory hierarchy, because as you can
-see it's extremely wide, so that if an index is "warm" all branches nodes most
-likely will be present in the buffer pool or could be fetched into the buffer
-pool as preparation. For leaf pages an efficient eviction policy could be
-deployed as well to address non-uniform workload. In general space management
-in B-tree is rather straightforward and an index can grow or shrink smoothly,
-whereas graceful grow or shrinking e.g. hash indexes is an issue.
+see it's extremely wide, and if an index is "warm" it means most likely all
+branches nodes will be present in the buffer pool or could be fetched into the
+buffer pool while preparing the query. For leaf pages an efficient eviction
+policy could be deployed as well to address non-uniform workload. In general
+space management in B-tree is rather straightforward and an index can grow or
+shrink smoothly, whereas graceful grow or shrinking e.g. hash indexes is not
+fully solved yet.
 
 Another property of B-tree that helps to address different workloads is its
 ability to support different form of queries (search with a prefix of the index
@@ -390,24 +393,24 @@ compose different optimizations at different levels to be able to address some
 particular type of workloads mostly without negatively affecting performance in
 other cases.
 
-Having said all that we can also pinpoint where on the RUM triangle we can
-place B-tree. Since it's pretty good in read workload, but could be better with
+Having said all that we can also pinpoint where in the RUM space we can place
+B-tree. Since it's pretty good in read workload, but could be better with
 memory footprint and insert workload, we can put it somewhere here:
 
 <figure>
 <img src="/public/img/rum-btree.png" border="0" width="60%" style="margin: auto">
 <br/>
 <figcaption style="text-align: center; font-size: 14px; font-style: italic">
-Fig 6. Approximate position of B-tree in the RUM triangle
+Fig 6. Approximate position of B-tree in the RUM space
 </figcaption>
 </figure>
 
 ## 4. Beyond the hard leaves of basics
 
-One of the reasons why B-trees are so universal in the databases world is their
-flexibility and extensibility. On can apply variety of different local
-optimizations which could be nicely composed without sacrificing on something
-else. Let's take a loot at some of them.
+As we already mentioned, one of the reasons why B-trees are so universal in the
+databases world is their flexibility and extensibility. On can apply variety of
+different local optimizations which could be nicely composed without
+sacrificing on something else. Let's take a loot at some of them.
 
 ### 4.1 Key normalization
 
@@ -425,13 +428,13 @@ Fig 7. Normalized keys
 </figure>
 
 This allows to use simple binary comparison to sort the records during index
-creation or guide a search to the correct record. Such an encoded value need to
-take care about nulls and collations and even include sort direction. But as
-always there are pros and cons and in this particular case the trick is that
-generally speaking it is impossible to reclaim the original data. In certain
-situations it can even happen that two different values produce the same
-normalized key (e.g. for languages with lower/upper case sorted
-case-insensitive). This means that we either:
+creation or when guiding a search to the correct record. Such an encoded value
+need to take care about nulls and collations and can even include sort
+direction. But as always there are pros and cons and in this particular case
+the trick is that generally speaking it is impossible to reclaim the original
+data. In certain situations it can even happen that two different values
+produce the same normalized key (e.g. for languages with lower/upper case
+sorted case-insensitive). This means that we either:
 
 * need to keep both original data and normalized key or somehow else make
   sure precise recovery is possible.
@@ -455,7 +458,7 @@ Fig 7. Prefix truncation (a)
 </figcaption>
 </figure>
 
-Note that the value we store start with the same prefix, which is sort of
+Note that the value we store start with the same prefix, which is sort of data
 duplication. If we're going to do a bit of bookkeeping, it's possible to store
 this prefix only once and truncate it from all the keys.
 
@@ -480,12 +483,12 @@ One example of databases using this approach is
 ### 4.3 Dynamic prefix truncation
 
 Even if prefix truncation is not implemented directly and B-tree pages format
-is not changes, dynamic prefix truncation could be used to reduce comparison
+is not changed, dynamic prefix truncation could be used to reduce comparison
 costs based on the knowledge about shared prefix and fence keys. Following the
 diagram on Fig. 9, if we want to add a new key (an outstanding item) and fence
-keys on a page have common prefix (marked red), it means all the keys have it
-and could be omitted from comparison (leaving us with only blue part to deal
-with):
+keys on a page have common prefix (marked as red parts), it means all the keys
+have it and could be omitted from comparison (leaving us with only blue part to
+deal with):
 
 <figure>
 <img src="/public/img/dynamic-prefix-truncation.png" border="0" width="40%" style="margin: auto">
@@ -532,10 +535,10 @@ Fig 11. Suffix truncation (b)
 That is pretty much the whole idea, to pick up a split point in a such way that
 the resulting separation key will be minimal.
 
-Interesting to mention that starting from version 12 PostgreSQL does
-whole-colum suffix truncation without actually implementing key normalization.
-There is even a good overview of all these techniques in the
-corresponding [wiki page][wiki-key-normalizaton].
+Worth mentioning that starting from version 12 PostgreSQL does whole-colum
+suffix truncation without actually implementing key normalization. There is
+even a good overview of all these techniques in the corresponding
+[wiki page][wiki-key-normalizaton].
 
 ### 4.5 Indirection vector
 
@@ -546,7 +549,7 @@ line pointers. Every time when we have a key to compare, we first follow a
 pointer and fetch the value it points to. But what if we extend this design a
 bit and equip every such pointer with some useful information, for example a
 first few bytes of the normalized key we're going to find after following the
-pointer as on the following diagram (e.g. first characters a,b,c,d)?
+pointer, as with the diagram on Fig. 12 (e.g. first characters a,b,c,d)?
 
 <figure>
 <img src="/public/img/indirection-vector.png" border="0" width="80%" style="margin: auto">
@@ -571,11 +574,11 @@ and the rest goes to the overflow page. Few examples are
 
 Page splits are a big deal in B-tree design, and obviously interesting
 variations could be found in the wild about how to deal with
-them.[SB-tree][sb-tree] is one such interesting example, an approach to improve
-page split efficiency by allocating disk space in large contiguous extents of
-many pages. This leaves free pages in each extent and whenever a node needs to
-be split, another node is "allocated" within the same extent from already
-preallocated space, like in the following diagram:
+them. [SB-tree][sb-tree] is one such example, where to improve page split
+efficiency disk space is allocated in large contiguous extents of many pages.
+This leaves free pages in each extent and whenever a node needs to be split,
+another node is "allocated" within the same extent from already preallocated
+space, like in the following diagram on Fig. 13:
 
 <figure>
 <img src="/public/img/sb-tree.png" border="0" width="90%" style="margin: auto">
@@ -587,18 +590,19 @@ Fig 13. SB-tree nodes organization
 
 Of course, it means that an extent itself could reach the point when there is no
 more free space and it needs to be split following the same ideas as normal
-page split. You maybe surprised what is it doing here, in basics section. I've
-decided to mention SB-tree here mostly due to its almost intuitive idea.
+page split. You maybe surprised what SB-tree it doing here, in basics section,
+since it's not a standard approach. Yes, it's not basic, but I've decided to
+mention it here anyway mostly due to its almost intuitive idea.
 
 ## 5. Why is it not enough?
 
 Indeed, everything looks great, why do we need to come up with some other
-designs? Well, as you can remember on the RUM triangle we put B-tree closer to
-the "Read" corner and not without the reason. There are several common
-downsides of B-tree design:
+designs? Well, as you can remember on the RUM space we put B-tree closer to the
+"Read" corner and not without the reason. There are several common downsides of
+B-tree design:
 
 * It's not particularly CPU cache friendly due to pointer-chase, since to
-  perform an operation we need to follow a lot of pointers.
+  perform an operation we need to follow many pointers.
 
 * Memory footprint and insert performance are located on different sides of
   balance, we can improve inserts by preallocating pages and keep track of free
@@ -616,7 +620,7 @@ downsides of B-tree design:
 At the same time there are some alternative data structures that provide
 similar functionality but different set of trade-offs. All this makes the topic
 pretty dynamic and full of interesting ideas. I'll try to describe some of
-those ideas I find interesting in the following sections. Keep your eyes
+those designs I find interesting in the following sections. Keep your eyes
 opened, you will probably notice many common patterns.
 
 ### 5.1 Partitioned B-tree
@@ -625,7 +629,7 @@ If SB-tree could be called intuitive, partitioned B-tree idea sounds rather
 confusing at first. Essentially the suggestion is to maintain partitions within
 a single B-tree via adding an artificial leading key field (see
 [[14]][partitioned-b-tree-Graefe]). Those partitions are nothing but temporary,
-and after some time will be merged together in background so that in a normal
+and after some time will be merged together in background so that in the normal
 state there is only one partition. Why on earth would we add artificial data to
 an index, which is clearly an overhead? The original paper suggests that this
 design could be beneficial if we need to assemble an index from smaller chunks.
@@ -649,11 +653,10 @@ merged this overhead disappears. This whole approach not only makes the index
 available earlier, but also makes resources consumption more predictable.
 
 After I originally discovered this approach, I've got an impression that
-unfortunately it never went further than one whitepaper end ended up being
-just a curiosity. But then I've found more recent paper with somewhat similar
-ideas [[15]][write-optimized-b-tree]. The main idea here is to have one
-partition to accumulate all inserts, updates or deletes and all the others are
-immutable:
+unfortunately it never went further and ended up being just a curiosity. But
+then I've found more recent paper with somewhat similar ideas
+[[15]][write-optimized-b-tree]. The main idea here is to have one partition to
+accumulate all inserts, updates or deletes and all the others are immutable:
 
 <figure>
 <img src="/public/img/partitioned-b-tree-2.png" border="0" width="80%" style="margin: auto; margin-left:100px">
@@ -673,25 +676,25 @@ required key.
 
 One can think of partitioned B-tree as few B-trees combined to produce a more
 complicated structure. For me the idea of using B-tree as a part of something
-bigger was quite a revelation, and it turns out that similar ideas about
+bigger was quite a revelation. It turns out that similar ideas about
 incorporating multiple smaller data structures, immutable partitions and bloom
-filter found their representation in other researches as well. It's interesting
-to note that some [LSM implementations][lsm-mark] also use a B-tree per sorted
-run.
+filter found their representation in other researches as well. Obviously you
+can also note how close this design comes to LSM, in fact some [LSM
+implementations][lsm-mark] also use a B-tree per sorted run.
 
 ### 5.2 Hybrid indexes
 
 What would you do to optimize B-tree memory footprint? Normally I would answer
 "nothing, it's good as it is", but in the context of in-memory databases we
 need to think twice. One of interesting suggestions could be derived directly
-from understanding of insert performance/memory footprint trade-off. So, we want
-to reduce memory consumption, but still do reasonably good on insert. Why not
-use two different things at once? The authors of [hybrid index][hybrid-index]
-suggests a dual-stage architecture with a dynamic "hot" part to absorb writes
-and read-only "cold" part to actually store compacted data. Obviously dynamic
-part is being merged from time to time into a read-only part. In fact there
-could be pretty much anything in place of "hot" part, but the simplest way to
-do it is to use B-tree as well:
+from understanding of insert performance/memory footprint trade-off. So, we
+want to reduce memory consumption, but still do reasonably good on insert. Why
+not use for that two different things at once? The authors of
+[hybrid index][hybrid-index] suggests a dual-stage architecture with a dynamic
+"hot" part to absorb writes and read-only "cold" part to actually store
+compacted data. Obviously dynamic part is being merged from time to time into
+the read-only part. In fact there could be pretty much anything in place of
+"hot" part, but the simplest way to do it is to use B-tree as well:
 
 <figure>
 <img src="/public/img/hybrid-index.png" border="0" width="90%" style="margin: auto;">
@@ -713,7 +716,7 @@ hand-waving.
 Fine, we can do something about memory footprint, what about multi-core
 scalability? It's another hot topic, often mentioned in the context of main
 memory databases, and one interesting approach to tackle the question is
-[Bw-tree][bw-tree] due to its latch-free nature.
+[Bw-tree][bw-tree] and its latch-free nature.
 
 Let's break it down into small points. First thing to notice is that Bw-tree
 avoids using physical pointers to pages, using logical pointers and a mapping
@@ -728,16 +731,16 @@ Fig 17. Bw-tree pages organization
 </figcaption>
 </figure>
 
-This change, not particularly unique by itself, enables to implement another
-important part, namely delta updating. And the idea is again vaguely reminds me
-something about immutable pages from previous sections. So instead of doing any
-direct modifications on the page, let's add a delta record describing the
-change, then perform an atomic CAS (compare-and-swap) to change the
-corresponding logical pointer so that it will point not to the original page,
-but to a delta record (the authors in [[17]][bw-tree] call this process
+This change, while not being particularly unique by itself, enables us to
+implement another important part, namely delta updating. And the idea is again
+vaguely reminds me something about immutable pages from previous sections. So
+instead of doing any direct modifications on the page, let's add a delta record
+describing the change, then perform an atomic CAS (compare-and-swap) to change
+the corresponding logical pointer so that it will point not to the original
+page, but to a delta record (the authors in [[17]][bw-tree] call this process
 "installing a new page"). The next change will introduce another delta record,
 which are forming a delta chain and at some point will be consolidated into a
-new merged page:
+new merged page, like on Fig. 18:
 
 <figure>
 <img src="/public/img/bw-tree-2.png" border="0" width="80%" style="margin: auto;">
@@ -747,11 +750,11 @@ Fig 18. Bw-tree page structure
 </figcaption>
 </figure>
 
-The trick here is that it works pretty well for data modifications, but
-structure modifications are getting more complicated and require a split delta
-record, merge delta record, node removal delta record. Overall Bw-Tree
-performance is tricky, [benchmarks][open-bw-tree] shows that even with some
-optimizations it could be outperformed by other in-memory data structures.
+The thing is it works pretty well for data modifications, but structure
+modifications are getting more complicated and require a split delta record,
+merge delta record, node removal delta record. Overall Bw-Tree performance is
+tricky, [benchmarks][open-bw-tree] shows that even with some optimizations it
+could be outperformed by other in-memory data structures.
 
 Few examples of databases using this type of index are in-memory database
 [Hekaton][hekaton], embeddable [Sled][sled-bw-tree] (although the latter one
@@ -760,17 +763,18 @@ moved away from it with time), [Cosmos DB][cosmos-db] and fresh
 
 ### 5.4 DPTree
 
-In previous sections we were discussing a lot of interesting ideas, which were
-exploring different possibilities in the index access method design to achieve
+In previous sections we were discussing a lot of intriguing ideas, which
+explore different possibilities in the index access method design to achieve
 something new. It's already a vast field, and then comes a tectonic plate shift
-and opens even more to discover. One example of it is non-volatile memory and
-[DPTree][dptree] as a question how could we exploit it. One of the main issues with using
-persistent memory for index structures is write-back nature of CPU cache which
-poses questions about index consistency and logging. To prevent that we need to
-use fencing (e.g. clwb + mfence instructions for x86), which is somewhat
-similar to fsync and write-back cache. But a lot of fencing is introduces an
-obvious overhead, so how to find a balance here? The authors of DPTree propose
-dual-stage index architecture (hm...where did we see this already?):
+and opens even more to discover. One example of such changes is non-volatile
+memory and [DPTree][dptree] as a question how could we exploit it. One of the
+main issues with using persistent memory for index structures is write-back
+nature of CPU cache which poses questions about index consistency and logging.
+To prevent that we need to use fencing (e.g. clwb + mfence instructions for
+x86), which is somewhat similar to fsync and write-back cache. But a lot of
+fencing is introduces an obvious overhead, so how to find a balance here? The
+authors of DPTree propose dual-stage index architecture (hm...where did we see
+this already?):
 
 <figure>
 <img src="/public/img/dptree.png" border="0" width="100%" style="margin: auto;">
@@ -782,20 +786,20 @@ Fig 19. DPTree structure
 
 Here we have the buffer tree, which resides in DRAM and absorbs incoming
 writes. This part is backed up by a redo log stored in persistent memory. When
-the buffer tree reaches a size threshold, it's being merged in-place (thanks to
-non-volatile memory byte addressability feature) into a base tree, which
-represents the main data and lives in persistent memory as well. After such
-merge all changes are flushed with a little fencing overhead. One interesting
-thing about the base tree is that only its leaves are kept in persistent memory,
-and all the branch nodes are stored just like that in DRAM. On crash internal
-nodes and required meta information is rebuild cooperatively with some running
-query.
+the buffer tree reaches certain size threshold, it's being merged in-place
+(thanks to non-volatile memory byte addressability feature) into a base tree,
+which represents the main data and lives in persistent memory as well. After
+such merge all changes are flushed with a little fencing overhead. One
+interesting thing about the base tree is that only its leaves are kept in
+persistent memory, and all the branch nodes are stored just like that in DRAM.
+On crash internal nodes and required meta information is rebuild cooperatively
+with some running query.
 
 There is much more to it than I've just described, i.e. efficient concurrent
 implementation of DPTree and other alternatives. I can only direct an
 interested reader to the [whitepaper][dptree] for more details.
 
-Interesting enough sometimes research in this area turns into a reverse
+It's remarkable that sometimes research in this area turns into a reverse
 engineering, like in case of [LB<sup>+</sup>-tree][lbplus-tree], where the
 authors were guided by discoveries and assumptions about 3DXPoint (on which
 Intel Optane persistent memory is based), e.g. that number of modified words in
@@ -806,37 +810,37 @@ a cache line doesn't matter for performance.
 Now let's try to expand our exploration area a bit more. What is it about those
 alternative data structures I've mentioned above? Are they even a thing?
 
-It turns out that yes, and the data structure with confusing pronunciation Trie
-(/ˈtriː/) is one of them. Do not be surprised if you know it as radix tree,
-prefix tree or even digital search tree -- it's still the same (I've said, a
-confusing naming). Generally speaking trie is a search tree where the value of
-the key is distributed across the structure, and all the descendants of a node
-have a common prefix of the string associated with that node. In a way it's
-similar to a thumb-index found in many alphabetically ordered dictionary books,
-when the first character of a word could be used to jump right away to all
-words starting with that character. Take a look at the example below, and try
-to follow one path from top to bottom assembling values on the way:
+It turns out yes, and the data structure with confusing pronunciation Trie
+(/ˈtriː/) is one of them. Do not be surprised if you know it as a radix tree,
+prefix tree or even digital search tree -- it's still the same. Generally
+speaking trie is a search tree where the value of the key is distributed across
+the structure, and all the descendants of a node have a common prefix of the
+string associated with that node. In a way it's similar to a thumb-index found
+in many alphabetically ordered dictionary books, when the first character of a
+word could be used to jump right away to all words starting with that
+character. Take a look at the example below, and try to follow one path from
+top to bottom assembling values on the way:
 
 <figure>
 <img src="/public/img/art.png" border="0" width="100%" style="margin: auto;">
 <br/>
 <figcaption style="text-align: center; font-size: 14px; font-style: italic">
-Fig 20. ART index structure
+Fig 20. Trie with compound nodes
 </figcaption>
 </figure>
 
 The main difference from B-tree here is that the tree heigh depends not on the
 number of elements in the tree, but rather on the length of the keys (and its
-value distribution). I already see you confused like Ryan Reynolds, asking why
+value distribution). I already see you, confused like Ryan Reynolds, asking why
 do we even need to bother with all that? The idea is that a well-designed trie
 could be more memory efficient than B-tree and utilize SIMD instructions to
 perform multiple comparisons at once [[19]][art-trie], [[20]][hot-trie]. Binary
 tries are too simple and of course do not provide good performance due to large
 tree heigh, it's correct. But there are many techniques to reduce the heigh by
 creating a "compound" nodes, which are a result of combining several binary
-nodes together (dashed nodes in the diagram above). But the question of how
+nodes together (dashed nodes in the diagram on Fig. 20). But the question of how
 exactly to create such nodes is not that easy, especially in the presence
-sparsely distributed keys. For example [Adaptive Radix Tree][art-trie] uses one
+sparsely of distributed keys. For example [Adaptive Radix Tree][art-trie] uses one
 most suitable of four node types for every group and adapt better to
 distribution of keys. It's not always enough, so [Height Optimized Trie][hot-trie]
 goes even further and suggest adapting every compound node
@@ -869,8 +873,7 @@ engine based on HB+-Trie, and there are discussion about using trie for
 
 ## 7. Learned indexes
 
-To attract more readers I've decided to add one section into the blogpost about
-machine learning...
+To attract more readers I've decided to add one section about machine learning...
 
 <a href="https://en.wikipedia.org/wiki/Joke#/media/File:Boris_Yeltsin_with_Bill_Clinton-1.jpg" target="_blank">
 <img src="/public/img/machine-learning.png" border="0" width="100%" style="margin: auto;">
@@ -880,7 +883,7 @@ Never mind the joke, it turns out there are a lot of fascinating ideas arise
 when one applies machine learning methods to indexing. But let's start
 from the beginning.
 
-Already "Modern B-tree techniques" mentions an interpolation search, the key
+Already "Modern B-tree techniques" mentions interpolation search, the key
 idea of which is to estimate the position of the key we're looking for on the
 page instead of doing binary search. Of course this requires some knowledge
 about the data distribution, at the very least we need to know if e.g. linear
@@ -898,11 +901,11 @@ distribution function (CDF) since the dataset is ordered.
 At the moment there are few different suggestions for approximating CDF, one
 can go with a neural network (like here [[21]][case-learned-index]) or do
 polynomial interpolation using piece-wise linear functions (like here
-[[23]][fitting-tree]) or more fancy stuff with Chebyshev/Bernstein Polynomial
+[[23]][fitting-tree]) and more fancy stuff with Chebyshev/Bernstein Polynomial
 (like here [[22]][interpolation-learned-index]). For example on the plot below
-you can see the idea behind the interpolation, where CDF function between key
-space and position in index is being roughly approximated by linear segments,
-which of course introduces and error (marked as red delta):
+(Fig. 22) you can see the idea behind the interpolation, where CDF function
+between key space and position in index is being roughly approximated by linear
+segments, which of course introduces and error (marked as red delta):
 
 <figure>
 <img src="/public/img/learned.png" border="0" width="100%" style="margin: auto;">
@@ -923,7 +926,7 @@ But the trade-offs in both cases are in fact pretty similar:
   not exactly a solved problem.
 
 Overall we can probably put learned indexes even more far away from the insert
-corner of RUM triangle.
+corner of RUM space.
 
 ## 8. Is that all?
 
@@ -932,7 +935,7 @@ corner of RUM triangle.
 </a>
 
 We have discussed so many topics, only the strongest have made to this point!
-But there is always more out there, the story is never fully completed. From on
+But there is always more out there, the story is never fully completed. Off the
 top of my head we haven't (and we're not going to) talked about:
 
 * Buffered (Lazy) B-Tree
@@ -968,7 +971,15 @@ references below in no particular order, so you can check them out directly
 (I've probably messed up the format of the references to make them more
 compact, do not get mad if you're a professional scientist).
 
-## 9. References
+## Acknowlegements
+
+Thanks a lot to
+Mark Callaghan (<a href="https://twitter.com/MarkCallaghanDB">@MarkCallaghanDB</a>),
+Peter Geoghegan (<a href="https://twitter.com/petervgeoghegan"> @petervgeoghegan</a>)
+and Andy Pavlo (<a href="https://twitter.com/andy_pavlo">@andy_pavlo</a>)
+for review and commentaries!
+
+## References
 
 [1] Bayer R., McCreight E. (1970).
 [Organization and maintenance of large ordered indices][first_btree_paper].

@@ -4,7 +4,7 @@
  <title>Blog</title>
  <link href="http://erthalion.info/atom.xml" rel="self"/>
  <link href="http://erthalion.info/"/>
- <updated>2020-11-27T00:53:20+01:00</updated>
+ <updated>2020-11-28T19:59:25+01:00</updated>
  <id>http://erthalion.info</id>
  <author>
    <name>Dmitry Dolgov</name>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>Evolution of tree data structures for indexing: more exciting than it sounds</title>
-   <link href="http://erthalion.info/2020/12/11/evolution-of-btree-index-am/"/>
-   <updated>2020-12-11T17:40:42+01:00</updated>
-   <id>http://erthalion.info/2020/12/11/evolution-of-btree-index-am</id>
+   <link href="http://erthalion.info/2020/11/29/evolution-of-btree-index-am/"/>
+   <updated>2020-11-29T17:40:42+01:00</updated>
+   <id>http://erthalion.info/2020/11/29/evolution-of-btree-index-am</id>
    
    <content type="html">What is your first association with the concept of B-tree? Mine is 'old and well researched, or in other words boring'. And indeed apparently it was first introduced in 1970! Not only that, already in 1979 they were ubiquitous. Does it mean there is nothing exciting left any more?
 It turns out that there are multitude of interesting ideas and techniques around B-Trees. They're all coming from desire to cover different (often incompatible) needs, as well as adapt to emerging hardware. In this blog post I'll try to show this, and we will be concerned mostly with B-tree as a data structure.</content>
