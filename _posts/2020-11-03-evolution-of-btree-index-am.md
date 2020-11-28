@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Evolution of tree data structures for indexing: more exciting than it sounds"
-date:   2020-11-29 16:40:42
+date:   2020-11-28 21:12:45
 comments: true
 tags: [BTree, Database]
 overview: "What is your first association with the concept of B-tree? Mine is
