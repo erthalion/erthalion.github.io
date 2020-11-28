@@ -111,6 +111,8 @@ structure.
 
 <img src="/public/img/btree-joke.png" border="0" width="80%" style="margin: auto">
 
+<!--break-->
+
 Let's start systematically and take a look at the definition first:
 
 > B-tree is a self-balancing tree data structure that maintains sorted data and
