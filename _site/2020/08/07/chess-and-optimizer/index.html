@@ -53,7 +53,7 @@
             </li>
           </ul>
 
-          <p>&copy; 2019. Dmitry Dolgov All rights reserved.</p>
+          <p>&copy; 2020. Dmitry Dolgov All rights reserved.</p>
         </div>
       </div>
     </header>
@@ -190,7 +190,9 @@ a board position and move probabilities to evaluate how good or bad this
 position is. All the values and probabilities are learned by AlphaZero from
 self play, as there is no provided heuristic or any human knowledge except the
 game rules. The resulting neural network is being used to guide the search for
-a next move. Does it sound familiar?</p>
+a next move using Monte-Carlo tree search (interesting enough, it could be also
+improved via <a href="https://proceedings.icml.cc/book/2020/file/310cc7ca5a76a446f85c1a0d641ba96d-Paper.pdf">model-free policy-optimization algorithm</a>). Does it sound
+familiar?</p>
 
 <h2 id="pulling-bits-together">Pulling bits together</h2>
 
@@ -254,6 +256,15 @@ fascinating insights!</p>
     
       <li>
         <h3>
+          <a href="/2020/12/11/evolution-of-btree-index-am/">
+            Evolution of tree data structures for indexing: more exciting than it sounds
+            <small>11 Dec 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
           <a href="/2019/12/06/postgresql-stay-curious/">
             PostgreSQL at low level: stay curious!
             <small>06 Dec 2019</small>
@@ -266,15 +277,6 @@ fascinating insights!</p>
           <a href="/2017/12/21/advanced-json-benchmarks/">
             Jsonb: few more stories about the performance
             <small>21 Dec 2017</small>
-          </a>
-        </h3>
-      </li>
-    
-      <li>
-        <h3>
-          <a href="/2016/06/05/convert-into-jsonb/">
-            How to convert your data to jsonb?
-            <small>05 Jun 2016</small>
           </a>
         </h3>
       </li>

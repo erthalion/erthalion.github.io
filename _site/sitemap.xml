@@ -2,6 +2,15 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
     <url>
+      <loc>http://erthalion.info/2020/12/11/evolution-of-btree-index-am/</loc>
+      
+        <lastmod>2020-12-11T17:40:42+01:00</lastmod>
+      
+      <changefreq>weekly</changefreq>
+      <priority>1.0</priority>
+    </url>
+  
+    <url>
       <loc>http://erthalion.info/2020/08/07/chess-and-optimizer/</loc>
       
         <lastmod>2020-08-07T12:02:10+02:00</lastmod>

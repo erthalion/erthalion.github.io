@@ -53,13 +53,37 @@
             </li>
           </ul>
 
-          <p>&copy; 2019. Dmitry Dolgov All rights reserved.</p>
+          <p>&copy; 2020. Dmitry Dolgov All rights reserved.</p>
         </div>
       </div>
     </header>
 
     <div class="content container">
       <div class="posts">
+  
+  <div class="post">
+    <h1>
+      <a href="/2016/06/05/convert-into-jsonb/">
+        How to convert your data to jsonb?
+      </a>
+    </h1>
+
+    <span class="post-date">05 Jun 2016</span>
+
+    <p>“How to start” is always a difficult question, and <code class="language-plaintext highlighter-rouge">jsonb</code> isn’t an exception.
+Here are few notes about converting different types of data into <code class="language-plaintext highlighter-rouge">jsonb</code>, that
+someone can find useful.</p>
+
+<p>Basically there are three possible cases of data conversion:</p>
+
+<ul>
+  <li>Convert data from inside PostgreSQL</li>
+  <li>Convert data from other database</li>
+  <li>Convert plain data outside database</li>
+</ul>
+
+
+  </div>
   
   <div class="post">
     <h1>
@@ -114,20 +138,6 @@ json in Mysql and bson in Mongodb.</p>
     <span class="post-date">22 Feb 2015</span>
 
     <p>Finally, I decided to replace my old laptop, and my chose fell on the Lenovo u430p. As I understand now, it was not a good idea in case of Gentoo =) Actually, I was surprised, how many nerves you can lose only because of the adaptation of you hardware to your requirements. And here is the shortlist of what you shouldn’t forget, if you want to do the same more easily.</p>
-
-
-  </div>
-  
-  <div class="post">
-    <h1>
-      <a href="/2014/08/16/fenv-exceptions/">
-        Use an exception instead of the NaN
-      </a>
-    </h1>
-
-    <span class="post-date">16 Aug 2014</span>
-
-    <p>This is a small notice about a very useful trick. I often have to deal with computations, because the CFD is the part of my activity. And one of the annoying problem in this kind of research is when after many hours of computations you got a <code class="language-plaintext highlighter-rouge">Not A Number</code> result, caused by a stupid mistake. It would be nice, if a computation was interrupted by the NaN.</p>
 
 
   </div>
