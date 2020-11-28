@@ -126,7 +126,7 @@ more? Once upon a time I came across a remarkable read called
 deeper into the topic and read bunch of shiny new whitepapers. Afterwards
 totally by chance I've stumbled upon a book "Database Internals: A Deep Dive
 into How Distributed Data Systems Work", which contains great sections on
-B-tree design. Both works were the triggers to write this blogpost. What was I
+B-tree design. Both works were the triggers to write this blog post. What was I
 saying about nothing exciting left? At the end I couldn't be more wrong.
 
 It turns out that there are multitude of interesting ideas and techniques
@@ -590,7 +590,7 @@ Fig 13. SB-tree nodes organization
 
 Of course, it means that an extent itself could reach the point when there is no
 more free space and it needs to be split following the same ideas as normal
-page split. You maybe surprised what SB-tree it doing here, in basics section,
+page split. You maybe surprised what SB-tree is doing here, in basics section,
 since it's not a standard approach. Yes, it's not basic, but I've decided to
 mention it here anyway mostly due to its almost intuitive idea.
 
@@ -960,12 +960,12 @@ academical?
 
 Yes, it is too academical in a way, but you should not be afraid of it. No one
 is going to ask you about Bw-Tree on an interview (hopefully), but throughout
-the blogpost I have tried to show that pretty theoretical stuff could be very
+the blog post I have tried to show that pretty theoretical stuff could be very
 entertaining and even inspiring at times. And theory tend to become a practice
 one day after all.
 
 One more thing I want to do is to express my appreciation to all those authors
-I've mentioned in the blogpost, which is nothing more than just a survey of
+I've mentioned in the blog post, which is nothing more than just a survey of
 interesting ideas they come up with. I've tried to carefully collect all the
 references below in no particular order, so you can check them out directly
 (I've probably messed up the format of the references to make them more
