@@ -96,7 +96,7 @@ ready to embark on the journey.
     <a href="#8-is-that-all">Is that all?</a>
   </li>
   <li>
-    <a href="#9-references">References</a>
+    <a href="#references">References</a>
   </li>
 </ul>
 
