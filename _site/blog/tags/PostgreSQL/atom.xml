@@ -4,13 +4,29 @@
  <title>Blog</title>
  <link href="http://erthalion.info/blog/tags/PostgreSQL/atom.xml" rel="self"/>
  <link href="http://erthalion.info/"/>
- <updated>2020-11-30T09:25:14+01:00</updated>
+ <updated>2021-03-03T10:36:39+01:00</updated>
  <id>http://erthalion.info</id>
  <author>
    <name>Dmitry Dolgov</name>
    <email>9erthalion6@gmail.com</email>
  </author>
 
+ 
+     
+     
+         <entry>
+           <title>How many engineers does it take to make subscripting work?</title>
+           <link href="http://erthalion.info/2021/03/03/subscripting/"/>
+           <updated>2021-03-03T10:12:45+01:00</updated>
+           <id>http://erthalion.info/2021/03/03/subscripting</id>
+           
+           <content type="html">Recently landed in PostgreSQL, jsonb subscripting support doesn't look as exciting as some other improvements around jsonb. But it's user visible changes are only tip of the iceberg. How many people were involved to make it, and what decisions choices were made? How long did it take, and what are the good/bad ideas to work on a patch?</content>
+           
+         </entry>
+     
+     
+     
+     
  
      
      

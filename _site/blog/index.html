@@ -63,6 +63,33 @@
   
   <div class="post">
     <h1>
+      <a href="/2021/03/03/subscripting/">
+        How many engineers does it take to make subscripting work?
+      </a>
+    </h1>
+
+    <span class="post-date">03 Mar 2021</span>
+
+    <p>Are you tired of this syntax in PostgreSQL?</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">jsonb_column</span><span class="o">-&gt;</span><span class="s1">'key'</span> <span class="k">FROM</span> <span class="k">table</span><span class="p">;</span>
+<span class="k">UPDATE</span> <span class="k">table</span> <span class="k">SET</span> <span class="n">jsonb_column</span> <span class="o">=</span>
+            <span class="n">jsonb_set</span><span class="p">(</span><span class="n">jsonb_column</span><span class="p">,</span> <span class="s1">'{"key"}'</span><span class="p">,</span> <span class="s1">'"value"'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>The select part is actually fine. But for updates, especially for complex
+updates, it could be pretty verbose and far from being ergonomic. What would
+you say to this syntax instead?</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">jsonb_column</span><span class="p">[</span><span class="s1">'key'</span><span class="p">]</span> <span class="k">FROM</span> <span class="k">table</span><span class="p">;</span>
+<span class="k">UPDATE</span> <span class="k">table</span> <span class="k">SET</span> <span class="n">jsonb_column</span><span class="p">[</span><span class="s1">'key'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'"value"'</span><span class="p">;</span>
+</code></pre></div></div>
+
+
+  </div>
+  
+  <div class="post">
+    <h1>
       <a href="/2020/11/28/evolution-of-btree-index-am/">
         Evolution of tree data structures for indexing: more exciting than it sounds
       </a>
@@ -293,36 +320,6 @@ questionable whether it’s good and appropriate, but this approach is
 something we have to face — sometimes it’s at least convenient, sometimes it
 allows to be more resource efficient and sometimes it’s the only available
 infrastructure in a company.</p>
-
-
-  </div>
-  
-  <div class="post">
-    <h1>
-      <a href="/2017/12/21/advanced-json-benchmarks/">
-        Jsonb: few more stories about the performance
-      </a>
-    </h1>
-
-    <span class="post-date">21 Dec 2017</span>
-
-    <blockquote>
-  <p>As such, there’s really no “standard” benchmark that will inform you about
-the best technology to use for your application. Only your requirements, your
-data, and your infrastructure can tell you what you need to know.</p>
-</blockquote>
-
-<p>For already some time I can’t stop doing interesting/useful/weird (one at the
-time) benchmarks to reveal some details on how to apply document-oriented
-approach in the world of relational databases. Finally, I decided that I have a
-critical mass of those details to share in the form of blog post. So welcome to
-The Benchmark Club, where we’re going to discuss what it takes to create a fair
-performance comparison of different databases. As you may guess, the first rule
-of The Benchmark Club is to never share a reproducible benchmarks. But we
-identify ourselves as a badass engineers, so we’re going to break this rule
-today.</p>
-
-<p><img src="/public/img/fight_club.jpg" border="0" width="100%" style="margin: auto" /></p>
 
 
   </div>

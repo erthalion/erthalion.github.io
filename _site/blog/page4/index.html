@@ -63,6 +63,93 @@
   
   <div class="post">
     <h1>
+      <a href="/2014/04/21/endless-paginator/">
+        Another strange thing - an endless paginator
+      </a>
+    </h1>
+
+    <span class="post-date">21 Apr 2014</span>
+
+    <p>A little bit about my new program-frankenstein. Now it is an endless <code class="language-plaintext highlighter-rouge">Paginator</code> for Django. It sounds crazy, isn’t?</p>
+
+<p>Standart Django <code class="language-plaintext highlighter-rouge">Paginator</code> uses the <code class="language-plaintext highlighter-rouge">count()</code> function for the verification of page number. It is converted to the <code class="language-plaintext highlighter-rouge">SELECT COUNT(*) ...</code> query, of course. But as I was explained (I really don’t know, maybe it’s just an exaggeration - you can post your opinion in the commentaries), this is not a such lightweight query, as we want for the paginated rest api, because of the <a href="http://wiki.postgresql.org/wiki/MVCC">MVCC</a> in PostgreSQL.</p>
+
+<p>How we can avoid the extra <code class="language-plaintext highlighter-rouge">COUNT(*)</code> query? Don’t panic, we can trick the Django.</p>
+
+<p>First of all we need to disable <code class="language-plaintext highlighter-rouge">count</code> parameter from the api response. We can introduce a custom pagination serializer:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># serializers.py
+</span><span class="k">class</span> <span class="nc">CustomPaginationSerializer</span><span class="p">(</span><span class="n">BasePaginationSerializer</span><span class="p">):</span>
+    <span class="nb">next</span> <span class="o">=</span> <span class="n">NextPageField</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s">'*'</span><span class="p">)</span>
+    <span class="n">previous</span> <span class="o">=</span> <span class="n">PreviousPageField</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s">'*'</span><span class="p">)</span>
+
+<span class="c1"># api.py
+</span><span class="k">class</span> <span class="nc">SomeListView</span><span class="p">(</span><span class="n">generics</span><span class="o">.</span><span class="n">ListAPIView</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">SomeModel</span>
+    <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">SomeSerializerClass</span>
+    <span class="n">pagination_serializer_class</span> <span class="o">=</span> <span class="n">CustomPaginationSerializer</span></code></pre></figure>
+
+<p>The next our move - disable the page number verification. This can be done by the custom paginator class:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">CustomPaginator</span><span class="p">(</span><span class="n">Paginator</span><span class="p">):</span>
+    <span class="s">""" HACK: To avoid unneseccary `SELECT COUNT(*) ...`
+        paginator has an infinity page number and a count of elements.
+    """</span>
+    <span class="k">def</span> <span class="nf">_get_num_pages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""
+        Returns the total number of pages.
+        """</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s">'inf'</span><span class="p">)</span>
+
+    <span class="n">num_pages</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_num_pages</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""
+        Returns the total number of objects, across all pages.
+        """</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s">'inf'</span><span class="p">)</span>
+
+    <span class="n">count</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">_get_count</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_page</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">CustomPage</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">SomeListView</span><span class="p">(</span><span class="n">generics</span><span class="o">.</span><span class="n">ListAPIView</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">SomeModel</span>
+    <span class="n">serializer_class</span> <span class="o">=</span> <span class="n">SomeSerializerClass</span>
+    <span class="n">pagination_serializer_class</span> <span class="o">=</span> <span class="n">CustomPaginationSerializer</span>
+    <span class="n">paginator_class</span> <span class="o">=</span> <span class="n">CustomPaginator</span></code></pre></figure>
+
+<p>Oh, goodness - we introduced the infinity number of the pages and the infinity number of elements… But we want also the correct next/prev links, so one more detail:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">CustomPage</span><span class="p">(</span><span class="n">Page</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">has_next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">""" HACK: Select object_list + 1 element
+            to verify next page existense.
+        """</span>
+        <span class="n">low</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="s">'low_mark'</span><span class="p">]</span>
+        <span class="n">high</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="s">'high_mark'</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">clear_limits</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">set_limits</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">high</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># len is used only for small portions of data (one page)
+</span>            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">paginator</span><span class="o">.</span><span class="n">per_page</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">False</span>
+
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="c1"># restore initial object_list count
+</span>            <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_list</span><span class="p">[:(</span><span class="n">high</span><span class="o">-</span><span class="n">low</span><span class="p">)]</span></code></pre></figure>
+
+<p>This solution looks very questionable, but exciting for me. If you have something to say about this - welcome! =)</p>
+
+
+  </div>
+  
+  <div class="post">
+    <h1>
       <a href="/2014/03/25/xi/">
         xi or the fast and furious Haskell
       </a>
@@ -271,115 +358,12 @@ autocmd <span class="nb">VimEnter</span><span class="p">,</span><span class="nb"
 
   </div>
   
-  <div class="post">
-    <h1>
-      <a href="/2014/02/13/django-sharding/">
-        What about sharding in the Django?
-      </a>
-    </h1>
-
-    <span class="post-date">13 Feb 2014</span>
-
-    <p>Some time ago I was faced with the need to implement the sharding in Django 1.6 . It was an attempt to make step beyond the standart features of this framework and I felt the resistance of Django =) I’ll talk a bit about this challenge and its results.</p>
-
-<p>Let’s start with definitions. Wikipedia says that:</p>
-
-<blockquote>
-  <p>A database shard is a horizontal partition in a database.
-Horizontal partitioning is a database design principle whereby rows of a database table are held separately, rather than being split into columns (which is what normalization and vertical partitioning do, to differing extents). Each partition forms part of a shard, which may in turn be located on a separate database server or physical location.</p>
-</blockquote>
-
-<p>We wanted split our database entities by the different PostgreSQL schemas and used something like <a href="http://instagram-engineering.tumblr.com/post/10853187575/sharding-ids-at-instagram">this</a> for the <code class="language-plaintext highlighter-rouge">id</code> generation. The sharding model was clear, but how to implement it in the Django application?</p>
-
-<p>My solution of this problem was a custom database backend, that contains a custom sql compilers. Maybe it was a dirty hack, but I hope it wasn’t =)</p>
-
-<p>To create your own custom database backend, you can copy structure from one of the existing backends from <code class="language-plaintext highlighter-rouge">django.db.backends</code> (<code class="language-plaintext highlighter-rouge">postgresql_psycopg2</code> for our case) and override <code class="language-plaintext highlighter-rouge">DatabaseOperations</code>:</p>
-
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># operations.py
-</span><span class="kn">from</span> <span class="nn">django.db.backends.postgresql_psycopg2.operations</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="k">class</span> <span class="nc">CustomDatabaseOperations</span><span class="p">(</span><span class="n">DatabaseOperations</span><span class="p">):</span>
-    <span class="n">compiler_module</span> <span class="o">=</span> <span class="s">"path.to.the.compiler.module"</span>
-
-<span class="c1"># base.py
-</span><span class="kn">from</span> <span class="nn">django.db.backends.postgresql_psycopg2.base</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">operations</span> <span class="kn">import</span> <span class="n">CustomDatabaseOperations</span>
-
-<span class="k">class</span> <span class="nc">CustomDatabaseWrapper</span><span class="p">(</span><span class="n">DatabaseWrapper</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">CustomDatabaseWrapper</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">ops</span> <span class="o">=</span> <span class="n">CustomDatabaseOperations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-
-<span class="n">DatabaseWrapper</span> <span class="o">=</span> <span class="n">CustomDatabaseWrapper</span></code></pre></figure>
-
-<p>A custom sql compilers will be adding a corresponding schema name into the sql request based on the entity id:</p>
-
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># compilers.py
-</span>
-<span class="k">class</span> <span class="nc">CustomSQLCompiler</span><span class="p">(</span><span class="n">SQLCompiler</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">as_sql</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get_meta</span><span class="p">()</span><span class="o">.</span><span class="n">db_table</span>
-        <span class="k">if</span> <span class="n">table</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sharded_tables</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">CustomSQLCompiler</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">as_sql</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">sql</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">CustomSQLCompiler</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">as_sql</span><span class="p">()</span>
-
-            <span class="s">""" The first item of the params tuple must be entity id
-            """</span>
-            <span class="n">schema</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_shard_name</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-
-            <span class="n">old</span> <span class="o">=</span> <span class="s">'"{}"'</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
-            <span class="n">new</span> <span class="o">=</span> <span class="s">'{}."{}"'</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">table</span><span class="p">)</span>
-            <span class="n">sql</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">sql</span><span class="p">,</span> <span class="n">params</span>
-
-
-<span class="n">SQLCompiler</span> <span class="o">=</span> <span class="n">CustomSQLCompiler</span></code></pre></figure>
-
-<p>That’s all! Oh, okay, that’s not all =) Now you must create a custom <code class="language-plaintext highlighter-rouge">QuerySet</code> (with the two overrided methods - <code class="language-plaintext highlighter-rouge">get</code> &amp; <code class="language-plaintext highlighter-rouge">create</code>) to provide a correct sharded id for an all entities.</p>
-
-<p>But there is one problem - migrations. You can’t migrate correctly your sharded models and it’s sad. To avoid this we inctoruced the some more complex database configuration dictionary. We used the special method, that converted this complex config into the standard with a lot of database connections - a one for each shard. All connections have the <code class="language-plaintext highlighter-rouge">search_path</code> option. In the <code class="language-plaintext highlighter-rouge">settings.py</code> we must take in account a type of action:</p>
-
-<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c1"># settings.py
-</span>
-<span class="k">def</span> <span class="nf">get_shard_settings</span><span class="p">(</span><span class="n">shard_migrate</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">shard_sync</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
-    <span class="s">""" Not an all apps must be sharded.
-    """</span>
-    <span class="n">installed_apps</span> <span class="o">=</span> <span class="p">(</span><span class="s">'some_sharded_app1'</span><span class="p">,</span> <span class="s">'some_sharder_app2'</span><span class="p">,)</span>
-    <span class="n">databases</span> <span class="o">=</span> <span class="n">DB_CONFIGURATOR</span><span class="p">(</span><span class="n">DB_CONFIG</span><span class="p">,</span> <span class="n">shard_migrate</span><span class="o">=</span><span class="n">shard_migrate</span><span class="p">,</span> <span class="n">shard_sync</span><span class="o">=</span><span class="n">shard_sync</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">installed_apps</span><span class="p">,</span> <span class="n">databases</span>
-
-<span class="s">""" We must separate
-    - normal usage,
-    - sharded models synchronization
-    - sharded models migration 
-"""</span>
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">'shard_migrate'</span><span class="p">:</span>
-    <span class="k">del</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">INSTALLED_APPS</span><span class="p">,</span> <span class="n">DATABASES</span> <span class="o">=</span> <span class="n">get_shard_settings</span><span class="p">(</span><span class="n">shard_migrate</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-
-<span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">'shard_sync'</span><span class="p">:</span>
-    <span class="k">del</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">INSTALLED_APPS</span><span class="p">,</span> <span class="n">DATABASES</span> <span class="o">=</span> <span class="n">get_shard_settings</span><span class="p">(</span><span class="n">shard_sync</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">DATABASES</span> <span class="o">=</span> <span class="n">DB_CONFIGURATOR</span><span class="p">(</span><span class="n">DB_CONFIG</span><span class="p">)</span></code></pre></figure>
-
-<p>Now we can manage sharded migrations by <code class="language-plaintext highlighter-rouge">--database</code> options. For convenience you can write a fab script of course.</p>
-
-<p>And one more and last caveat - you must create <code class="language-plaintext highlighter-rouge">SOUTH_DATABASE_ADAPTERS</code> variable, that will be pointing to original postgres adapter <code class="language-plaintext highlighter-rouge">south.db.postgresql_psycopg2</code> - south can’t create a correct migration otherwise.</p>
-
-
-  </div>
-  
 </div>
 
 <!-- Pagination links -->
 <div class="pagination">
   
-    <span class="next">Older</span>
+    <a href="/blog/page5" class="older">Older</a>
   
   
     
