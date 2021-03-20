@@ -1077,7 +1077,7 @@ doi:10.1007/978-3-030-39469-1_6.
 doi:10.1145/3299869.3319860
 
 [first_btree_paper]: https://infolab.usc.edu/csci585/Spring2010/den_ar/indexing.pdf
-[ubiquitous]: http://cgi.di.uoa.gr/~ad/M149/ubiquitous_btree.pdf
+[ubiquitous]: https://dl.acm.org/doi/10.1145/356770.356776
 [modern-btree-techniques]: https://dl.acm.org/doi/10.1561/1900000028
 [rum-conjecture]: https://stratos.seas.harvard.edu/files/stratos/files/rum.pdf
 [lehman-yao]: https://www.csd.uoc.gr/~hy460/pdf/p650-lehman.pdf
