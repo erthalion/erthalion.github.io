@@ -544,7 +544,12 @@ falling into four categories (see more details in
 * Retiring
 
 <p align="center">
-<img src="/public/img/bpf-perf/top-down-level-1.small.png" border="0" width="80%" style="margin: auto">
+<figure>
+ <img src="/public/img/bpf-perf/top-down-level-1.small.png" border="0" width="80%" style="margin: auto">
+ <figcaption>
+      <p align="center"><small>Intel® 64 and IA-32 Architectures Optimization Reference Manual, Appendix B.1</small></p>
+  </figcaption>
+</figure>
 </p>
 
 Now, armed with this method, if we face a system with multitude of BPF programs
