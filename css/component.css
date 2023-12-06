@@ -25,21 +25,6 @@
 	transform: scale(0.4);
 }
 
-.no-touch .hi-icon-effect-8 .hi-icon:hover {
-	background: rgba(255,255,255,0.05);
-	-webkit-transform: scale(0.93);
-	-moz-transform: scale(0.93);
-	-ms-transform: scale(0.93);
-	transform: scale(0.93);
-	color: #fff;
-}
-
-.hi-icon-effect-8 .hi-icon:hover:after {
-	-webkit-animation: sonarEffect 1.3s ease-out 75ms;
-	-moz-animation: sonarEffect 1.3s ease-out 75ms;
-	animation: sonarEffect 1.3s ease-out 75ms;
-}
-
 @-webkit-keyframes sonarEffect {
 	0% {
 		opacity: 0.3;
